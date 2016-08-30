@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="wrk_type_data">
+        <item>BCH</item>
+        <item>PU</item>
+        <item>DL</item>
+    </string-array>
+</resources>
