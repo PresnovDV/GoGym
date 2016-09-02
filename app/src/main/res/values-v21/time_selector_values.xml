@@ -1,0 +1,14 @@
+<resources>
+    <dimen name="timeSelector_text">30dp</dimen>
+    <dimen name="timeSelector_label_text">10dp</dimen>
+    <dimen name="timeSelector_button_hMargin">15dp</dimen>
+    <dimen name="timeSelector_button_insideMargin">5dp</dimen>
+
+    <string name="timeSelector_label">TIMER</string>
+    <string name="timeSelector_min">min</string>
+
+    <integer name="timeSelector_minValue">0</integer>
+    <integer name="timeSelector_maxValue">10</integer>
+
+    <integer name="timeSelector_updInterval">200</integer>
+</resources>
