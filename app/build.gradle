@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "com.android.dzianis.com.android.android.gym.app"
+        applicationId "com.android.prasnou"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
