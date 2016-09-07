@@ -67,5 +67,14 @@ public class DataDbHelper extends SQLiteOpenHelper {
             values.put(WorkoutTypeEntry.COLUMN_NAME, item);
             db.insert(WorkoutTypeEntry.TABLE_NAME, null, values);
         }
+
+        // Test !! Workout
+        values.put(WorkoutEntry.COLUMN_NUMBER, 0);
+        values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 1);
+        values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
+        values.put(WorkoutEntry.COLUMN_DURATION, 60);
+        values.put(WorkoutEntry.COLUMN_NOTES, "this is a note");
+        db.insert(WorkoutEntry.TABLE_NAME, null, values);
+
     }
 }
