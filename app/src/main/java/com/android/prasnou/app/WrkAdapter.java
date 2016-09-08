@@ -77,8 +77,8 @@ public class WrkAdapter extends CursorAdapter {
         viewHolder.typeView.setText(wrkType);
 
         // Wrk Date
-        String wrkDate = cursor.getString(WorkoutListFragment.COL_WRK_DATE);
-        viewHolder.dateView.setText(wrkDate);
+        Long wrkDate = Long.valueOf(cursor.getString(WorkoutListFragment.COL_WRK_DATE));
+        viewHolder.dateView.setText(Utils.formatDate(wrkDate));
 
         // Wrk Result
         String wrkResult = cursor.getString(WorkoutListFragment.COL_WRK_DURATION);

@@ -69,6 +69,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         }
 
         // Test !! Workout
+        values.clear();
         values.put(WorkoutEntry.COLUMN_NUMBER, 0);
         values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 1);
         values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());

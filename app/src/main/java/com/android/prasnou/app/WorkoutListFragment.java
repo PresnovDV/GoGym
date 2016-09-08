@@ -1,9 +1,12 @@
 package com.android.prasnou.app;
 
-import android.app.Fragment;
+
+
+
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -17,7 +20,8 @@ import com.android.prasnou.app.data.DataContract;
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
-public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private final int WORKOUT_LIST_LOADER_ID = 0;
     private WrkAdapter mWorkoutAdapter;
     private ListView mListView;
 
@@ -46,6 +50,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(WORKOUT_LIST_LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -92,6 +97,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         // Sort order:  Ascending, by date.
         //String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
         // projection
+
         String[] projection = WRK_COLUMNS;
         Uri wrkListUri = DataContract.WorkoutEntry.CONTENT_URI;
 
@@ -101,7 +107,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mWorkoutAdapter.swapCursor(data);
+        mWorkoutAdapter.changeCursor(data);
         /*if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
         }*/
