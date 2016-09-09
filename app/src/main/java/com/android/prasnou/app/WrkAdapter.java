@@ -20,19 +20,22 @@ public class WrkAdapter extends CursorAdapter {
     }
 
     // view types
-    private static final int VIEW_TYPE_DETAILED = 0;
-    private static final int VIEW_TYPE_REGULAR = 1;
+    private static final int VIEW_TYPE_DETAILED = 0; // todo
+    private static final int VIEW_TYPE_REGULAR = 10;
+    private static final int VIEW_TYPE_DETAILED_DRAFT = 2;
+    private static final int VIEW_TYPE_REGULAR_DRAFT = 1;
+
 //    private static final int VIEW_TYPE_COUNT = 2; todo
 
     /*public void setUseDetailedLayout(boolean isSpecTodayLayout){
         mIsSelectedWorkout = isSpecTodayLayout;
-    }*/
+}*/
 
 
     @Override
     public int getItemViewType(int position) {
-
-        return (mIsSelectedWorkout) ? VIEW_TYPE_DETAILED : VIEW_TYPE_REGULAR;
+        return position;
+        //return (mIsSelectedWorkout) ? VIEW_TYPE_DETAILED : VIEW_TYPE_REGULAR;
     }
 
     /*
@@ -55,8 +58,13 @@ public class WrkAdapter extends CursorAdapter {
                     layoutId = R.layout.wrk_list_item;
                     break;
             }
+            case VIEW_TYPE_REGULAR_DRAFT: {
+                layoutId = R.layout.wrk_list_item_draft;
+                break;
+            }
         }
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
+
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
@@ -70,23 +78,37 @@ public class WrkAdapter extends CursorAdapter {
 
         // Wrk #
         String numb = cursor.getString(WorkoutListFragment.COL_WRK_NUMBER);
-        viewHolder.numbView.setText(numb);
+        if(viewHolder.numbView != null) {
+            //viewHolder.numbView.setText(numb);
+            viewHolder.numbView.setText("999");
+        }
 
         // Wrk Type
         String wrkType = cursor.getString(WorkoutListFragment.COL_WRK_TYPE);
-        viewHolder.typeView.setText(wrkType);
+        if(viewHolder.typeView != null) {
+            //viewHolder.typeView.setText(wrkType);
+            viewHolder.typeView.setText("BCH");
+        }
 
         // Wrk Date
         Long wrkDate = Long.valueOf(cursor.getString(WorkoutListFragment.COL_WRK_DATE));
-        viewHolder.dateView.setText(Utils.formatDate(wrkDate));
+        if(viewHolder.dateView != null) {
+            //viewHolder.dateView.setText(Utils.formatDate(wrkDate));  todo UTILS!!!
+            viewHolder.dateView.setText("08/09/2016 Th");
+        }
 
         // Wrk Result
         String wrkResult = cursor.getString(WorkoutListFragment.COL_WRK_DURATION);
-        viewHolder.resultView.setText(wrkResult);
+        if(viewHolder.resultView != null) {
+            //viewHolder.resultView.setText(wrkResult);
+            viewHolder.resultView.setText("Time: 1h:20m  Weight: 2300lb");
+        }
 
         // Wrk Notes
         String wrkNotes = cursor.getString(WorkoutListFragment.COL_WRK_NOTES);
-        viewHolder.noteView.setText(wrkNotes);
+        if(viewHolder.noteView != null) {
+            viewHolder.noteView.setText(wrkNotes);
+        }
     }
 
     /**

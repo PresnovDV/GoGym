@@ -1,6 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:id="@+id/list_item_future_day_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/touch_selector"
+    android:orientation="vertical"
+    android:padding="5dp"
+    >
+
+    <!-- number | type | date | info -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/wrk_numb_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="10dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+
+            android:background="#cceecc"
+            />
+        <TextView
+            android:id="@+id/wrk_type_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="10dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/text"
+
+            android:layout_toRightOf="@+id/wrk_numb_textview"
+
+            android:background="#ffaaaa"
+            />
+        <TextView
+            android:id="@+id/wrk_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingRight="5dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+
+            android:layout_toRightOf="@+id/wrk_type_textview"
+            android:singleLine="true"
+
+            android:background="#ccccee"
+            />
+        <TextView
+            android:id="@+id/wrk_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/colorPrimary"
+
+            android:layout_toRightOf="@+id/wrk_date_textview"
+
+            android:background="#cceecc"
+            />
+
+        <View
+            android:id="@+id/hrule"
+            android:layout_below="@+id/wrk_numb_textview"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="#646464"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <!-- time | weight -->
+    <!-- Note -->
+    <LinearLayout
+        android:id="@+id/sets_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="placeholder"/>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/hrule_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="#646464"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:id="@+id/wrk_note_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_below="@+id/hrule_bottom"
+            android:gravity="bottom"
+            android:textAppearance="?android:textAppearanceSmall"
+            />
+    </RelativeLayout>
+
 
 </LinearLayout>
+
+
