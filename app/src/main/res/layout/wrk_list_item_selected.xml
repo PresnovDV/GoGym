@@ -15,67 +15,64 @@
         <TextView
             android:id="@+id/wrk_numb_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:paddingRight="10dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentLeft="true"
-            android:gravity="center_vertical"
+            android:textColor="@color/text_med"
+            android:gravity="center"
 
-            android:background="#cceecc"
             />
         <TextView
             android:id="@+id/wrk_type_textview"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="25dp"
             android:paddingRight="10dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text"
+            android:textColor="@color/text_med"
 
             android:layout_toRightOf="@+id/wrk_numb_textview"
-
-            android:background="#ffaaaa"
+            android:gravity="center"
             />
         <TextView
             android:id="@+id/wrk_date_textview"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingRight="5dp"
+            android:layout_height="25dp"
+            android:paddingRight="15dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
 
             android:layout_toRightOf="@+id/wrk_type_textview"
+            android:gravity="center"
             android:singleLine="true"
 
-            android:background="#ccccee"
             />
         <TextView
             android:id="@+id/wrk_result_textview"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="25dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/text_med"
 
             android:layout_toRightOf="@+id/wrk_date_textview"
+            android:gravity="center"
 
-            android:background="#cceecc"
             />
 
         <View
             android:id="@+id/hrule"
-            android:layout_below="@+id/wrk_numb_textview"
+            android:layout_below="@+id/wrk_type_textview"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:background="#646464"
+            android:background="@color/gray_med"
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
@@ -101,7 +98,7 @@
             android:layout_height="1px"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
-            android:background="#646464"
+            android:background="@color/gray_med"
             android:layout_alignParentTop="true"/>
 
         <TextView

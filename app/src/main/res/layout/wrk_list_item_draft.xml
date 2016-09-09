@@ -36,7 +36,7 @@
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text"
+            android:textColor="@color/text_dark"
 
             android:layout_toRightOf="@+id/wrk_numb_textview"
             android:layout_alignParentRight="true"
