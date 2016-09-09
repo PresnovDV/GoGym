@@ -43,49 +43,49 @@
 
             />
         <TextView
-            android:id="@+id/wrk_date_textview"
+            android:id="@+id/wrk_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@android:color/holo_green_dark"
 
             android:layout_alignParentBottom="true"
             android:gravity="bottom"
             android:layout_below="@+id/wrk_numb_textview"
+            android:text="draft"
 
-            android:singleLine="true"
             />
 
     </RelativeLayout>
 
-    <!-- time | weight -->
-    <!-- Note -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/wrk_result_textview"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:fontFamily="sans-serif-condensed"
-            android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/colorPrimary"
 
-            android:layout_weight="3"
-            />
-        <TextView
-            android:id="@+id/wrk_note_textview"
+    <!-- GO button -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <View
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="4"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="bottom"
-            android:textAppearance="?android:textAppearanceSmall"
+            android:layout_height="match_parent"
+            android:layout_gravity="left"
             />
-    </LinearLayout>
 
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical|right"
+            android:paddingRight="20dp"
+            android:textSize="22sp"
+            android:textColor="@android:color/holo_green_dark"
+            android:text="GO"
+            android:clickable="true"
+            android:layout_gravity="right"
+            />
+    </FrameLayout>
 </LinearLayout>
 
 

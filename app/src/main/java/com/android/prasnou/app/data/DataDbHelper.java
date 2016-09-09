@@ -32,7 +32,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -56,6 +56,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         onCreate(sqLiteDatabase);
     }
 
+
     private void initData(SQLiteDatabase db) {
         // Initialize the db with values from initdata.xml
         ContentValues values = new ContentValues();
@@ -70,11 +71,18 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
         // Test !! Workout
         values.clear();
-        values.put(WorkoutEntry.COLUMN_NUMBER, 0);
+        values.put(WorkoutEntry.COLUMN_NUMBER, 189);
         values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 1);
         values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
         values.put(WorkoutEntry.COLUMN_DURATION, 60);
-        values.put(WorkoutEntry.COLUMN_NOTES, "this is a note");
+        values.put(WorkoutEntry.COLUMN_NOTES, "Went good. some pain in knee. Mood is good. a bit overdone");
+        db.insert(WorkoutEntry.TABLE_NAME, null, values);
+        values.clear();
+        values.put(WorkoutEntry.COLUMN_NUMBER, 190);
+        values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 2);
+        values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
+        values.put(WorkoutEntry.COLUMN_DURATION, 75);
+        values.put(WorkoutEntry.COLUMN_NOTES, "No power, undersleep");
         db.insert(WorkoutEntry.TABLE_NAME, null, values);
 
     }
