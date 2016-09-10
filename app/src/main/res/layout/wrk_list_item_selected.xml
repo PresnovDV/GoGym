@@ -76,19 +76,36 @@
             android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
-    <!-- time | weight -->
-    <!-- Note -->
+    <!-- exercise list -->
     <LinearLayout
         android:id="@+id/sets_layout"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
+        <ListView
+            style="@style/ExcersiseListStyle"
+            android:id="@+id/ex_listview"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="placeholder"/>
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/ex_numb_textview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/colorPrimary"
+                android:text="1."
+                android:layout_weight="3 "
+                />
+
+
+
+        </ListView>
     </LinearLayout>
 
+
+    <!-- footer / note -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">

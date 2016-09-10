@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2014 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.android.prasnou.app.data;
 
 import android.content.ContentValues;
@@ -24,15 +9,18 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.android.prasnou.app.R;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutSetEntry;
+import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
+import com.android.prasnou.app.data.DataContract.SetTypeEntry;
 
 /**
- * Manages a local database.
+ * Manage a local database.
  */
 public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 5;
+    private static final int DATABASE_VERSION = 12;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -43,16 +31,25 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(WorkoutEntry.SQL_CREATE_WORKOUT_TABLE);
-
         sqLiteDatabase.execSQL(WorkoutTypeEntry.SQL_CREATE_WORKOUT_TYPE_TABLE);
+        sqLiteDatabase.execSQL(ExcerciseEntry.SQL_CREATE_EXCERCISE_TABLE);
+        sqLiteDatabase.execSQL(SetTypeEntry.SQL_CREATE_SET_TYPE_TABLE);
+
+        sqLiteDatabase.execSQL(WorkoutEntry.SQL_CREATE_WORKOUT_TABLE);
+        sqLiteDatabase.execSQL(WorkoutSetEntry.SQL_CREATE_WORKOUT_SET_TABLE);
+
         initData(sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutSetEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutEntry.TABLE_NAME);
+
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutTypeEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ExcerciseEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SetTypeEntry.TABLE_NAME);
+
         onCreate(sqLiteDatabase);
     }
 
@@ -62,11 +59,25 @@ public class DataDbHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         Resources res = mContext.getResources();
 
-        // Workout Type dictionary
+        // Workout Type reference
         String[] wrkTypeData = res.getStringArray(R.array.wrk_type_data);
         for (String item : wrkTypeData){
             values.put(WorkoutTypeEntry.COLUMN_NAME, item);
             db.insert(WorkoutTypeEntry.TABLE_NAME, null, values);
+        }
+
+        // excercise reference
+        String[] exData = res.getStringArray(R.array.ex_data);
+        for (String item : exData){
+            values.put(DataContract.ExcerciseEntry.COLUMN_NAME, item);
+            db.insert(DataContract.ExcerciseEntry.TABLE_NAME, null, values);
+        }
+
+        // excercise reference
+        String[] setTypeData = res.getStringArray(R.array.set_type_data);
+        for (String item : setTypeData){
+            values.put(DataContract.SetTypeEntry.COLUMN_NAME, item);
+            db.insert(DataContract.SetTypeEntry.TABLE_NAME, null, values);
         }
 
         // Test !! Workout
@@ -91,6 +102,45 @@ public class DataDbHelper extends SQLiteOpenHelper {
         values.put(WorkoutEntry.COLUMN_DURATION, 72);
         values.put(WorkoutEntry.COLUMN_NOTES, "good");
         db.insert(WorkoutEntry.TABLE_NAME, null, values);
+
+        // Test !! WorkoutSet
+        // ex 1
+        values.clear();
+        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_EX_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 55);
+        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 8);
+        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
+
+        values.clear();
+        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_EX_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 2);
+        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 75);
+        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 5);
+        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
+
+        // ex 2
+        values.clear();
+        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_EX_ID, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 120);
+        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 8);
+        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
+
+        values.clear();
+        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
+        values.put(WorkoutSetEntry.COLUMN_EX_ID, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 1);
+        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 2);
+        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 175);
+        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 6);
+        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
 
     }
 }

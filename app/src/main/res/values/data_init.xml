@@ -5,4 +5,16 @@
         <item>PU</item>
         <item>DL</item>
     </string-array>
+
+    <string-array name="ex_data">
+        <item>bench</item>
+        <item>pull ups</item>
+        <item>squat</item>
+        <item>dead lift</item>
+    </string-array>
+
+    <string-array name="set_type_data">
+        <item>Warm Up</item>
+        <item>Work</item>
+    </string-array>
 </resources>

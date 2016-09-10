@@ -7,6 +7,7 @@ import java.util.Date;
  */
 public class Utils {
     private static final String DATE_FORMAT_MED = "MM/dd/yyyy EE";
+    private static final String TIME_FORMAT = "hhh:mmm";
 
     /* date to String MM/DD/YYYY dd */
     public static String formatDate(long dateInMillis) {
