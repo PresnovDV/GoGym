@@ -25,14 +25,16 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     private WrkAdapter mWorkoutAdapter;
     private ListView mListView;
 
-    // culumns
-    private static final String[] WRK_COLUMNS = {
+    //*************** Workout List Cols ***********************
+    private static final String[] WRK_LIST_COLUMNS = {
             DataContract.WorkoutEntry.TABLE_NAME + "." + DataContract.WorkoutEntry._ID,
             DataContract.WorkoutEntry.COLUMN_NUMBER,
-            DataContract.WorkoutEntry.COLUMN_WRK_TYPE_ID,
+            DataContract.WorkoutTypeEntry.TABLE_NAME + "." + DataContract.WorkoutTypeEntry.COLUMN_NAME,
             DataContract.WorkoutEntry.COLUMN_DATE,
             DataContract.WorkoutEntry.COLUMN_DURATION,
-            DataContract.WorkoutEntry.COLUMN_NOTES
+            "100 as weight",
+            DataContract.WorkoutEntry.COLUMN_NOTES,
+
     };
 
     static final int COL_WRK_ID = 0;
@@ -40,8 +42,9 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     static final int COL_WRK_TYPE = 2;
     static final int COL_WRK_DATE = 3;
     static final int COL_WRK_DURATION = 4;
-    static final int COL_WRK_NOTES = 5;
-
+    static final int COL_WRK_WEIGHT = 5;
+    static final int COL_WRK_NOTES = 6;
+    //******************************************************
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,15 +96,11 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        //String locationSetting = Utility.getPreferredLocation(getActivity());
-        // Sort order:  Ascending, by date.
-        //String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        // projection
+        Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
+        String[] select = WRK_LIST_COLUMNS;
+        String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
 
-        String[] projection = WRK_COLUMNS;
-        Uri wrkListUri = DataContract.WorkoutEntry.CONTENT_URI;
-
-        return new CursorLoader(getActivity(),wrkListUri,projection,null,null,null);
+        return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
     }
 
 
@@ -115,7 +114,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mWorkoutAdapter.swapCursor(null);
+        mWorkoutAdapter.changeCursor(null);
     }
 
 }

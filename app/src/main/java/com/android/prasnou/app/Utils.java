@@ -1,8 +1,5 @@
 package com.android.prasnou.app;
 
-import java.text.DateFormat;
-import java.text.DateFormatSymbols;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -19,5 +16,9 @@ public class Utils {
                 android.text.format.DateFormat.format(DATE_FORMAT_MED, date)
                     .subSequence(0,DATE_FORMAT_MED.length()));
         return sb.toString();
+    }
+
+    public static String wrkResult(long durInMillis, long totalWeight){
+        return "Time: 1h:20m  Weight: 2300lb"; // todo
     }
 }

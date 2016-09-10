@@ -20,10 +20,10 @@ public class WrkAdapter extends CursorAdapter {
     }
 
     // view types
-    private static final int VIEW_TYPE_DETAILED = 0; // todo
-    private static final int VIEW_TYPE_REGULAR = 10;
-    private static final int VIEW_TYPE_DETAILED_DRAFT = 2;
-    private static final int VIEW_TYPE_REGULAR_DRAFT = 1;
+    private static final int VIEW_TYPE_DETAILED = 0;
+    private static final int VIEW_TYPE_REGULAR = 1;
+    private static final int VIEW_TYPE_DETAILED_DRAFT = 12;
+    private static final int VIEW_TYPE_REGULAR_DRAFT = 2;
 
 //    private static final int VIEW_TYPE_COUNT = 2; todo
 
@@ -79,15 +79,13 @@ public class WrkAdapter extends CursorAdapter {
         // Wrk #
         String numb = cursor.getString(WorkoutListFragment.COL_WRK_NUMBER);
         if(viewHolder.numbView != null) {
-            //viewHolder.numbView.setText(numb);
-            viewHolder.numbView.setText("999");
+            viewHolder.numbView.setText(numb);
         }
 
         // Wrk Type
         String wrkType = cursor.getString(WorkoutListFragment.COL_WRK_TYPE);
         if(viewHolder.typeView != null) {
-            //viewHolder.typeView.setText(wrkType);
-            viewHolder.typeView.setText("BCH");
+            viewHolder.typeView.setText(wrkType);
         }
 
         // Wrk Date
@@ -97,10 +95,10 @@ public class WrkAdapter extends CursorAdapter {
         }
 
         // Wrk Result
-        String wrkResult = cursor.getString(WorkoutListFragment.COL_WRK_DURATION);
+        long wrkDuration = Long.valueOf(cursor.getString(WorkoutListFragment.COL_WRK_DURATION));
         if(viewHolder.resultView != null) {
-            //viewHolder.resultView.setText(wrkResult);
-            viewHolder.resultView.setText("Time: 1h:20m  Weight: 2300lb");
+            String wrkResult = Utils.wrkResult(wrkDuration,0);
+            viewHolder.resultView.setText(wrkResult);
         }
 
         // Wrk Notes

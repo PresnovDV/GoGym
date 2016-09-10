@@ -23,177 +23,82 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 public class DataProvider extends ContentProvider {
-
-    // The URI Matcher used by this content provider.
-    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    // db helper
     private DataDbHelper mOpenHelper;
 
+
+    //********************* URI Matcher ************************************************************
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+
+    // constants for URI Matcher
     public static final int WORKOUT = 100;
-    public static final int WORKOUT_WITH_NUMBER = 101;
-    public static final int WORKOUT_TYPE = 110;
-/*
-    private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
-
-    static{
-        sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
-        
-        //This is an inner join which looks like
-        //weather INNER JOIN location ON weather.location_id = location._id
-        sWeatherByLocationSettingQueryBuilder.setTables(
-                WeatherContract.WeatherEntry.TABLE_NAME + " INNER JOIN " +
-                        WeatherContract.LocationEntry.TABLE_NAME +
-                        " ON " + WeatherContract.WeatherEntry.TABLE_NAME +
-                        "." + WeatherContract.WeatherEntry.COLUMN_LOC_KEY +
-                        " = " + WeatherContract.LocationEntry.TABLE_NAME +
-                        "." + WeatherContract.LocationEntry._ID);
-    }
-
-    //location.location_setting = ?
-    private static final String sLocationSettingSelection =
-            WeatherContract.LocationEntry.TABLE_NAME+
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
-
-    //location.location_setting = ? AND date >= ?
-    private static final String sLocationSettingWithStartDateSelection =
-            WeatherContract.LocationEntry.TABLE_NAME+
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
-
-    //location.location_setting = ? AND date = ?
-    private static final String sLocationSettingAndDaySelection =
-            WeatherContract.LocationEntry.TABLE_NAME +
-                    "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
-                    WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ";
+    public static final int WORKOUT_LIST = 101;
+    public static final int WORKOUT_LIST_ID = 102;
 
 
-
-    private Cursor getWeatherByLocationSettingAndDate(
-            Uri uri, String[] projection, String sortOrder) {
-        String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
-        long date = WeatherContract.WeatherEntry.getDateFromUri(uri);
-
-        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
-                projection,
-                sLocationSettingAndDaySelection,
-                new String[]{locationSetting, Long.toString(date)},
-                null,
-                null,
-                sortOrder
-        );
-    }
-*/
-
-    // wrk.number = ?
-    private Cursor getWorkoutByNumber(Uri uri, String[] projection, String sortOrder) {
-        String number = DataContract.WorkoutEntry.getWrkNumberFromUri(uri);
-
-        String[] selectionArgs;
-        String selection;
-
-        selectionArgs = new String[]{number};
-        selection = DataContract.WorkoutEntry.TABLE_NAME + "." + DataContract.WorkoutEntry.COLUMN_NUMBER + " = ? ";
-
-        return mOpenHelper.getReadableDatabase().query(
-                DataContract.WorkoutEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder);
-    }
-
-    public static UriMatcher buildUriMatcher() {
-        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT ,WORKOUT);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/#", WORKOUT_WITH_NUMBER);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT_TYPE, WORKOUT_TYPE);
-        // ?? add other paths
-        return matcher;
-    }
-
-    /*
-        Students: We've coded this for you.  We just create a new WeatherDbHelper for later use
-        here.
-     */
+    //********************* Init content provider **************************************************
     @Override
     public boolean onCreate() {
         mOpenHelper = new DataDbHelper(getContext());
         return true;
     }
 
+    /**********************************************************************************************/
+    /**************************************  URI Matcher  *****************************************/
+    /**********************************************************************************************/
 
-    // Use the Uri Matcher to determine what kind of URI this is.
+    public static UriMatcher buildUriMatcher() {
+        UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT, WORKOUT);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST, WORKOUT_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/#", WORKOUT_LIST_ID);
+
+        return matcher;
+    }
+
+    // getType by URI Matcher
     @Override
     public String getType(Uri uri) {
 
         final int match = sUriMatcher.match(uri);
-// ?? to add more
+        // match to type of data DIR / ITEM
         switch (match) {
-            case WORKOUT_WITH_NUMBER:
-                return DataContract.WorkoutEntry.CONTENT_ITEM_TYPE;
             case WORKOUT:
+            case WORKOUT_LIST:
                 return DataContract.WorkoutEntry.CONTENT_TYPE;
-            case WORKOUT_TYPE:
-                return DataContract.WorkoutTypeEntry.CONTENT_TYPE;
+            case WORKOUT_LIST_ID:
+                return DataContract.WorkoutEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
 
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
-                        String sortOrder) {
-        // Here's the switch statement that, given a URI, will determine what kind of request it is,
-        // and query the database accordingly.
-        Cursor retCursor;
-        switch (sUriMatcher.match(uri)) {
-            // "weather/*"
-            case WORKOUT_WITH_NUMBER: {
-                retCursor = getWorkoutByNumber(uri, projection, sortOrder);
-                break;
-            }
-            // "weather"
-            case WORKOUT: {
-                retCursor = mOpenHelper.getReadableDatabase().query(
-                        DataContract.WorkoutEntry.TABLE_NAME,
-                        projection,
-                        selection,
-                        selectionArgs,
-                        null,
-                        null,
-                        sortOrder);
-                break;
-            }
 
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+    /**********************************************************************************************/
+    /**************************************  Query Section ****************************************/
+    /**********************************************************************************************/
+
+    @Override
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+        String whereClause = createWhereClause(uri, selection);
+        String[] whereClauseArgs = createWhereClauseArgs(uri, selectionArgs);
+
+        Cursor retCursor = mOpenHelper.getReadableDatabase().query(createDataSource(uri), projection, whereClause, whereClauseArgs, null, null, sortOrder);
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;
     }
 
-
     @Override
     public Uri insert(Uri uri, ContentValues values) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
         Uri returnUri;
+        normalizeDate(values);
+        long _id = db.insert(createDataSource(uri), null, values);
+        if ( _id > 0 )
+            returnUri = DataContract.WorkoutEntry.buildWrkIdUri(_id);
+        else
+            throw new android.database.SQLException("Failed to insert row into " + uri);
 
-        switch (match) {
-            case WORKOUT: {
-                normalizeDate(values);
-                long _id = db.insert(DataContract.WorkoutEntry.TABLE_NAME, null, values);
-                if ( _id > 0 )
-                    returnUri = DataContract.WorkoutEntry.buildWrkUri(_id);
-                else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
-                break;
-            }
-            // ?? add more
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
         getContext().getContentResolver().notifyChange(uri, null);
         return returnUri;
     }
@@ -201,20 +106,12 @@ public class DataProvider extends ContentProvider {
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int rowsDeleted = 0;
 
         if(selection == null){
             selection = "1";
         }
-        switch (match){
-            case WORKOUT:
-                rowsDeleted = db.delete(DataContract.WorkoutEntry.TABLE_NAME, selection, selectionArgs);
-                break;
-            // ?? add more
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+        int rowsDeleted = db.delete(createDataSource(uri), selection, selectionArgs);
+
         if(rowsDeleted != 0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -225,17 +122,8 @@ public class DataProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        int updatedRows = 0;
 
-        switch (match){
-            case WORKOUT:
-                updatedRows = db.update(DataContract.WorkoutEntry.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            // ?? add more
-            default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
-        }
+        int updatedRows = db.update(createDataSource(uri), values, selection, selectionArgs);
         if(updatedRows !=0) {
             getContext().getContentResolver().notifyChange(uri, null);
         }
@@ -271,6 +159,65 @@ public class DataProvider extends ContentProvider {
         }
     }
   */
+
+    /**********************************************************************************************/
+    /****************************  Data Sources  **************************************************/
+    /**********************************************************************************************/
+
+    // Data Source
+    private String createDataSource(Uri uri) {
+        StringBuilder ds = new StringBuilder();
+        switch (sUriMatcher.match(uri)){
+            case(WORKOUT):
+                ds.append(DataContract.WorkoutEntry.TABLE_NAME);
+                break;
+            case(WORKOUT_LIST):{
+                ds.append(DataContract.WorkoutEntry.TABLE_NAME).append(" inner join ")
+                        .append(DataContract.WorkoutTypeEntry.TABLE_NAME).append(" on ")
+                        .append(DataContract.WorkoutEntry.TABLE_NAME).append(".").append(DataContract.WorkoutEntry._ID).append(" = ")
+                        .append(DataContract.WorkoutTypeEntry.TABLE_NAME).append(".").append(DataContract.WorkoutTypeEntry._ID);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        return ds.toString();
+    }
+
+    /** creates where clause template */
+    private String createWhereClause(Uri uri, String whereClause) {
+        if(whereClause == null){
+            StringBuilder sb = new StringBuilder();
+            switch (sUriMatcher.match(uri)){
+                case(WORKOUT_LIST_ID):{
+                    sb.append(DataContract.WorkoutEntry.TABLE_NAME).append(".")
+                            .append(DataContract.WorkoutEntry._ID).append("== ?");
+                    break;
+                }
+            }
+            whereClause = sb.toString();
+        }
+        return whereClause;
+    }
+
+
+    /** create args list for where clause template */
+    private String[] createWhereClauseArgs(Uri uri, String[] whereClauseArgs) {
+        if(whereClauseArgs == null) {
+            switch (sUriMatcher.match(uri)) {
+                case (WORKOUT_LIST_ID): {
+                    whereClauseArgs = new String[]{ DataContract.WorkoutEntry.getWrkIdFromUri(uri) };
+                    break;
+                }
+            }
+        }
+        return whereClauseArgs;
+    }
+
+
+
+    //*********************** Service methods *****************************//
+
     // Normalize Date
     private void normalizeDate(ContentValues values) {
         if (values.containsKey(DataContract.WorkoutEntry.COLUMN_DATE)) {
@@ -278,5 +225,4 @@ public class DataProvider extends ContentProvider {
             values.put(DataContract.WorkoutEntry.COLUMN_DATE, DataContract.normalizeDate(dateValue));
         }
     }
-
 }

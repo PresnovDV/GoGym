@@ -13,6 +13,7 @@ public class DataContract {
     public static final String CONTENT_AUTHORITY = "com.android.prasnou.app";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_WORKOUT = "workout";
+    public static final String PATH_LIST = "list";
     public static final String PATH_WORKOUT_TYPE = "workout_type";
     public static final String PATH_WORKOUT_SET = "workout_set";
 
@@ -54,11 +55,13 @@ public class DataContract {
                 // constraint
                 " UNIQUE (" + WorkoutEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
 
-        public static Uri buildWrkUri(long id) {
+        /** returns workout/id uri */
+        public static Uri buildWrkIdUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        public static String getWrkNumberFromUri(Uri uri) {
+        // returns id from workout/id uri
+        public static String getWrkIdFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
 
@@ -80,10 +83,18 @@ public class DataContract {
                 WorkoutTypeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 WorkoutTypeEntry.COLUMN_NAME + " TEXT NOT NULL);";
 
+        /** returns workoutType/id uri */
         public static Uri buildWrkTypeUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        // returns id from workoutType/id uri
+        public static String getWrkTypeIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
+
+
     /// todo other tables
 
 
