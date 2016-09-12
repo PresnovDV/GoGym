@@ -54,9 +54,7 @@ public class DataContract {
                 WorkoutEntry.COLUMN_NOTES + " TEXT, " +
                 // Set up the location column as a foreign key to location table.
                 " FOREIGN KEY (" + WorkoutEntry.COLUMN_WRK_TYPE_ID + ") REFERENCES " +
-                WorkoutTypeEntry.TABLE_NAME + " (" + WorkoutTypeEntry._ID + "), " +
-                // constraint
-                " UNIQUE (" + WorkoutEntry.COLUMN_DATE + ") ON CONFLICT REPLACE);";
+                WorkoutTypeEntry.TABLE_NAME + " (" + WorkoutTypeEntry._ID + "));";
 
         /** returns workout/id uri */
         public static Uri buildWrkIdUri(long id) {
@@ -106,10 +104,10 @@ public class DataContract {
             return uri.getPathSegments().get(1);
         }
         public static String getWrkIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
+            return uri.getPathSegments().get(2);
         }
         public static String getExIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(2);
+            return uri.getPathSegments().get(3);
         }
 
     }

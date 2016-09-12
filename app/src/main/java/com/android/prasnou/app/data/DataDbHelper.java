@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.prasnou.app.R;
-import com.android.prasnou.app.data.DataContract.WorkoutEntry;
-import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
-import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
-import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
 import com.android.prasnou.app.data.DataContract.SetTypeEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 
 /**
  * Manage a local database.
@@ -21,7 +21,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 21;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -120,5 +120,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
             values.put(WorkoutExSetEntry.COLUMN_SET_REPS, vals[4]);
             db.insert(WorkoutExSetEntry.TABLE_NAME, null, values);
         }
+
+
     }
 }

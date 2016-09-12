@@ -2,15 +2,11 @@ package com.android.prasnou.app;
 
 import android.content.Context;
 import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.android.prasnou.app.data.DataContract;
 
 /**
  * {@link WrkAdapter} exposes a list of weather forecasts
@@ -42,12 +38,12 @@ public class WrkAdapter extends CursorAdapter {
         //return (mIsSelectedWorkout) ? VIEW_TYPE_DETAILED : VIEW_TYPE_REGULAR;
     }
 
-    /*
+
     @Override
     public int getViewTypeCount() {
-        return VIEW_TYPE_COUNT;
+        return super.getViewTypeCount();
     }
-*/
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Choose the layout type
@@ -66,23 +62,32 @@ public class WrkAdapter extends CursorAdapter {
                 layoutId = R.layout.wrk_list_item_draft;
                 break;
             }
+            default:
+                layoutId = R.layout.wrk_list_item_draft;
         }
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
+        /*ExcerciseListFragment exListFragment = (ExcerciseListFragment) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.fr_ex_list);
+        exListFragment.setWrkID(cursor.getInt(WorkoutListFragment.COL_WRK_ID));
+
+        ((MainActivity)context).getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fr_ex_list, exListFragment)
+                .commit();
+*/
         return view;
 
     }
-    https://developer.android.com/guide/components/fragments.html
+
     // presnov fragment // TODO: 9/11/2016
-    /*
+/*
         ExcerciseListFragment forecastFragment = ((ExcerciseListFragment)view.getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
     forecastFragment.setUseSpecialTodayLayout(!mTwoPane);
 
         ExcerciseListFragment excerciseListFragment = new ExcerciseListFragment();
-        excerciseListFragment.setWrkID(cursor.getInt(WorkoutListFragment.COL_WRK_ID));
+
 
     getSupportFragmentManager().beginTransaction()
     .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)

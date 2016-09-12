@@ -78,15 +78,10 @@
 
     <!-- exercise list -->
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/fr_ex_list"
         android:name="com.android.prasnou.app.ExcerciseListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context="com.android.prasnou.app.ExcerciseListFragment"
-        tools:layout="@android:layout/ex_list_content"
-        />
-
+        android:layout_height="match_parent" />
 
 
     <!-- footer / note -->

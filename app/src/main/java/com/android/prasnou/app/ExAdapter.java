@@ -1,5 +1,6 @@
 package com.android.prasnou.app;
 
+
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
@@ -16,6 +17,17 @@ public class ExAdapter extends CursorAdapter {
 
     public ExAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
+    }
+
+
+    @Override
+    public int getItemViewType(int position) {
+        return IGNORE_ITEM_VIEW_TYPE;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return super.getViewTypeCount();
     }
 
     @Override

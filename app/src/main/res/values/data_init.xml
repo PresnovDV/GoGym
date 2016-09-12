@@ -21,20 +21,21 @@
 
     <string-array name="workout_test_data">
         <item>189;1;123456789;60;"Went good. some pain in knee. Mood is good. a bit overdone"</item>
-        <item>190;2;123456789;75;"No power, undersleep"</item>
-        <item>191;3;123456789;72;"good."</item>
+        <item>190;2;123456790;75;"No power, undersleep"</item>
+        <item>191;3;123456791;72;"good."</item>
     </string-array>
 
     <string-array name="workout_ex_test_data">
-        <item>0;0;1</item>
-        <item>0;1;2</item>
+        <item>1;1;1</item>
+        <item>1;2;2</item>
+        <item>1;3;4</item>
     </string-array>
 
     <string-array name="workout_ex_set_test_data">
-        <item>0;0;0;55;8</item>
-        <item>0;0;1;75;5</item>
-        <item>1;1;0;120;8</item>
-        <item>1;1;1;175;6</item>
+        <item>1;1;1;55;8</item>
+        <item>1;1;2;75;5</item>
+        <item>2;2;1;120;8</item>
+        <item>2;2;2;175;6</item>
     </string-array>
 
 </resources>

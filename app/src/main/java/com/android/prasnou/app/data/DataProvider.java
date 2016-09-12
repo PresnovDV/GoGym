@@ -21,7 +21,11 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import com.android.prasnou.app.data.DataContract.*;
+
+import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 
 public class DataProvider extends ContentProvider {
     // db helper
@@ -58,8 +62,8 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST + "/#", WORKOUT_LIST_ID);
 
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE, EX);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
 
         return matcher;
     }
@@ -187,7 +191,7 @@ public class DataProvider extends ContentProvider {
             case(WORKOUT_LIST):{
                 ds.append(WorkoutEntry.TABLE_NAME).append(" inner join ")
                         .append(WorkoutTypeEntry.TABLE_NAME).append(" on ")
-                        .append(WorkoutEntry.TABLE_NAME).append(".").append(WorkoutEntry._ID).append(" = ")
+                        .append(WorkoutEntry.TABLE_NAME).append(".").append(WorkoutEntry.COLUMN_WRK_TYPE_ID).append(" = ")
                         .append(WorkoutTypeEntry.TABLE_NAME).append(".").append(WorkoutTypeEntry._ID);
                 break;
             }
@@ -210,17 +214,16 @@ public class DataProvider extends ContentProvider {
             StringBuilder sb = new StringBuilder();
             switch (sUriMatcher.match(uri)){
                 case(WORKOUT_LIST_ID):{
-                    sb.append(WorkoutEntry.TABLE_NAME).append(".")
-                            .append(WorkoutEntry._ID).append("== ?");
+                    whereClause = sb.append(WorkoutEntry.TABLE_NAME).append(".")
+                            .append(WorkoutEntry._ID).append("== ?").toString();
                     break;
                 }
                 case(EX_LIST):{
-                    sb.append(WorkoutExEntry.TABLE_NAME).append(".")
-                            .append(WorkoutExEntry.COLUMN_WRK_ID).append("== ?");
+                    whereClause = sb.append(WorkoutExEntry.TABLE_NAME).append(".")
+                            .append(WorkoutExEntry.COLUMN_WRK_ID).append("== ?").toString();
                     break;
                 }
             }
-            whereClause = sb.toString();
         }
         return whereClause;
     }

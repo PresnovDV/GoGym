@@ -41,8 +41,9 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     static final int COL_WRK_TYPE = 2;
     static final int COL_WRK_DATE = 3;
     static final int COL_WRK_DURATION = 4;
-    static final int COL_WRK_WEIGHT = 5;
-    static final int COL_WRK_NOTES = 6;
+    static final int COL_WRK_NOTES = 5;
+    static final int COL_WRK_WEIGHT = 6;
+
     //******************************************************
 
     @Override

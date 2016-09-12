@@ -19,8 +19,8 @@
         android:textAppearance="?android:textAppearanceSmall"
         android:text="PUL UPS"
         />
-    <com.android.prasnou.app.component.WrkSet
+    <!--com.android.prasnou.app.component.WrkSet
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/WrkSetWarm"/>
+        style="@style/WrkSetWarm"/-->
 </LinearLayout>
