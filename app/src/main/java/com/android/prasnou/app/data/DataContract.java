@@ -13,7 +13,8 @@ public class DataContract {
     public static final String CONTENT_AUTHORITY = "com.android.prasnou.app";
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
     public static final String PATH_WORKOUT = "workout";
-    public static final String PATH_WORKOUT_SET = "workout_set";
+    public static final String PATH_WRK_EX = "wrk_ex";
+    public static final String PATH_WRK_EX_SET = "wrk_ex_set";
     public static final String PATH_LIST = "list";
 
     public static final String PATH_WORKOUT_TYPE = "workout_type";
@@ -69,51 +70,96 @@ public class DataContract {
 
     }
 
-    /** Workout Set table  */
-    public static final class WorkoutSetEntry implements BaseColumns {
-        private WorkoutSetEntry(){};
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKOUT_SET).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WORKOUT_SET;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WORKOUT_SET;
+    /** Workout Excercise table  */
+    public static final class WorkoutExEntry implements BaseColumns {
+        private WorkoutExEntry(){};
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WRK_EX).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WRK_EX;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WRK_EX;
 
         // table
-        public static final String TABLE_NAME = "wrk_set";
+        public static final String TABLE_NAME = "wrk_ex";
         public static final String COLUMN_WRK_ID = "wrk_id";
         public static final String COLUMN_EX_ID = "ex_id";
-        public static final String COLUMN_SET_TYPE_ID = "set_type_id";
-        public static final String COLUMN_SET_NUMB = "set_numb";
-        public static final String COLUMN_SET_WEIGHT = "set_weight";
-        public static final String COLUMN_SET_REPS = "set_reps";
-
+        public static final String COLUMN_EX_NUMB = "ex_numb";
 
         // create sql
-        public static final String SQL_CREATE_WORKOUT_SET_TABLE = "CREATE TABLE " + WorkoutSetEntry.TABLE_NAME + " (" +
-                WorkoutSetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                WorkoutSetEntry.COLUMN_WRK_ID + " INTEGER NOT NULL, " +
-                WorkoutSetEntry.COLUMN_EX_ID + " INTEGER NOT NULL, " +
-                WorkoutSetEntry.COLUMN_SET_TYPE_ID + " INTEGER NOT NULL," +
-                WorkoutSetEntry.COLUMN_SET_NUMB + " INTEGER NOT NULL, " +
-                WorkoutSetEntry.COLUMN_SET_WEIGHT + " INTEGER NOT NULL, " +
-                WorkoutSetEntry.COLUMN_SET_REPS + " INTEGER NOT NULL, " +
+        public static final String SQL_CREATE_WRK_EX_TABLE = "CREATE TABLE " + WorkoutExEntry.TABLE_NAME + " (" +
+                WorkoutExEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                WorkoutExEntry.COLUMN_WRK_ID + " INTEGER NOT NULL, " +
+                WorkoutExEntry.COLUMN_EX_ID + " INTEGER NOT NULL, " +
+                WorkoutExEntry.COLUMN_EX_NUMB + " INTEGER NOT NULL, " +
                 // foreign keys
-                " FOREIGN KEY (" + WorkoutSetEntry.COLUMN_WRK_ID + ") REFERENCES " +
+                " FOREIGN KEY (" + WorkoutExEntry.COLUMN_WRK_ID + ") REFERENCES " +
                 WorkoutEntry.TABLE_NAME + " (" + WorkoutEntry._ID + "), " +
-                " FOREIGN KEY (" + WorkoutSetEntry.COLUMN_EX_ID + ") REFERENCES " +
-                ExcerciseEntry.TABLE_NAME + " (" + ExcerciseEntry._ID + ");"; todo error near ;
-
-        /** returns workoutSet/id uri */
-        public static Uri buildWrkSetIdUri(long id) {
+                " FOREIGN KEY (" + WorkoutExEntry.COLUMN_EX_ID + ") REFERENCES " +
+                ExcerciseEntry.TABLE_NAME + " (" + ExcerciseEntry._ID + "), " +
+                // constraint
+                " UNIQUE (" + WorkoutExEntry.COLUMN_WRK_ID + "," + WorkoutExEntry.COLUMN_EX_ID + ") ON CONFLICT REPLACE);";
+        /** returns workoutEx/id uri */
+        public static Uri buildWrkExIdUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
 
-        // returns id from workoutSet/id uri
-        public static String getWrkSetIdFromUri(Uri uri) {
+        // returns id from workoutEx/id uri
+        public static String getWrkExIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+        public static String getWrkIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+        public static String getExIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(2);
+        }
+
+    }
+
+    /** Workout Excercise Set table  */
+    public static final class WorkoutExSetEntry implements BaseColumns {
+        private WorkoutExSetEntry(){};
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WRK_EX_SET).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WRK_EX_SET;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_WRK_EX_SET;
+
+        // table
+        public static final String TABLE_NAME = "wrk_ex_set";
+        public static final String COLUMN_WRK_EX_ID = "wrk_ex_id";
+        public static final String COLUMN_SET_NUMB = "set_numb";
+        public static final String COLUMN_SET_TYPE_ID = "set_type_id";
+        public static final String COLUMN_SET_WEIGHT = "set_weight";
+        public static final String COLUMN_SET_REPS = "set_reps";
+
+        // create sql
+        public static final String SQL_CREATE_WORKOUT_EX_SET_TABLE = "CREATE TABLE " + WorkoutExSetEntry.TABLE_NAME + " (" +
+                WorkoutExSetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                WorkoutExSetEntry.COLUMN_WRK_EX_ID + " INTEGER NOT NULL, " +
+                WorkoutExSetEntry.COLUMN_SET_NUMB + " INTEGER NOT NULL, " +
+                WorkoutExSetEntry.COLUMN_SET_TYPE_ID + " INTEGER NOT NULL," +
+                WorkoutExSetEntry.COLUMN_SET_WEIGHT + " INTEGER NOT NULL, " +
+                WorkoutExSetEntry.COLUMN_SET_REPS + " INTEGER NOT NULL, " +
+                // foreign keys
+                " FOREIGN KEY (" + WorkoutExSetEntry.COLUMN_WRK_EX_ID + ") REFERENCES " +
+                WorkoutEntry.TABLE_NAME + " (" + WorkoutEntry._ID + "));";
+
+        /** returns workoutSet/id uri */
+        public static Uri buildWrkExSetIdUri(long id) {
+            return ContentUris.withAppendedId(CONTENT_URI, id);
+        }
+
+        // returns id from workoutExSet/id uri
+        public static String getWrkExSetIdFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
+        public static String getWrkExIdFromUri(Uri uri) {
             return uri.getPathSegments().get(1);
         }
 
     }
 
-    /****** reference tables *****/
+    /***********************************************************************************************/
+    /************************************** reference tables ***************************************/
+
+
     /* workout type table */
     public static final class WorkoutTypeEntry implements BaseColumns {
         public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_WORKOUT_TYPE).build();

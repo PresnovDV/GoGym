@@ -2,11 +2,15 @@ package com.android.prasnou.app;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.android.prasnou.app.data.DataContract;
 
 /**
  * {@link WrkAdapter} exposes a list of weather forecasts
@@ -71,6 +75,20 @@ public class WrkAdapter extends CursorAdapter {
         return view;
 
     }
+    https://developer.android.com/guide/components/fragments.html
+    // presnov fragment // TODO: 9/11/2016
+    /*
+        ExcerciseListFragment forecastFragment = ((ExcerciseListFragment)view.getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
+    forecastFragment.setUseSpecialTodayLayout(!mTwoPane);
+
+        ExcerciseListFragment excerciseListFragment = new ExcerciseListFragment();
+        excerciseListFragment.setWrkID(cursor.getInt(WorkoutListFragment.COL_WRK_ID));
+
+    getSupportFragmentManager().beginTransaction()
+    .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
+    .commit();
+     */
+
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {

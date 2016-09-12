@@ -3,6 +3,7 @@ package com.android.prasnou.app;
 
 
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,33 +17,30 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.android.prasnou.app.data.DataContract;
+import com.android.prasnou.app.data.DataContract.*;
 
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
-public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    private final int WORKOUT_LIST_LOADER_ID = 0;
-    private WrkAdapter mWorkoutAdapter;
+public class ExcerciseListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private final int WRK_EX_LIST_LOADER_ID = 0;
+    private ExAdapter mWrkExAdapter;
     private ListView mListView;
+    private int mWrkID = -1;
 
     //*************** Workout List Cols ***********************
-    private static final String[] WRK_LIST_COLUMNS = {
-            DataContract.WorkoutEntry.TABLE_NAME + "." + DataContract.WorkoutEntry._ID,
-            DataContract.WorkoutEntry.COLUMN_NUMBER,
-            DataContract.WorkoutTypeEntry.TABLE_NAME + "." + DataContract.WorkoutTypeEntry.COLUMN_NAME,
-            DataContract.WorkoutEntry.COLUMN_DATE,
-            DataContract.WorkoutEntry.COLUMN_DURATION,
-            DataContract.WorkoutEntry.COLUMN_NOTES,
-
+    private static final String[] WRK_EX_LIST_COLUMNS = {
+            WorkoutExEntry.TABLE_NAME + "." + WorkoutEntry._ID,
+            WorkoutExEntry.COLUMN_WRK_ID,
+            WorkoutExEntry.COLUMN_EX_ID,
+            WorkoutExEntry.COLUMN_EX_NUMB,
+            ExcerciseEntry.TABLE_NAME + "." + WorkoutTypeEntry.COLUMN_NAME
     };
 
     static final int COL_WRK_ID = 0;
-    static final int COL_WRK_NUMBER = 1;
-    static final int COL_WRK_TYPE = 2;
-    static final int COL_WRK_DATE = 3;
-    static final int COL_WRK_DURATION = 4;
-    static final int COL_WRK_WEIGHT = 5;
-    static final int COL_WRK_NOTES = 6;
+    static final int COL_EX_ID = 1;
+    static final int COL_EX_NUMB = 2;
+    static final int COL_EX_NAME = 3;
     //******************************************************
 
     @Override
@@ -52,19 +50,17 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(WORKOUT_LIST_LOADER_ID, null, this);
+        getLoaderManager().initLoader(WRK_EX_LIST_LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        mWrkExAdapter = new ExAdapter(getActivity(), null, 0);
 
-        mWorkoutAdapter = new WrkAdapter(getActivity(), null, 0);
-        //mWorkoutAdapter.setUseSpecialTodayLayout(mUseSpecialTodayLayout);
-
-        View rootView = inflater.inflate(R.layout.fr_wrk_list, container, false);
-        mListView = (ListView) rootView.findViewById(R.id.wrk_listview);
-        mListView.setAdapter(mWorkoutAdapter);
+        View rootView = inflater.inflate(R.layout.fr_ex_list, container, false);
+        mListView = (ListView) rootView.findViewById(R.id.ex_listview);
+        mListView.setAdapter(mWrkExAdapter);
 
         /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
@@ -91,25 +87,31 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
-        String[] select = WRK_LIST_COLUMNS;
-        String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
+        if(mWrkID > -1) {
+            String[] select = WRK_EX_LIST_COLUMNS;
+            String orderBy = WorkoutExEntry.COLUMN_EX_NUMB + " ASC";
+            Uri uri = DataContract.WorkoutExEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).appendPath(String.valueOf(mWrkID)).build();
 
-        return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
+            return new CursorLoader(getActivity(), uri, select, null, null, orderBy);
+        }
+        else {
+            return null;
+        }
     }
 
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mWorkoutAdapter.changeCursor(data);
-        /*if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
-        }*/
+        mWrkExAdapter.changeCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mWorkoutAdapter.changeCursor(null);
+        mWrkExAdapter.changeCursor(null);
+    }
+
+    public void setWrkID(int id) {
+        mWrkID = id;
     }
 
 }

@@ -21,6 +21,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import com.android.prasnou.app.data.DataContract.*;
 
 public class DataProvider extends ContentProvider {
     // db helper
@@ -34,6 +35,9 @@ public class DataProvider extends ContentProvider {
     public static final int WORKOUT = 100;
     public static final int WORKOUT_LIST = 101;
     public static final int WORKOUT_LIST_ID = 102;
+    public static final int EX = 200;
+    public static final int EX_LIST = 201;
+    public static final int EX_LIST_ID = 202;
 
 
     //********************* Init content provider **************************************************
@@ -51,7 +55,11 @@ public class DataProvider extends ContentProvider {
         UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT, WORKOUT);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST, WORKOUT_LIST);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/#", WORKOUT_LIST_ID);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST + "/#", WORKOUT_LIST_ID);
+
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE, EX);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
 
         return matcher;
     }
@@ -65,9 +73,14 @@ public class DataProvider extends ContentProvider {
         switch (match) {
             case WORKOUT:
             case WORKOUT_LIST:
-                return DataContract.WorkoutEntry.CONTENT_TYPE;
+                return WorkoutEntry.CONTENT_TYPE;
             case WORKOUT_LIST_ID:
-                return DataContract.WorkoutEntry.CONTENT_ITEM_TYPE;
+                return WorkoutEntry.CONTENT_ITEM_TYPE;
+            case EX:
+            case EX_LIST:
+                return ExcerciseEntry.CONTENT_TYPE;
+            case EX_LIST_ID:
+                return ExcerciseEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -95,7 +108,7 @@ public class DataProvider extends ContentProvider {
         normalizeDate(values);
         long _id = db.insert(createDataSource(uri), null, values);
         if ( _id > 0 )
-            returnUri = DataContract.WorkoutEntry.buildWrkIdUri(_id);
+            returnUri = WorkoutEntry.buildWrkIdUri(_id);
         else
             throw new android.database.SQLException("Failed to insert row into " + uri);
 
@@ -169,13 +182,20 @@ public class DataProvider extends ContentProvider {
         StringBuilder ds = new StringBuilder();
         switch (sUriMatcher.match(uri)){
             case(WORKOUT):
-                ds.append(DataContract.WorkoutEntry.TABLE_NAME);
+                ds.append(WorkoutEntry.TABLE_NAME);
                 break;
             case(WORKOUT_LIST):{
-                ds.append(DataContract.WorkoutEntry.TABLE_NAME).append(" inner join ")
-                        .append(DataContract.WorkoutTypeEntry.TABLE_NAME).append(" on ")
-                        .append(DataContract.WorkoutEntry.TABLE_NAME).append(".").append(DataContract.WorkoutEntry._ID).append(" = ")
-                        .append(DataContract.WorkoutTypeEntry.TABLE_NAME).append(".").append(DataContract.WorkoutTypeEntry._ID);
+                ds.append(WorkoutEntry.TABLE_NAME).append(" inner join ")
+                        .append(WorkoutTypeEntry.TABLE_NAME).append(" on ")
+                        .append(WorkoutEntry.TABLE_NAME).append(".").append(WorkoutEntry._ID).append(" = ")
+                        .append(WorkoutTypeEntry.TABLE_NAME).append(".").append(WorkoutTypeEntry._ID);
+                break;
+            }
+            case(EX_LIST):{
+                ds.append(WorkoutExEntry.TABLE_NAME).append(" inner join ")
+                        .append(ExcerciseEntry.TABLE_NAME).append(" on ")
+                        .append(WorkoutExEntry.TABLE_NAME).append(".").append(WorkoutExEntry.COLUMN_EX_ID).append(" = ")
+                        .append(ExcerciseEntry.TABLE_NAME).append(".").append(ExcerciseEntry._ID);
                 break;
             }
             default:
@@ -190,8 +210,13 @@ public class DataProvider extends ContentProvider {
             StringBuilder sb = new StringBuilder();
             switch (sUriMatcher.match(uri)){
                 case(WORKOUT_LIST_ID):{
-                    sb.append(DataContract.WorkoutEntry.TABLE_NAME).append(".")
-                            .append(DataContract.WorkoutEntry._ID).append("== ?");
+                    sb.append(WorkoutEntry.TABLE_NAME).append(".")
+                            .append(WorkoutEntry._ID).append("== ?");
+                    break;
+                }
+                case(EX_LIST):{
+                    sb.append(WorkoutExEntry.TABLE_NAME).append(".")
+                            .append(WorkoutExEntry.COLUMN_WRK_ID).append("== ?");
                     break;
                 }
             }
@@ -206,7 +231,11 @@ public class DataProvider extends ContentProvider {
         if(whereClauseArgs == null) {
             switch (sUriMatcher.match(uri)) {
                 case (WORKOUT_LIST_ID): {
-                    whereClauseArgs = new String[]{ DataContract.WorkoutEntry.getWrkIdFromUri(uri) };
+                    whereClauseArgs = new String[]{ WorkoutEntry.getWrkIdFromUri(uri) };
+                    break;
+                }
+                case (EX_LIST): {
+                    whereClauseArgs = new String[]{ WorkoutExEntry.getWrkIdFromUri(uri) };
                     break;
                 }
             }
@@ -220,9 +249,9 @@ public class DataProvider extends ContentProvider {
 
     // Normalize Date
     private void normalizeDate(ContentValues values) {
-        if (values.containsKey(DataContract.WorkoutEntry.COLUMN_DATE)) {
-            long dateValue = values.getAsLong(DataContract.WorkoutEntry.COLUMN_DATE);
-            values.put(DataContract.WorkoutEntry.COLUMN_DATE, DataContract.normalizeDate(dateValue));
+        if (values.containsKey(WorkoutEntry.COLUMN_DATE)) {
+            long dateValue = values.getAsLong(WorkoutEntry.COLUMN_DATE);
+            values.put(WorkoutEntry.COLUMN_DATE, DataContract.normalizeDate(dateValue));
         }
     }
 }

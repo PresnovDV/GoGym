@@ -9,7 +9,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.android.prasnou.app.R;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
-import com.android.prasnou.app.data.DataContract.WorkoutSetEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
 import com.android.prasnou.app.data.DataContract.SetTypeEntry;
 
@@ -20,7 +21,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -35,15 +36,18 @@ public class DataDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(ExcerciseEntry.SQL_CREATE_EXCERCISE_TABLE);
         sqLiteDatabase.execSQL(SetTypeEntry.SQL_CREATE_SET_TYPE_TABLE);
 
+        // test data presnov
         sqLiteDatabase.execSQL(WorkoutEntry.SQL_CREATE_WORKOUT_TABLE);
-        sqLiteDatabase.execSQL(WorkoutSetEntry.SQL_CREATE_WORKOUT_SET_TABLE);
+        sqLiteDatabase.execSQL(WorkoutExEntry.SQL_CREATE_WRK_EX_TABLE);
+        sqLiteDatabase.execSQL(WorkoutExSetEntry.SQL_CREATE_WORKOUT_EX_SET_TABLE);
 
         initData(sqLiteDatabase);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutSetEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutExSetEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutExEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutEntry.TABLE_NAME);
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutTypeEntry.TABLE_NAME);
@@ -81,66 +85,40 @@ public class DataDbHelper extends SQLiteOpenHelper {
         }
 
         // Test !! Workout
-        values.clear();
-        values.put(WorkoutEntry.COLUMN_NUMBER, 189);
-        values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 1);
-        values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
-        values.put(WorkoutEntry.COLUMN_DURATION, 60);
-        values.put(WorkoutEntry.COLUMN_NOTES, "Went good. some pain in knee. Mood is good. a bit overdone");
-        db.insert(WorkoutEntry.TABLE_NAME, null, values);
-        values.clear();
-        values.put(WorkoutEntry.COLUMN_NUMBER, 190);
-        values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 2);
-        values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
-        values.put(WorkoutEntry.COLUMN_DURATION, 75);
-        values.put(WorkoutEntry.COLUMN_NOTES, "No power, undersleep");
-        db.insert(WorkoutEntry.TABLE_NAME, null, values);
-        values.clear();
-        values.put(WorkoutEntry.COLUMN_NUMBER, 191);
-        values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, 3);
-        values.put(WorkoutEntry.COLUMN_DATE, System.currentTimeMillis());
-        values.put(WorkoutEntry.COLUMN_DURATION, 72);
-        values.put(WorkoutEntry.COLUMN_NOTES, "good");
-        db.insert(WorkoutEntry.TABLE_NAME, null, values);
+        String[] wrkTestData = res.getStringArray(R.array.workout_test_data);
+        for (String item : wrkTestData){
+            String[] vals = item.split("[;]");
+            values.clear();
+            values.put(WorkoutEntry.COLUMN_NUMBER, vals[0]);
+            values.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, vals[1]);
+            values.put(WorkoutEntry.COLUMN_DATE, vals[2]);
+            values.put(WorkoutEntry.COLUMN_DURATION, vals[3]);
+            values.put(WorkoutEntry.COLUMN_NOTES, vals[4]);
+            db.insert(WorkoutEntry.TABLE_NAME, null, values);
+        }
 
-        // Test !! WorkoutSet
-        // ex 1
-        values.clear();
-        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_EX_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 55);
-        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 8);
-        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
+        // Test !! WRK_EX
+        String[] wrkExTestData = res.getStringArray(R.array.workout_ex_test_data);
+        for (String item : wrkExTestData){
+            String[] vals = item.split("[;]");
+            values.clear();
+            values.put(WorkoutExEntry.COLUMN_WRK_ID, vals[0]);
+            values.put(WorkoutExEntry.COLUMN_EX_ID, vals[1]);
+            values.put(WorkoutExEntry.COLUMN_EX_NUMB, vals[2]);
+            db.insert(WorkoutExEntry.TABLE_NAME, null, values);
+        }
 
-        values.clear();
-        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_EX_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 2);
-        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 75);
-        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 5);
-        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
-
-        // ex 2
-        values.clear();
-        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_EX_ID, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 120);
-        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 8);
-        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
-
-        values.clear();
-        values.put(WorkoutSetEntry.COLUMN_WRK_ID, 0);
-        values.put(WorkoutSetEntry.COLUMN_EX_ID, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_TYPE_ID, 1);
-        values.put(WorkoutSetEntry.COLUMN_SET_NUMB, 2);
-        values.put(WorkoutSetEntry.COLUMN_SET_WEIGHT, 175);
-        values.put(WorkoutSetEntry.COLUMN_SET_REPS, 6);
-        db.insert(WorkoutSetEntry.TABLE_NAME, null, values);
-
+        // Test !! WRK_EX_SET
+        String[] wrkExSetTestData = res.getStringArray(R.array.workout_ex_set_test_data);
+        for (String item : wrkExSetTestData){
+            String[] vals = item.split("[;]");
+            values.clear();
+            values.put(WorkoutExSetEntry.COLUMN_WRK_EX_ID, vals[0]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_NUMB, vals[1]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_TYPE_ID, vals[2]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_WEIGHT, vals[3]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_REPS, vals[4]);
+            db.insert(WorkoutExSetEntry.TABLE_NAME, null, values);
+        }
     }
 }
