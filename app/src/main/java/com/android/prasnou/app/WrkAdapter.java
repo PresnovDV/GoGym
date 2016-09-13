@@ -20,22 +20,15 @@ public class WrkAdapter extends CursorAdapter {
     }
 
     // view types
-    private static final int VIEW_TYPE_DETAILED = 0;
-    private static final int VIEW_TYPE_REGULAR = 1;
-    private static final int VIEW_TYPE_DETAILED_DRAFT = 12;
-    private static final int VIEW_TYPE_REGULAR_DRAFT = 2;
+    private static final int VIEW_TYPE_DONE = 0;
+    private static final int VIEW_TYPE_DRAFT = 1;
 
-//    private static final int VIEW_TYPE_COUNT = 2; todo
-
-    /*public void setUseDetailedLayout(boolean isSpecTodayLayout){
-        mIsSelectedWorkout = isSpecTodayLayout;
-}*/
-
+    private static final int VIEW_TYPE_COUNT = 2;
 
     @Override
     public int getItemViewType(int position) {
-        return position;
-        //return (mIsSelectedWorkout) ? VIEW_TYPE_DETAILED : VIEW_TYPE_REGULAR;
+        int isDone = 1;// getCursor().getInt(); presnov todo
+        return (isDone > 0) ? VIEW_TYPE_DONE : VIEW_TYPE_DRAFT;
     }
 
 
@@ -50,50 +43,23 @@ public class WrkAdapter extends CursorAdapter {
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
         switch (viewType) {
-            case VIEW_TYPE_DETAILED: {
-                    layoutId = R.layout.wrk_list_item_selected;
-                    break;
-            }
-            case VIEW_TYPE_REGULAR: {
+            case VIEW_TYPE_DONE: {
                     layoutId = R.layout.wrk_list_item;
                     break;
             }
-            case VIEW_TYPE_REGULAR_DRAFT: {
+            case VIEW_TYPE_DRAFT: {
                 layoutId = R.layout.wrk_list_item_draft;
                 break;
             }
-            default:
-                layoutId = R.layout.wrk_list_item_draft;
         }
         View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
 
-        /*ExcerciseListFragment exListFragment = (ExcerciseListFragment) ((MainActivity)context).getSupportFragmentManager().findFragmentById(R.id.fr_ex_list);
-        exListFragment.setWrkID(cursor.getInt(WorkoutListFragment.COL_WRK_ID));
-
-        ((MainActivity)context).getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fr_ex_list, exListFragment)
-                .commit();
-*/
         return view;
 
     }
-
-    // presnov fragment // TODO: 9/11/2016
-/*
-        ExcerciseListFragment forecastFragment = ((ExcerciseListFragment)view.getSupportFragmentManager().findFragmentById(R.id.fragment_forecast));
-    forecastFragment.setUseSpecialTodayLayout(!mTwoPane);
-
-        ExcerciseListFragment excerciseListFragment = new ExcerciseListFragment();
-
-
-    getSupportFragmentManager().beginTransaction()
-    .replace(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
-    .commit();
-     */
-
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {

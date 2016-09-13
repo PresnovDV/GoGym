@@ -1,8 +1,6 @@
 package com.android.prasnou.app;
 
 
-
-
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +11,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.android.prasnou.app.data.DataContract;
@@ -22,6 +21,8 @@ import com.android.prasnou.app.data.DataContract;
  */
 public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final int WORKOUT_LIST_LOADER_ID = 0;
+    private static final String SELECTED_KEY = "selected_wrk";
+    private int mPosition = ListView.INVALID_POSITION;
     private WrkAdapter mWorkoutAdapter;
     private ListView mListView;
 
@@ -67,10 +68,15 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         mListView = (ListView) rootView.findViewById(R.id.wrk_listview);
         mListView.setAdapter(mWorkoutAdapter);
 
-        /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                // presnov todo here
+                View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
+
+
                 Cursor cursor = (Cursor) parent.getItemAtPosition(position);
                 if (cursor != null) {
                     ((Callback) getActivity()).onItemSelected(
@@ -83,10 +89,8 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         });
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
-        }*/
+        }
         return rootView;
     }
 
@@ -111,6 +115,15 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mWorkoutAdapter.changeCursor(null);
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != ListView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
     }
 
 }
