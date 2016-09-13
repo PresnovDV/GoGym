@@ -62,29 +62,17 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         mWorkoutAdapter = new WrkAdapter(getActivity(), null, 0);
-        //mWorkoutAdapter.setUseSpecialTodayLayout(mUseSpecialTodayLayout);
 
         View rootView = inflater.inflate(R.layout.fr_wrk_list, container, false);
         mListView = (ListView) rootView.findViewById(R.id.wrk_listview);
         mListView.setAdapter(mWorkoutAdapter);
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // presnov todo here
-                View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-
-
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(
-                            DataContract.WorkoutEntry.buildWeatherLocationWithDate(
-                                    Utility.getPreferredLocation(getContext()),
-                                    cursor.getLong(COL_WEATHER_DATE)));
-                }
-                mPosition = position;
+                mPosition = mPosition>0 ? ListView.INVALID_POSITION : position;
+                mWorkoutAdapter.setSelectedPosition(mPosition);
+                mWorkoutAdapter.notifyDataSetChanged();
             }
         });
 
@@ -103,13 +91,12 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
     }
 
-
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mWorkoutAdapter.changeCursor(data);
-        /*if (mPosition != ListView.INVALID_POSITION) {
+        if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
-        }*/
+        }
     }
 
     @Override
@@ -120,10 +107,28 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        if (mPosition != ListView.INVALID_POSITION) {
-            outState.putInt(SELECTED_KEY, mPosition);
-        }
+        outState.putInt(SELECTED_KEY, mPosition);
         super.onSaveInstanceState(outState);
     }
 
+    public int getSelectedPosition(){
+        return mPosition;
+    }
 }
+
+
+/*
+
+                // presnov todo here
+                View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
+
+
+                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
+                if (cursor != null) {
+                    ((Callback) getActivity()).onItemSelected(
+                            DataContract.WorkoutEntry.buildWeatherLocationWithDate(
+                                    Utility.getPreferredLocation(getContext()),
+                                    cursor.getLong(COL_WEATHER_DATE)));
+}
+
+        */

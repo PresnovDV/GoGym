@@ -1,11 +1,13 @@
 package com.android.prasnou.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 import android.widget.TextView;
 
 /**
@@ -13,7 +15,8 @@ import android.widget.TextView;
  * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
  */
 public class WrkAdapter extends CursorAdapter {
-    private boolean mIsSelectedWorkout;
+
+    private int mSelectedPosition = ListView.INVALID_POSITION;
 
     public WrkAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -38,8 +41,22 @@ public class WrkAdapter extends CursorAdapter {
     }
 
     @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        LayoutInflater mInflater = LayoutInflater.from(mContext);
+
+        if(mSelectedPosition == position)
+        {
+            return LayoutInflater.from(mContext).inflate(R.layout.wrk_list_item_selected, parent, false);
+        }
+
+        return super.getView(position, convertView, parent);
+    }
+
+    @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         // Choose the layout type
+
         int viewType = getItemViewType(cursor.getPosition());
         int layoutId = -1;
         switch (viewType) {
@@ -97,6 +114,10 @@ public class WrkAdapter extends CursorAdapter {
         }
     }
 
+    public void setSelectedPosition(int selectedPosition) {
+        mSelectedPosition = selectedPosition;
+    }
+
     /**
      * Cache of the children views for a forecast list item.
      */
@@ -116,4 +137,5 @@ public class WrkAdapter extends CursorAdapter {
 
         }
     }
+
 }
