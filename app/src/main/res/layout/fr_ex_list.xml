@@ -6,5 +6,105 @@
     android:orientation="vertical"
     tools:context="com.android.prasnou.app.ExcerciseListFragment"
     >
+    <!-- number | type | date | info -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/wrk_numb_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingRight="10dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/text_med"
+            android:gravity="center"
+
+            />
+        <TextView
+            android:id="@+id/wrk_type_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingRight="10dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceMedium"
+            android:textColor="@color/text_med"
+
+            android:layout_toRightOf="@+id/wrk_numb_textview"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/wrk_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingRight="15dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+
+            android:layout_toRightOf="@+id/wrk_type_textview"
+            android:gravity="center"
+            android:singleLine="true"
+
+            />
+        <TextView
+            android:id="@+id/wrk_result_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:textColor="@color/text_med"
+
+            android:layout_toRightOf="@+id/wrk_date_textview"
+            android:gravity="center"
+
+            />
+
+        <View
+            android:id="@+id/hrule"
+            android:layout_below="@+id/wrk_type_textview"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/gray_med"
+            android:layout_alignParentBottom="true"/>
+    </RelativeLayout>
+
+    <!-- exercise list -->
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ex_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </LinearLayout>
+
+    <!-- footer / note -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+            android:id="@+id/hrule_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:background="@color/gray_med"
+            android:layout_alignParentTop="true"/>
+
+        <TextView
+            android:id="@+id/wrk_note_textview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
+            android:layout_below="@+id/hrule_bottom"
+            android:gravity="bottom"
+            android:textAppearance="?android:textAppearanceSmall"
+            />
+    </RelativeLayout>
 
 </LinearLayout>

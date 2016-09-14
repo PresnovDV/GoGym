@@ -12,7 +12,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.android.prasnou.app.data.DataContract;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
@@ -24,8 +26,8 @@ import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
  */
 public class ExcerciseListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final int WRK_EX_LIST_LOADER_ID = 0;
-    private ExAdapter mWrkExAdapter;
-    private ListView mListView;
+    private LinearLayout mListViewContainer;
+    private LayoutInflater rootInflater;
     private int mWrkID = 1;  // presnov change to -1
 
     //*************** Workout List Cols ***********************
@@ -57,33 +59,10 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mWrkExAdapter = new ExAdapter(getActivity(), null, 0);
-
+        rootInflater = inflater;
         View rootView = inflater.inflate(R.layout.fr_ex_list, container, false);
-        //mListView = (ListView) rootView.findViewById(R.id.ex_listview);
-        mListView.setAdapter(mWrkExAdapter);
+        mListViewContainer = (LinearLayout) rootView.findViewById(R.id.ex_list);
 
-
-        /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(
-                            DataContract.WorkoutEntry.buildWeatherLocationWithDate(
-                                    Utility.getPreferredLocation(getContext()),
-                                    cursor.getLong(COL_WEATHER_DATE)));
-                }
-                mPosition = position;
-            }
-        });
-
-        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
-            // The listview probably hasn't even been populated yet.  Actually perform the
-            // swapout in onLoadFinished.
-            mPosition = savedInstanceState.getInt(SELECTED_KEY);
-        }*/
         return rootView;
     }
 
@@ -104,24 +83,52 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        if(data.moveToFirst()) {
+            int exId = -1;
+            View view = null;
+            ViewHolder vHolder = null;
 
-        data.moveToFirst();
-        for(int i = 0; i<data.getCount(); i++){
-            for(int j = 0; j<data.getColumnCount(); j++){
-                Log.i("eee",data.getString(j));
-            }
-            data.moveToNext();
+            do{
+                if(exId != data.getInt(ExcerciseListFragment.COL_EX_ID)){
+                    exId = data.getInt(ExcerciseListFragment.COL_EX_ID);
+                    view = rootInflater.inflate(R.layout.ex_list_item,mListViewContainer,false);
+                    vHolder = new ViewHolder(view);
+                }
+                // Ex #
+                String numb = data.getString(ExcerciseListFragment.COL_EX_NUMB);
+                if(vHolder.numbView != null) {
+                    vHolder.numbView.setText(numb);
+                }
+
+                // Ex Name
+                String exName = data.getString(ExcerciseListFragment.COL_EX_NAME);
+                if(vHolder.nameView != null) {
+                    vHolder.nameView.setText(exName);
+                }
+
+                mListViewContainer.addView(view);
+
+            }while (data.moveToNext());
+
+
         }
-        mWrkExAdapter.changeCursor(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mWrkExAdapter.changeCursor(null);
-    }
+    public void onLoaderReset(Loader<Cursor> loader) {}
 
     public void setWrkID(int id) {
         mWrkID = id;
+    }
+
+    public static class ViewHolder {
+        public final TextView numbView;
+        public final TextView nameView;
+
+        public ViewHolder(View view) {
+            numbView = (TextView) view.findViewById(R.id.ex_numb_textview);
+            nameView = (TextView) view.findViewById(R.id.ex_name_textview);
+        }
     }
 
 }

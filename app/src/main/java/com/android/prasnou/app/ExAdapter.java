@@ -31,6 +31,11 @@ public class ExAdapter extends CursorAdapter {
     }
 
     @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
+    }
+
+    @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
         View view = LayoutInflater.from(context).inflate(R.layout.ex_list_item, parent, false);
@@ -71,3 +76,28 @@ public class ExAdapter extends CursorAdapter {
         }
     }
 }
+
+
+/*                LinearLayout exItem = (LinearLayout)view.findViewById(R.id.ex_item);
+
+                exItem.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                WrkSet set = new WrkSet(context);
+                set.setWeight(123);
+                set.setReps(8);
+                set.setTag("ex1.set1");
+
+                exItem.addView(set);
+
+                WrkSet set1 = new WrkSet(context);
+                set1.setWeight(12);
+                set1.setReps(2);
+                exItem.addView(set1);
+
+                ////
+                WrkSet mySet = (WrkSet)view.findViewWithTag("ex1.set1");
+                if(mySet != null) {
+                    mySet.setReps(111);
+                }
+                ////*/

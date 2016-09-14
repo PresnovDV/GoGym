@@ -34,7 +34,7 @@ public class WrkAdapter extends CursorAdapter {
     @Override
     public int getItemViewType(int position) {
         int isDone = 1;// getCursor().getInt(); presnov todo
-        if(mSelectedPosition == position){
+        if(mSelectedPosition == position){ // todo
             return VIEW_TYPE_DETAILED;
         }
         return (isDone > 0) ? VIEW_TYPE_DONE : VIEW_TYPE_DRAFT;
@@ -71,29 +71,6 @@ public class WrkAdapter extends CursorAdapter {
             }
             case VIEW_TYPE_DETAILED: {
                 view = inflater.inflate(R.layout.wrk_list_item_detailed, parent, false);
-                LinearLayout exItem = (LinearLayout)view.findViewById(R.id.ex_item);
-
-                exItem.setLayoutParams(new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-
-                WrkSet set = new WrkSet(context);
-                set.setWeight(123);
-                set.setReps(8);
-                set.setTag("ex1.set1");
-
-                exItem.addView(set);
-
-                WrkSet set1 = new WrkSet(context);
-                set1.setWeight(12);
-                set1.setReps(2);
-                exItem.addView(set1);
-
-                ////
-                WrkSet mySet = (WrkSet)view.findViewWithTag("ex1.set1");
-                if(mySet != null) {
-                    mySet.setReps(111);
-                }
-                ////
                 break;
             }
         }
