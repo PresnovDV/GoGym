@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_future_day_view"
+    android:id="@+id/wrk_list_item_detailed"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/touch_selector"
@@ -77,12 +77,38 @@
     </RelativeLayout>
 
     <!-- exercise list -->
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ex_item"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/ex_numb_textview"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:text="1."
+            />
+        <TextView
+            android:id="@+id/ex_name_textview"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif-condensed"
+            android:textAppearance="?android:textAppearanceSmall"
+            android:text="PUL UPS"
+            />
+
+        <!--com.android.prasnou.app.component.WrkSet
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/WrkSetWarm"/-->
+    </LinearLayout>
+    <!--fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/fr_ex_list"
         android:name="com.android.prasnou.app.ExcerciseListFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent" /-->
 
     <!-- footer / note -->
     <RelativeLayout

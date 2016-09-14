@@ -8,24 +8,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10dp"
-        android:text="10"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/hrule"/>
+        />
     <View
         android:id="@+id/hrule"
-        android:layout_below="@+id/repsTextView"
-        android:layout_width="match_parent"
+        android:layout_below="@+id/weightTextView"
+        android:layout_width="20dp"
         android:layout_height="1px"
         android:layout_marginLeft="2dp"
         android:layout_marginRight="2dp"
         android:background="#646464"/>
     <TextView
-
         android:id="@+id/repsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10dp"
-        android:text="11"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/hrule"/>
 
 </merge>

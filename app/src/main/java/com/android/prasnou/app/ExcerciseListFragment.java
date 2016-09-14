@@ -60,8 +60,9 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
         mWrkExAdapter = new ExAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fr_ex_list, container, false);
-        mListView = (ListView) rootView.findViewById(R.id.ex_listview);
+        //mListView = (ListView) rootView.findViewById(R.id.ex_listview);
         mListView.setAdapter(mWrkExAdapter);
+
 
         /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
 

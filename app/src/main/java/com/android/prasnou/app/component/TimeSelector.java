@@ -13,12 +13,12 @@ import com.android.prasnou.app.R;
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  * to add component
- <com.android.prasnou.app.TimeSelector
+ <com.android.prasnou.app.component.TimeSelector
      android:id="@+id/timeSelector"
      android:background="#ccffcc"
      android:layout_width="match_parent"
      android:layout_height="70dp">
- </com.android.prasnou.app.TimeSelector>
+ </com.android.prasnou.app.component.TimeSelector>
  */
 public class TimeSelector extends RelativeLayout {
     private final long REPEAT_INTERVAL_MS = this.getResources().getInteger(R.integer.timeSelector_updInterval);

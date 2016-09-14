@@ -1,14 +1,16 @@
 package com.android.prasnou.app;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.android.prasnou.app.component.WrkSet;
 
 /**
  * {@link WrkAdapter} exposes a list of weather forecasts
@@ -25,12 +27,16 @@ public class WrkAdapter extends CursorAdapter {
     // view types
     private static final int VIEW_TYPE_DONE = 0;
     private static final int VIEW_TYPE_DRAFT = 1;
+    private static final int VIEW_TYPE_DETAILED = 10;
 
     private static final int VIEW_TYPE_COUNT = 2;
 
     @Override
     public int getItemViewType(int position) {
         int isDone = 1;// getCursor().getInt(); presnov todo
+        if(mSelectedPosition == position){
+            return VIEW_TYPE_DETAILED;
+        }
         return (isDone > 0) ? VIEW_TYPE_DONE : VIEW_TYPE_DRAFT;
     }
 
@@ -42,37 +48,60 @@ public class WrkAdapter extends CursorAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        LayoutInflater mInflater = LayoutInflater.from(mContext);
-
-        if(mSelectedPosition == position)
-        {
-            return LayoutInflater.from(mContext).inflate(R.layout.wrk_list_item_selected, parent, false);
-        }
-
+        convertView = null;
         return super.getView(position, convertView, parent);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
+        View view = null;
         // Choose the layout type
-
         int viewType = getItemViewType(cursor.getPosition());
-        int layoutId = -1;
+        LayoutInflater inflater = LayoutInflater.from(context);
+
         switch (viewType) {
             case VIEW_TYPE_DONE: {
-                    layoutId = R.layout.wrk_list_item;
+                    view = inflater.inflate(R.layout.wrk_list_item, parent, false);
                     break;
             }
             case VIEW_TYPE_DRAFT: {
-                layoutId = R.layout.wrk_list_item_draft;
+
+                view = inflater.inflate(R.layout.wrk_list_item_draft, parent, false);
+                break;
+            }
+            case VIEW_TYPE_DETAILED: {
+                view = inflater.inflate(R.layout.wrk_list_item_detailed, parent, false);
+                LinearLayout exItem = (LinearLayout)view.findViewById(R.id.ex_item);
+
+                exItem.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                WrkSet set = new WrkSet(context);
+                set.setWeight(123);
+                set.setReps(8);
+                set.setTag("ex1.set1");
+
+                exItem.addView(set);
+
+                WrkSet set1 = new WrkSet(context);
+                set1.setWeight(12);
+                set1.setReps(2);
+                exItem.addView(set1);
+
+                ////
+                WrkSet mySet = (WrkSet)view.findViewWithTag("ex1.set1");
+                if(mySet != null) {
+                    mySet.setReps(111);
+                }
+                ////
                 break;
             }
         }
-        View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
 
-        ViewHolder viewHolder = new ViewHolder(view);
-        view.setTag(viewHolder);
+        if(view != null) {
+            ViewHolder viewHolder = new ViewHolder(view);
+            view.setTag(viewHolder);
+        }
 
         return view;
 
@@ -113,6 +142,7 @@ public class WrkAdapter extends CursorAdapter {
             viewHolder.noteView.setText(wrkNotes);
         }
     }
+
 
     public void setSelectedPosition(int selectedPosition) {
         mSelectedPosition = selectedPosition;

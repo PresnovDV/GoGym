@@ -2,6 +2,7 @@ package com.android.prasnou.app;
 
 
 import android.database.Cursor;
+import android.database.MergeCursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,10 +22,12 @@ import com.android.prasnou.app.data.DataContract;
  */
 public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final int WORKOUT_LIST_LOADER_ID = 0;
+    private final int WORKOUT_SET_LIST_LOADER_ID = 1;
     private static final String SELECTED_KEY = "selected_wrk";
     private int mPosition = ListView.INVALID_POSITION;
     private WrkAdapter mWorkoutAdapter;
     private ListView mListView;
+    MergeCursor mergeCursor;
 
     //*************** Workout List Cols ***********************
     private static final String[] WRK_LIST_COLUMNS = {
@@ -54,8 +57,19 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
+        MergeCursor mergeCursor = new MergeCursor(new Cursor[2]);
         getLoaderManager().initLoader(WORKOUT_LIST_LOADER_ID, null, this);
+
         super.onActivityCreated(savedInstanceState);
+    }
+
+    private void reloadWrkExList(){
+        //getLoaderManager().getLoader(WORKOUT_LIST_LOADER_ID).reset();
+        // update params
+        //Bundle args = new Bundle(); presnov
+
+        getLoaderManager().restartLoader(WORKOUT_SET_LIST_LOADER_ID, null, this);
     }
 
     @Override
@@ -70,7 +84,11 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mPosition = mPosition>0 ? ListView.INVALID_POSITION : position;
+
+                mPosition = mPosition==position ? ListView.INVALID_POSITION : position;
+                if(mPosition>0){
+                    reloadWrkExList();
+                }
                 mWorkoutAdapter.setSelectedPosition(mPosition);
                 mWorkoutAdapter.notifyDataSetChanged();
             }
@@ -78,22 +96,37 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
+            mWorkoutAdapter.setSelectedPosition(mPosition);
         }
         return rootView;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
-        String[] select = WRK_LIST_COLUMNS;
-        String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
+        switch(id){
+            case WORKOUT_LIST_LOADER_ID:{
+                Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
+                String[] select = WRK_LIST_COLUMNS;
+                String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
 
-        return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
+                return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
+            }
+            case WORKOUT_SET_LIST_LOADER_ID:{
+                Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
+                String[] select = WRK_LIST_COLUMNS;
+                String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
+
+                return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
+            }
+        }
+        return null;
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mWorkoutAdapter.changeCursor(data);
+        //loader.get
+        mergeCursor.set
+        mWorkoutAdapter.changeCursor(mergeCursor);
         if (mPosition != ListView.INVALID_POSITION) {
             mListView.smoothScrollToPosition(mPosition);
         }
@@ -111,9 +144,6 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
         super.onSaveInstanceState(outState);
     }
 
-    public int getSelectedPosition(){
-        return mPosition;
-    }
 }
 
 

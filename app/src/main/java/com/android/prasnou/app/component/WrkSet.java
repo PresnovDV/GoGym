@@ -16,9 +16,13 @@ import com.android.prasnou.app.R;
      style="@style/WrkSetWarm"/>
   */
 public class WrkSet extends RelativeLayout {
+
     View rootView;
     TextView weightTextView;
     TextView repsTextView;
+
+    private int mWeight = 0;
+    private int mReps = 0;
 
     public WrkSet(Context context) {
 
@@ -37,11 +41,32 @@ public class WrkSet extends RelativeLayout {
         rootView = inflate(context, R.layout.wrk_set, this);
         weightTextView = (TextView) rootView.findViewById(R.id.weightTextView);
         repsTextView = (TextView) rootView.findViewById(R.id.repsTextView);
-        weightTextView.setText("100");
-        repsTextView.setText("11");
+        weightTextView.setText(String.valueOf(mWeight));
+        repsTextView.setText(String.valueOf(mReps));
 
         this.setBackgroundResource(R.drawable.wrk_set_warm);
+    }
 
+    public void setWeight(int weight){
+        mWeight = weight;
+        weightTextView.setText(String.valueOf(mWeight));
+        invalidate();
+        requestLayout();
+    }
+
+    public int getWeight(){
+        return mWeight;
+    }
+
+    public void setReps(int reps){
+        mReps = reps;
+        repsTextView.setText(String.valueOf(mReps));
+        invalidate();
+        requestLayout();
+    }
+
+    public int getReps(){
+        return mReps;
     }
 
 }
