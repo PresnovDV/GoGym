@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/A2"
+    android:background="@color/wrk_item_activated"
     android:padding="5dp"
     tools:context="com.android.prasnou.app.ExcerciseListFragment"
     >
@@ -81,7 +81,8 @@
         android:id="@+id/ex_list"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
     </LinearLayout>
 

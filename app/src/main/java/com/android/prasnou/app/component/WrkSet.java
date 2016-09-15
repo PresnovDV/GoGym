@@ -1,6 +1,7 @@
 package com.android.prasnou.app.component;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +42,8 @@ public class WrkSet extends RelativeLayout{
     private void init(Context context) {
         rootView = inflate(context, R.layout.wrk_set, this);
         rootView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        //rootView.setPadding(2,2,2,2);
+
         weightTextView = (TextView) rootView.findViewById(R.id.weightTextView);
         repsTextView = (TextView) rootView.findViewById(R.id.repsTextView);
         weightTextView.setText(String.valueOf(mWeight));

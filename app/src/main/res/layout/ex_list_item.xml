@@ -21,6 +21,6 @@
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceMedium"
 
-        android:gravity="center_vertical|center_horizontal"
+        android:gravity="center_vertical"
         />
 </LinearLayout>
