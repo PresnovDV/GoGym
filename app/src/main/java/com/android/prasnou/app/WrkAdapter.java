@@ -6,19 +6,9 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.android.prasnou.app.component.WrkSet;
-
-/**
- * {@link WrkAdapter} exposes a list of weather forecasts
- * from a {@link android.database.Cursor} to a {@link android.widget.ListView}.
- */
 public class WrkAdapter extends CursorAdapter {
-
-    private int mSelectedPosition = ListView.INVALID_POSITION;
 
     public WrkAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
@@ -27,19 +17,22 @@ public class WrkAdapter extends CursorAdapter {
     // view types
     private static final int VIEW_TYPE_DONE = 0;
     private static final int VIEW_TYPE_DRAFT = 1;
-    private static final int VIEW_TYPE_DETAILED = 10;
-
-    private static final int VIEW_TYPE_COUNT = 2;
+    private static final int VIEW_TYPE_DETAILED_DONE = 10;
+    private static final int VIEW_TYPE_DETAILED_DRAFT = 11;
 
     @Override
     public int getItemViewType(int position) {
-        int isDone = 1;// getCursor().getInt(); presnov todo
-        if(mSelectedPosition == position){ // todo
-            return VIEW_TYPE_DETAILED;
-        }
-        return (isDone > 0) ? VIEW_TYPE_DONE : VIEW_TYPE_DRAFT;
-    }
+        int currWrkId = ((Cursor)getItem(position)).getInt(WorkoutListFragment.COL_WRK_ID);
+        int selectedWrkId = ((MainActivity)mContext).getSelectedWrkId();
+        boolean isDone = ((Cursor)getItem(position)).getLong(WorkoutListFragment.COL_WRK_DATE)>0;
 
+        if(selectedWrkId == currWrkId){
+            return (isDone) ? VIEW_TYPE_DETAILED_DONE : VIEW_TYPE_DETAILED_DRAFT;
+        }
+        else {
+            return (isDone) ? VIEW_TYPE_DONE : VIEW_TYPE_DRAFT;
+        }
+    }
 
     @Override
     public int getViewTypeCount() {
@@ -58,19 +51,21 @@ public class WrkAdapter extends CursorAdapter {
         // Choose the layout type
         int viewType = getItemViewType(cursor.getPosition());
         LayoutInflater inflater = LayoutInflater.from(context);
-
         switch (viewType) {
             case VIEW_TYPE_DONE: {
                     view = inflater.inflate(R.layout.wrk_list_item, parent, false);
                     break;
             }
             case VIEW_TYPE_DRAFT: {
-
                 view = inflater.inflate(R.layout.wrk_list_item_draft, parent, false);
                 break;
             }
-            case VIEW_TYPE_DETAILED: {
+            case VIEW_TYPE_DETAILED_DONE: {
                 view = inflater.inflate(R.layout.wrk_list_item_detailed, parent, false);
+                break;
+            }
+            case VIEW_TYPE_DETAILED_DRAFT: {
+                view = inflater.inflate(R.layout.wrk_list_item_detailed_draft, parent, false);
                 break;
             }
         }
@@ -79,14 +74,14 @@ public class WrkAdapter extends CursorAdapter {
             ViewHolder viewHolder = new ViewHolder(view);
             view.setTag(viewHolder);
         }
-
         return view;
-
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        view.setTag(R.id.fr_wrk_list,cursor.getInt(WorkoutListFragment.COL_WRK_ID));
 
         // Wrk #
         String numb = cursor.getString(WorkoutListFragment.COL_WRK_NUMBER);
@@ -120,13 +115,8 @@ public class WrkAdapter extends CursorAdapter {
         }
     }
 
-
-    public void setSelectedPosition(int selectedPosition) {
-        mSelectedPosition = selectedPosition;
-    }
-
     /**
-     * Cache of the children views for a forecast list item.
+     * Cache of the children views
      */
     public static class ViewHolder {
         public final TextView numbView;

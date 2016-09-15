@@ -3,6 +3,7 @@ package com.android.prasnou.app.component;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,7 +16,7 @@ import com.android.prasnou.app.R;
      android:layout_height="wrap_content"
      style="@style/WrkSetWarm"/>
   */
-public class WrkSet extends RelativeLayout {
+public class WrkSet extends RelativeLayout{
 
     View rootView;
     TextView weightTextView;
@@ -23,6 +24,7 @@ public class WrkSet extends RelativeLayout {
 
     private int mWeight = 0;
     private int mReps = 0;
+    private int mType = -1;
 
     public WrkSet(Context context) {
 
@@ -37,8 +39,8 @@ public class WrkSet extends RelativeLayout {
     }
 
     private void init(Context context) {
-
         rootView = inflate(context, R.layout.wrk_set, this);
+        rootView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
         weightTextView = (TextView) rootView.findViewById(R.id.weightTextView);
         repsTextView = (TextView) rootView.findViewById(R.id.repsTextView);
         weightTextView.setText(String.valueOf(mWeight));
@@ -67,6 +69,17 @@ public class WrkSet extends RelativeLayout {
 
     public int getReps(){
         return mReps;
+    }
+
+    public void setType(int type){
+        mType = type;
+        // presnov
+        invalidate();
+        requestLayout();
+    }
+
+    public int getType(){
+        return mType;
     }
 
 }

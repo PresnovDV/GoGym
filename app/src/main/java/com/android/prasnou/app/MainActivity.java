@@ -2,15 +2,19 @@ package com.android.prasnou.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements WorkoutListFragment.Callback{
+    private static final String SELECTED_WRK_KEY = "selected_wrk";
+    private int mSelectedWrkId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_WRK_KEY)) {
+            mSelectedWrkId = savedInstanceState.getInt(SELECTED_WRK_KEY);
+        }
         setContentView(R.layout.activity_main);
     }
 
@@ -37,20 +41,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-     /*   String location = Utility.getPreferredLocation(this); presnov todo
-        if(!mLocation.equals(location)){
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-            if(ff != null) {
-                ff.onLocationChanged();
-            }
-            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-            if ( null != df ) {
-                df.onLocationChanged(location);
-            }
-            mLocation = location;
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt(SELECTED_WRK_KEY, mSelectedWrkId);
+        super.onSaveInstanceState(outState);
+    }
+
+
+    @Override
+    public void onItemSelected(int wrkId) {
+        if(mSelectedWrkId == wrkId){
+            mSelectedWrkId = -1;
         }
-*/
+        else {
+            mSelectedWrkId = wrkId;
+        }
+    }
+
+    public int getSelectedWrkId(){
+        return mSelectedWrkId;
     }
 }

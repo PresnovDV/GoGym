@@ -84,7 +84,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
             db.insert(DataContract.SetTypeEntry.TABLE_NAME, null, values);
         }
 
-        // Test !! Workout
+        // Test !! Workout presnov
         String[] wrkTestData = res.getStringArray(R.array.workout_test_data);
         for (String item : wrkTestData){
             String[] vals = item.split("[;]");
@@ -97,7 +97,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
             db.insert(WorkoutEntry.TABLE_NAME, null, values);
         }
 
-        // Test !! WRK_EX
+        // Test !! WRK_EX presnov
         String[] wrkExTestData = res.getStringArray(R.array.workout_ex_test_data);
         for (String item : wrkExTestData){
             String[] vals = item.split("[;]");
@@ -108,7 +108,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
             db.insert(WorkoutExEntry.TABLE_NAME, null, values);
         }
 
-        // Test !! WRK_EX_SET
+        // Test !! WRK_EX_SET presnov
         String[] wrkExSetTestData = res.getStringArray(R.array.workout_ex_set_test_data);
         for (String item : wrkExSetTestData){
             String[] vals = item.split("[;]");

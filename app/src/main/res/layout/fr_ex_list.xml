@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/A2"
+    android:padding="5dp"
     tools:context="com.android.prasnou.app.ExcerciseListFragment"
     >
     <!-- number | type | date | info -->
@@ -63,7 +65,7 @@
 
             />
 
-        <View
+        <!--View
             android:id="@+id/hrule"
             android:layout_below="@+id/wrk_type_textview"
             android:layout_width="match_parent"
@@ -71,7 +73,7 @@
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:background="@color/gray_med"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"/-->
     </RelativeLayout>
 
     <!-- exercise list -->
@@ -79,7 +81,7 @@
         android:id="@+id/ex_list"
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
     </LinearLayout>
 
@@ -87,14 +89,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <View
+        <!--View
             android:id="@+id/hrule_bottom"
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_marginLeft="3dp"
             android:layout_marginRight="3dp"
             android:background="@color/gray_med"
-            android:layout_alignParentTop="true"/>
+            android:layout_alignParentTop="true"/-->
 
         <TextView
             android:id="@+id/wrk_note_textview"

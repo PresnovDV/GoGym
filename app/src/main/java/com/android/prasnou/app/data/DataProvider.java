@@ -25,6 +25,7 @@ import android.net.Uri;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
+import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 
 public class DataProvider extends ContentProvider {
@@ -42,6 +43,7 @@ public class DataProvider extends ContentProvider {
     public static final int EX = 200;
     public static final int EX_LIST = 201;
     public static final int EX_LIST_ID = 202;
+    public static final int EX_LIST_SET = 203;
 
 
     //********************* Init content provider **************************************************
@@ -63,6 +65,7 @@ public class DataProvider extends ContentProvider {
 
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE, EX);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#", EX_LIST_SET);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
 
         return matcher;
@@ -82,6 +85,7 @@ public class DataProvider extends ContentProvider {
                 return WorkoutEntry.CONTENT_ITEM_TYPE;
             case EX:
             case EX_LIST:
+            case EX_LIST_SET:
                 return ExcerciseEntry.CONTENT_TYPE;
             case EX_LIST_ID:
                 return ExcerciseEntry.CONTENT_ITEM_TYPE;
@@ -202,6 +206,18 @@ public class DataProvider extends ContentProvider {
                         .append(ExcerciseEntry.TABLE_NAME).append(".").append(ExcerciseEntry._ID);
                 break;
             }
+            case(EX_LIST_SET):{
+                ds.append(WorkoutExEntry.TABLE_NAME)
+                        .append(" left outer join ")
+                        .append(WorkoutExSetEntry.TABLE_NAME).append(" on ")
+                        .append(WorkoutExEntry.TABLE_NAME).append(".").append(WorkoutExEntry._ID).append(" = ")
+                        .append(WorkoutExSetEntry.TABLE_NAME).append(".").append(WorkoutExSetEntry.COLUMN_WRK_EX_ID)
+                        .append(" inner join ")
+                        .append(ExcerciseEntry.TABLE_NAME).append(" on ")
+                        .append(WorkoutExEntry.TABLE_NAME).append(".").append(WorkoutExEntry.COLUMN_EX_ID).append(" = ")
+                        .append(ExcerciseEntry.TABLE_NAME).append(".").append(ExcerciseEntry._ID);
+                break;
+            }
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -218,7 +234,8 @@ public class DataProvider extends ContentProvider {
                             .append(WorkoutEntry._ID).append("== ?").toString();
                     break;
                 }
-                case(EX_LIST):{
+                case(EX_LIST):
+                case(EX_LIST_SET):{
                     whereClause = sb.append(WorkoutExEntry.TABLE_NAME).append(".")
                             .append(WorkoutExEntry.COLUMN_WRK_ID).append("== ?").toString();
                     break;
@@ -228,7 +245,6 @@ public class DataProvider extends ContentProvider {
         return whereClause;
     }
 
-
     /** create args list for where clause template */
     private String[] createWhereClauseArgs(Uri uri, String[] whereClauseArgs) {
         if(whereClauseArgs == null) {
@@ -237,7 +253,8 @@ public class DataProvider extends ContentProvider {
                     whereClauseArgs = new String[]{ WorkoutEntry.getWrkIdFromUri(uri) };
                     break;
                 }
-                case (EX_LIST): {
+                case (EX_LIST):
+                case (EX_LIST_SET):{
                     whereClauseArgs = new String[]{ WorkoutExEntry.getWrkIdFromUri(uri) };
                     break;
                 }
@@ -245,8 +262,6 @@ public class DataProvider extends ContentProvider {
         }
         return whereClauseArgs;
     }
-
-
 
     //*********************** Service methods *****************************//
 

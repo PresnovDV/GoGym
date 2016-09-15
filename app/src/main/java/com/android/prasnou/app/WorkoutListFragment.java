@@ -2,7 +2,6 @@ package com.android.prasnou.app;
 
 
 import android.database.Cursor;
-import android.database.MergeCursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,15 +17,22 @@ import android.widget.ListView;
 
 import com.android.prasnou.app.data.DataContract;
 
+
+
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
 public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final int WORKOUT_LIST_LOADER_ID = 0;
-    private static final String SELECTED_KEY = "selected_wrk";
+    private static final String SELECTED_KEY = "selected_position";
     private int mPosition = ListView.INVALID_POSITION;
     private WrkAdapter mWorkoutAdapter;
     private ListView mListView;
+
+    /** callback to pass selected workout id to other activities/fragments*/
+    public interface Callback {
+        public void onItemSelected(int wrkId);
+    }
 
     //*************** Workout List Cols ***********************
     private static final String[] WRK_LIST_COLUMNS = {
@@ -36,7 +42,6 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
             DataContract.WorkoutEntry.COLUMN_DATE,
             DataContract.WorkoutEntry.COLUMN_DURATION,
             DataContract.WorkoutEntry.COLUMN_NOTES,
-
     };
 
     static final int COL_WRK_ID = 0;
@@ -73,7 +78,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mPosition = mPosition==position ? ListView.INVALID_POSITION : position;
-                mWorkoutAdapter.setSelectedPosition(mPosition);
+                ((Callback)getActivity()).onItemSelected((Integer)view.getTag(R.id.fr_wrk_list));
                 ExcerciseListFragment exFt = (ExcerciseListFragment)getFragmentManager().findFragmentById(R.id.fr_ex_list);
                 if(exFt != null) {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -87,7 +92,6 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
-            mWorkoutAdapter.setSelectedPosition(mPosition);
         }
         return rootView;
     }
@@ -123,19 +127,3 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
 
 }
 
-
-/*
-
-                // presnov todo here
-                View view = LayoutInflater.from(context).inflate(layoutId, parent, false);
-
-
-                Cursor cursor = (Cursor) parent.getItemAtPosition(position);
-                if (cursor != null) {
-                    ((Callback) getActivity()).onItemSelected(
-                            DataContract.WorkoutEntry.buildWeatherLocationWithDate(
-                                    Utility.getPreferredLocation(getContext()),
-                                    cursor.getLong(COL_WEATHER_DATE)));
-}
-
-        */
