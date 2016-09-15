@@ -28,13 +28,11 @@ public class WrkSet extends RelativeLayout{
     private int mType = -1;
 
     public WrkSet(Context context) {
-
         super(context);
         init(context);
     }
 
     public WrkSet(Context context, AttributeSet attrs) {
-
         super(context, attrs);
         init(context);
     }
@@ -42,14 +40,11 @@ public class WrkSet extends RelativeLayout{
     private void init(Context context) {
         rootView = inflate(context, R.layout.wrk_set, this);
         rootView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        //rootView.setPadding(2,2,2,2);
 
         weightTextView = (TextView) rootView.findViewById(R.id.weightTextView);
         repsTextView = (TextView) rootView.findViewById(R.id.repsTextView);
         weightTextView.setText(String.valueOf(mWeight));
         repsTextView.setText(String.valueOf(mReps));
-
-        this.setBackgroundResource(R.drawable.wrk_set_warm);
     }
 
     public void setWeight(int weight){
@@ -77,6 +72,8 @@ public class WrkSet extends RelativeLayout{
     public void setType(int type){
         mType = type;
         // presnov
+        type
+        this.setBackgroundResource(R.drawable.wrk_set_warm);
         invalidate();
         requestLayout();
     }
