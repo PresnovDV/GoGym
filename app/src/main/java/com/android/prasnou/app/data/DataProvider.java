@@ -37,14 +37,17 @@ public class DataProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = buildUriMatcher();
 
     // constants for URI Matcher
-    public static final int WORKOUT = 100;
-    public static final int WORKOUT_LIST = 101;
-    public static final int WORKOUT_LIST_ID = 102;
-    public static final int EX = 200;
-    public static final int EX_LIST = 201;
-    public static final int EX_LIST_ID = 202;
-    public static final int EX_LIST_SET = 203;
-
+    // workout list
+    public static final int WORKOUT = 10;
+    public static final int WORKOUT_LIST = 11;
+    public static final int WORKOUT_LIST_ID = 12;
+    // excercise list
+    public static final int EX = 20;
+    public static final int EX_LIST = 21;
+    public static final int EX_LIST_ID = 22;
+    public static final int EX_LIST_SET = 23;
+    // workout type ref
+    public static final int WRK_TYPE_LIST = 30;
 
     //********************* Init content provider **************************************************
     @Override
@@ -68,6 +71,8 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#", EX_LIST_SET);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
 
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT_TYPE + "/" + DataContract.PATH_LIST, WRK_TYPE_LIST);
+
         return matcher;
     }
 
@@ -78,17 +83,22 @@ public class DataProvider extends ContentProvider {
         final int match = sUriMatcher.match(uri);
         // match to type of data DIR / ITEM
         switch (match) {
+            // workout
             case WORKOUT:
             case WORKOUT_LIST:
                 return WorkoutEntry.CONTENT_TYPE;
             case WORKOUT_LIST_ID:
                 return WorkoutEntry.CONTENT_ITEM_TYPE;
+            // excercise
             case EX:
             case EX_LIST:
             case EX_LIST_SET:
                 return ExcerciseEntry.CONTENT_TYPE;
             case EX_LIST_ID:
                 return ExcerciseEntry.CONTENT_ITEM_TYPE;
+            // workout type
+            case WRK_TYPE_LIST:
+                return WorkoutTypeEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -189,24 +199,26 @@ public class DataProvider extends ContentProvider {
     private String createDataSource(Uri uri) {
         StringBuilder ds = new StringBuilder();
         switch (sUriMatcher.match(uri)){
-            case(WORKOUT):
+            // workout
+            case WORKOUT:
                 ds.append(WorkoutEntry.TABLE_NAME);
                 break;
-            case(WORKOUT_LIST):{
+            case WORKOUT_LIST:{
                 ds.append(WorkoutEntry.TABLE_NAME).append(" inner join ")
                         .append(WorkoutTypeEntry.TABLE_NAME).append(" on ")
                         .append(WorkoutEntry.TABLE_NAME).append(".").append(WorkoutEntry.COLUMN_WRK_TYPE_ID).append(" = ")
                         .append(WorkoutTypeEntry.TABLE_NAME).append(".").append(WorkoutTypeEntry._ID);
                 break;
             }
-            case(EX_LIST):{
+            // excercise
+            case EX_LIST:{
                 ds.append(WorkoutExEntry.TABLE_NAME).append(" inner join ")
                         .append(ExcerciseEntry.TABLE_NAME).append(" on ")
                         .append(WorkoutExEntry.TABLE_NAME).append(".").append(WorkoutExEntry.COLUMN_EX_ID).append(" = ")
                         .append(ExcerciseEntry.TABLE_NAME).append(".").append(ExcerciseEntry._ID);
                 break;
             }
-            case(EX_LIST_SET):{
+            case EX_LIST_SET:{
                 ds.append(WorkoutExEntry.TABLE_NAME)
                         .append(" left outer join ")
                         .append(WorkoutExSetEntry.TABLE_NAME).append(" on ")
@@ -218,6 +230,11 @@ public class DataProvider extends ContentProvider {
                         .append(ExcerciseEntry.TABLE_NAME).append(".").append(ExcerciseEntry._ID);
                 break;
             }
+            // workout type
+            case WRK_TYPE_LIST:
+                ds.append(WorkoutTypeEntry.TABLE_NAME);
+                break;
+
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -229,13 +246,13 @@ public class DataProvider extends ContentProvider {
         if(whereClause == null){
             StringBuilder sb = new StringBuilder();
             switch (sUriMatcher.match(uri)){
-                case(WORKOUT_LIST_ID):{
+                case WORKOUT_LIST_ID:{
                     whereClause = sb.append(WorkoutEntry.TABLE_NAME).append(".")
                             .append(WorkoutEntry._ID).append("== ?").toString();
                     break;
                 }
-                case(EX_LIST):
-                case(EX_LIST_SET):{
+                case EX_LIST:
+                case EX_LIST_SET:{
                     whereClause = sb.append(WorkoutExEntry.TABLE_NAME).append(".")
                             .append(WorkoutExEntry.COLUMN_WRK_ID).append("== ?").toString();
                     break;
@@ -249,12 +266,12 @@ public class DataProvider extends ContentProvider {
     private String[] createWhereClauseArgs(Uri uri, String[] whereClauseArgs) {
         if(whereClauseArgs == null) {
             switch (sUriMatcher.match(uri)) {
-                case (WORKOUT_LIST_ID): {
+                case WORKOUT_LIST_ID: {
                     whereClauseArgs = new String[]{ WorkoutEntry.getWrkIdFromUri(uri) };
                     break;
                 }
-                case (EX_LIST):
-                case (EX_LIST_SET):{
+                case EX_LIST:
+                case EX_LIST_SET:{
                     whereClauseArgs = new String[]{ WorkoutExEntry.getWrkIdFromUri(uri) };
                     break;
                 }

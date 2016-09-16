@@ -22,20 +22,47 @@
     <string-array name="workout_test_data">
         <item>189;1;123456789;60;"Went good. some pain in knee. Mood is good. a bit overdone"</item>
         <item>190;2;123456790;75;"No power, undersleep"</item>
-        <item>191;3;123456791;72;"good."</item>
+        <item>191;3;0;0;"-"</item>
+        <item>192;1;0;0;"-"</item>
     </string-array>
 
     <string-array name="workout_ex_test_data">
+        <!-- wrk id / ex id / ex numb -->
         <item>1;1;1</item>
         <item>1;2;2</item>
-        <item>1;3;4</item>
+        <item>1;3;3</item>
+
+        <item>2;3;1</item>
+
+        <item>4;1;1</item>
+        <item>4;4;2</item>
+
     </string-array>
 
     <string-array name="workout_ex_set_test_data">
+        <!-- wrk ex id / set numb  / set type / weight / reps-->
         <item>1;1;1;55;8</item>
-        <item>1;1;2;75;5</item>
-        <item>2;2;1;120;8</item>
+        <item>1;2;2;75;5</item>
+        <item>2;1;1;120;8</item>
         <item>2;2;2;175;6</item>
+        <item>3;1;1;80;10</item>
+        <item>3;2;2;160;6</item>
+
+        <item>4;1;1;80;10</item>
+
+        <item>5;1;1;0;10</item>
+        <item>5;2;1;25;8</item>
+        <item>5;3;1;70;4</item>
+        <item>5;4;2;90;5</item>
+        <item>5;5;2;90;5</item>
+        <item>5;6;2;100;5</item>
+
+        <item>6;1;1;135;10</item>
+        <item>6;2;2;255;5</item>
+        <item>6;3;2;315;5</item>
     </string-array>
+
+
+
 
 </resources>

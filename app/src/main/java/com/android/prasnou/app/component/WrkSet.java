@@ -1,7 +1,6 @@
 package com.android.prasnou.app.component;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,15 @@ public class WrkSet extends RelativeLayout{
 
     private int mWeight = 0;
     private int mReps = 0;
-    private int mType = -1;
+    private int mType = 0;
+    private int mSelected = 0;
+
+    /** state layouts */
+    private final int LAYOUT_WARM = 10;
+    private final int LAYOUT_WARM_SELECTED = 11;
+    private final int LAYOUT_WORK = 20;
+    private final int LAYOUT_WORK_SELECTED = 21;
+
 
     public WrkSet(Context context) {
         super(context);
@@ -71,11 +78,30 @@ public class WrkSet extends RelativeLayout{
 
     public void setType(int type){
         mType = type;
-        // presnov
-        type
-        this.setBackgroundResource(R.drawable.wrk_set_warm);
+        this.setBackgroundResource(resolveLayout());
         invalidate();
         requestLayout();
+    }
+
+    private int resolveLayout(){
+        int layout = 0;
+
+        switch (mType * 10 | mSelected){
+            case(LAYOUT_WARM):
+                layout = R.drawable.wrk_set_warm;
+                break;
+            case(LAYOUT_WARM_SELECTED):
+                layout = R.drawable.wrk_set_warm_selected;
+                break;
+            case(LAYOUT_WORK):
+                layout = R.drawable.wrk_set_work;
+                break;
+            case(LAYOUT_WORK_SELECTED):
+                layout = R.drawable.wrk_set_work_selected;
+                break;
+        }
+
+        return layout;
     }
 
     public int getType(){

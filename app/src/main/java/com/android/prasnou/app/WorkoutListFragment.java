@@ -100,7 +100,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = DataContract.WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
         String[] select = WRK_LIST_COLUMNS;
-        String orderBy = DataContract.WorkoutEntry.COLUMN_DATE + " ASC";
+        String orderBy = DataContract.WorkoutEntry.COLUMN_NUMBER + " DESC";
 
         return new CursorLoader(getActivity(),uri,select,null,null,orderBy);
     }

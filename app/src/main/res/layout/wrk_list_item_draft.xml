@@ -62,16 +62,9 @@
 
 
     <!-- GO button -->
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="left"
-            />
-
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -82,10 +75,10 @@
             android:textSize="22sp"
             android:textColor="@android:color/holo_green_dark"
             android:text="GO"
-            android:clickable="true"
+            android:layout_alignParentRight="true"
             android:layout_gravity="right"
             />
-    </FrameLayout>
+    </RelativeLayout>
 </LinearLayout>
 
 
