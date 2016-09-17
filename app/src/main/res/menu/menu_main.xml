@@ -4,7 +4,8 @@
     tools:context="com.android.prasnou.app.MainActivity">
     <item
         android:id="@+id/action_add_wrk"
-        android:title="+"
+        android:icon="@drawable/ic_action_add"
+        android:title="Create workout"
         app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_settings"

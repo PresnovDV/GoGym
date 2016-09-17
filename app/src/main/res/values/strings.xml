@@ -1,10 +1,13 @@
 <resources>
-    <string name="app_name">GoGym</string>
+    <string name="app_name">Go Gym</string>
     <string name="action_settings">Settings</string>
 
     <string name="content_authority">com.android.prasnou.app</string>
     <string name="title_add_wrk_activity">New Workout</string>
     <string name="sp_type_label">Type</string>
-    <string name="sp_template_label">Template</string>
+    <string name="title_add_ex_activity">New Excercise</string>
+    <string name="chb_tmpl">Tmpl</string>
+    <string name="wrk_numb_prefix">#</string>
+    <string name="app_label">Gym</string>
 
 </resources>

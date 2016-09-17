@@ -9,13 +9,14 @@
 
     <!-- main activity scheme -->
     <style name="GoGymTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.GoGym</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.GoGym</item>
     </style>
 
     <!-- main activity action bar styles -->
     <style name="ActionBar.Solid.GoGym" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:displayOptions">useLogo|showHome|showTitle</item>
-        <item name="android:logo">@mipmap/ic_launcher</item>
+        <item name="displayOptions">useLogo|showHome|showTitle</item>
+        <item name="logo">@drawable/ic_logo</item>
+        <item name="title">Gym</item>
     </style>
 
     <style name="WorkoutListStyle"></style>

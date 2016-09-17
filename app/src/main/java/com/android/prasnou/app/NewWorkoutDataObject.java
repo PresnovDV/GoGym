@@ -1,0 +1,131 @@
+package com.android.prasnou.app;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Dzianis_Prasnou on 9/16/2016.
+ */
+public class NewWorkoutDataObject {
+    private int wrkNumb = -1;
+    private int wrkTypeId = -1;
+    private List<Ex> wrkExList = new ArrayList<>();
+
+    public NewWorkoutDataObject(){
+        super();
+    }
+
+    public NewWorkoutDataObject(int numb, int typeId){
+        super();
+        wrkNumb = numb;
+        wrkTypeId = typeId;
+    }
+
+    public void setWrkNumb(int numb){
+        wrkNumb = numb;
+    }
+    public int getWrkNumb(){
+        return wrkNumb;
+    }
+
+    public int getWrkTypeId() {
+        return wrkTypeId;
+    }
+    public void setWrkTypeId(int wrkTypeId) {
+        this.wrkTypeId = wrkTypeId;
+    }
+
+    public List<Ex> getWrkExList() {
+        return wrkExList;
+    }
+    public Ex newEx() {
+        Ex ex = new Ex(wrkExList.size());
+        wrkExList.add(ex);
+        return ex;
+    }
+    public void removeEx(int ind){
+        wrkExList.remove(ind);
+    }
+
+    //------------- Excercise ----------------------
+    class Ex{
+        private int exNumb = -1;
+        private List<Set> exSetList = new ArrayList<>();
+
+        public Ex(int numb){
+            super();
+            exNumb = numb;
+        }
+
+        public int getExNumb() {
+            return exNumb;
+        }
+        public void setExNumb(int exNumb) {
+            this.exNumb = exNumb;
+        }
+
+        public List<Set> getExSetList() {
+            return exSetList;
+        }
+
+        public Set newSet(int setTypeId, int weight, int reps) {
+            Set set = new Set(exSetList.size(), setTypeId, weight, reps);
+            exSetList.add(set);
+            return set;
+        }
+
+        public void removeSet(int ind){
+            exSetList.remove(ind);
+        }
+    }
+
+    //------------- Set ----------------------------
+    class Set{
+        private int setNumb = -1;
+        private int setTypeId = -1;
+        private int setWeight = -1;
+        private int setReps = -1;
+
+        public Set(int numb, int typeId, int weight, int reps){
+            setNumb = numb;
+            setTypeId = typeId;
+            setWeight = weight;
+            setReps = reps;
+        }
+
+        public int getSetNumb() {
+            return setNumb;
+        }
+
+        public void setSetNumb(int setNumb) {
+            this.setNumb = setNumb;
+        }
+
+        public int getSetTypeId() {
+            return setTypeId;
+        }
+
+        public void setSetTypeId(int setTypeId) {
+            this.setTypeId = setTypeId;
+        }
+
+        public int getSetWeight() {
+            return setWeight;
+        }
+
+        public void setSetWeight(int setWeight) {
+            this.setWeight = setWeight;
+        }
+
+        public int getSetReps() {
+            return setReps;
+        }
+
+        public void setSetReps(int setReps) {
+            this.setReps = setReps;
+        }
+    }
+
+
+
+}

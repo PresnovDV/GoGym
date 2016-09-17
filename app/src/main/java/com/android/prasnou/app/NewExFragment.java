@@ -1,7 +1,6 @@
 package com.android.prasnou.app;
 
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,11 +23,11 @@ import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
-public class NewWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class NewExFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private final int SP_WRK_TYPE_LOADER_ID = 10;
     private final int WRK_EX_LIST_LOADER_ID = 11;
     SimpleCursorAdapter spWrkTypeAdapter = null;
-    private NewWorkoutDataObject newWorkout = new NewWorkoutDataObject();
+    SimpleCursorAdapter spWrkTemplAdapter = null;
 
     //*************** Workout Type List Cols ***********************
     private static final String[] WRK_TYPE_LIST_COLUMNS = {
@@ -54,7 +53,7 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.fr_new_wrk, container, false);
 
-        // Workout Type spinner init
+        // Workout Type
         Spinner spWrkType = (Spinner) rootView.findViewById(R.id.sp_wrk_type);
         spWrkTypeAdapter=new SimpleCursorAdapter(getContext(),
                 android.R.layout.simple_spinner_item,
@@ -64,22 +63,8 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
                 0);
         spWrkTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWrkType.setAdapter(spWrkTypeAdapter);
-        /*
-        // change type
-        spWrkType.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onClick(View view) {
-                newWorkout.setWrkTypeId(2);
-            }
-        });
-*/
-        // init workout object
-        if(newWorkout.getWrkNumb()>0){
-            TextView wrkNumb = (TextView) rootView.findViewById(R.id.wrk_numb_textview);
-            wrkNumb.setText(R.string.wrk_numb_prefix + newWorkout.getWrkNumb());
-        }
 
-        // add ex button
+
         TextView btnAddEx = (TextView) rootView.findViewById(R.id.btn_add_ex);
         if (btnAddEx != null) {
             btnAddEx.setOnClickListener( new View.OnClickListener() {
@@ -91,6 +76,8 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             });
         }
 
+        // footer
+
         return rootView;
     }
 
@@ -101,9 +88,8 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             item_numb.setText(exList.getChildCount()+1);
         }
         Spinner item_name = (Spinner) item.findViewById(R.id.ex_name_spinner);
-
-        startActivity(new Intent(getActivity(), com.android.prasnou.app.AddExActivity.class));
     }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -118,6 +104,9 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
                 orderBy = WorkoutTypeEntry._ID + " ASC";
                 uri = WorkoutTypeEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
             }
+            case (WRK_EX_LIST_LOADER_ID): {
+
+            }
         }
 
         return new CursorLoader(getActivity(), uri, select, null, null, orderBy);
@@ -130,66 +119,24 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             switch (loader.getId()){
                 case(SP_WRK_TYPE_LOADER_ID):
                     spWrkTypeAdapter.changeCursor(data);
+                    //queryTemplates(data.getInt(NewWorkoutFragment.COL_WRK_TYPE_ID));
                     break;
             }
-
-/*
-            int exId = -1;
-            LinearLayout exItem = null;
-            ViewHolder vHolder = null;
-
-            do{
-                if(exId != data.getInt(ExcerciseListFragment.COL_EX_ID)){
-                    exId = data.getInt(ExcerciseListFragment.COL_EX_ID);
-                    exItem = (LinearLayout)rootInflater.inflate(R.layout.ex_list_item,mListViewContainer,false);
-                    vHolder = new ViewHolder(exItem);
-
-                    // Ex #
-                    String numb = data.getString(ExcerciseListFragment.COL_EX_NUMB);
-                    if(vHolder.numbView != null) {
-                        vHolder.numbView.setText(numb);
-                    }
-
-                    // Ex Name
-                    String exName = data.getString(ExcerciseListFragment.COL_EX_NAME);
-                    if(vHolder.nameView != null) {
-                        vHolder.nameView.setText(exName);
-                    }
-                    mListViewContainer.addView(exItem);
-                }
-
-                // add set
-
-                //exItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                if(data.getInt(ExcerciseListFragment.COL_SET_ID)>0) {
-                    WrkSet set = new WrkSet(getContext());
-
-                    set.setWeight(data.getInt(ExcerciseListFragment.COL_SET_WEIGHT));
-                    set.setReps(data.getInt(ExcerciseListFragment.COL_SET_REPS));
-                    StringBuilder setTag = new StringBuilder(data.getString(ExcerciseListFragment.COL_EX_NUMB)).append(":")
-                            .append(data.getString(ExcerciseListFragment.COL_SET_NUMB));
-                    set.setTag(setTag.toString());
-                    set.setType(data.getInt(ExcerciseListFragment.COL_SET_TYPE));
-
-                    exItem.addView(set);
-                }
-            }while (data.moveToNext());
-*/
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
-//    public static class ViewHolder {
-//        public final TextView numbView;
-//        public final TextView nameView;
-//
-//        public ViewHolder(View view) {
-//            numbView = (TextView) view.findViewById(R.id.ex_numb_textview);
-//            nameView = (TextView) view.findViewById(R.id.ex_name_textview);
-//        }
-//    }
+    public static class ViewHolder {
+        public final TextView numbView;
+        public final TextView nameView;
+
+        public ViewHolder(View view) {
+            numbView = (TextView) view.findViewById(R.id.ex_numb_textview);
+            nameView = (TextView) view.findViewById(R.id.ex_name_textview);
+        }
+    }
 
 }
 

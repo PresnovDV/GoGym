@@ -17,30 +17,27 @@
         android:layout_height="match_parent">
         <TextView
             android:id="@+id/wrk_numb_textview"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:paddingRight="10dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceSmall"
-            android:textColor="@color/colorPrimaryDark"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignBottom="@+id/wrk_type_textview"
-
-
+            android:textColor="@color/text_med"
+            android:gravity="center"
             />
         <TextView
             android:id="@+id/wrk_type_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
+            android:paddingRight="10dp"
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text_dark"
+            android:textColor="@color/text_med"
 
             android:layout_toRightOf="@+id/wrk_numb_textview"
-            android:layout_alignParentRight="true"
-
+            android:gravity="center"
             />
         <TextView
             android:id="@+id/wrk_label"

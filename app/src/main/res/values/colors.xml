@@ -4,8 +4,8 @@
     <color name="colorPrimaryDark">#390835</color>
 
 
-    <color name="wrk_item_activated">#E6EDCC</color>
-    <color name="wrk_item_pressed">#E6EDCC</color>
+    <color name="wrk_item_activated">#f1e6edcc</color>
+    <color name="wrk_item_pressed">#f1e6edcc</color>
 
     <color name="text_black">#000</color>
     <color name="text_dark">#390835</color>
