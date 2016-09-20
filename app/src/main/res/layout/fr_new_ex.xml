@@ -5,86 +5,19 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#ffeeee"
-    tools:context="com.android.prasnou.app.NewWorkoutFragment"
+    tools:context="com.android.prasnou.app.NewExFragment"
     >
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/ex_textview"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentTop="true"
-        android:background="#eeffee"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="#"/>
-
-        <EditText
-            android:id="@+id/wrkNumb_editText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="193"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/sp_type_label"/>
-        <Spinner
-            android:id="@+id/sp_wrk_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Tmpl"/>
-    </LinearLayout>
-    <View
-        android:id="@+id/hrule"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@color/gray_med"
-        android:layout_below="@id/header"
-        />
-
-    <LinearLayout
-        android:id="@+id/ex_list"
-        android:orientation="vertical"
-        android:layout_width="match_parent"
+        android:text="New Ex stub"/>
+    <Button
+        android:id="@+id/btn_return"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hrule"
-        >
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <TextView
-                android:padding="10dp"
-                android:id="@+id/btn_add_ex"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:text="+"/>
-        </FrameLayout>
-    </LinearLayout>
+        android:text="Return"
+        android:layout_alignParentBottom="true"/>
 
-    <LinearLayout
-        android:background="#eeeeff"
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        >
-        <Button
-            android:id="@+id/btn_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Save"/>
-    </LinearLayout>
 
 </RelativeLayout>

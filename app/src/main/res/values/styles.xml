@@ -19,8 +19,14 @@
         <item name="title">Gym</item>
     </style>
 
+
     <style name="WorkoutListStyle"></style>
 
     <style name="ExcersiseListStyle"></style>
+
+    <style name="checkBoxStyle" parent="Base.Theme.AppCompat">
+        <item name="colorAccent">@color/B3</item>
+        <item name="android:textColorSecondary">@color/B3</item>
+    </style>
 
 </resources>

@@ -1,6 +1,7 @@
 package com.android.prasnou.app;
 
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -13,6 +14,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,10 +27,15 @@ import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
 public class NewWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private final int SP_WRK_TYPE_LOADER_ID = 10;
-    private final int WRK_EX_LIST_LOADER_ID = 11;
-    SimpleCursorAdapter spWrkTypeAdapter = null;
-    private NewWorkoutDataObject newWorkout = new NewWorkoutDataObject();
+    public static final int EX_EDIT_REQUEST_CODE = 0;
+
+    private static final int WRK_INIT_LOADER_ID = 0;
+    private final int WRK_TYPE_LOADER_ID = 10;
+    private final int EX_TYPE_LOADER_ID = 11;
+
+    private SimpleCursorAdapter spWrkTypeAdapter = null;
+    private NewWorkoutDataObject newWorkout  = new NewWorkoutDataObject();
+    private View rootView = null;
 
     //*************** Workout Type List Cols ***********************
     private static final String[] WRK_TYPE_LIST_COLUMNS = {
@@ -39,6 +46,7 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
     static final int COL_WRK_TYPE_NAME = 1;
     //******************************************************
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +54,15 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(SP_WRK_TYPE_LOADER_ID, null, this);
+        getLoaderManager().initLoader(WRK_TYPE_LOADER_ID, null, this);
+        getLoaderManager().initLoader(EX_TYPE_LOADER_ID, null, this);
+
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fr_new_wrk, container, false);
+        rootView = inflater.inflate(R.layout.fr_new_wrk, container, false);
 
         // Workout Type spinner init
         Spinner spWrkType = (Spinner) rootView.findViewById(R.id.sp_wrk_type);
@@ -80,13 +90,13 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         }
 
         // add ex button
-        TextView btnAddEx = (TextView) rootView.findViewById(R.id.btn_add_ex);
+        ImageButton btnAddEx = (ImageButton) rootView.findViewById(R.id.btn_add_ex);
         if (btnAddEx != null) {
             btnAddEx.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     LinearLayout exList = (LinearLayout) rootView.findViewById(R.id.ex_list);
-                    addEx(inflater, exList);
+                    editEx(-1);
                 }
             });
         }
@@ -94,15 +104,33 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         return rootView;
     }
 
-    private void addEx(LayoutInflater inflater, LinearLayout exList) {
-        View item = inflater.inflate(R.layout.ex_list_item_edit, exList, false);
-        TextView item_numb = (TextView)item.findViewById(R.id.ex_numb_textview);
-        if(item_numb != null){
-            item_numb.setText(exList.getChildCount()+1);
+    private void editEx(int ind) {
+        NewWorkoutDataObject.Ex ex = null;
+        // get ex by ind (-1 - new)
+        if(ind < 0){ // new - create empty ex
+            ex = newWorkout.newEx();
+            ex.setExInd(newWorkout.getWrkExList().size());
         }
-        Spinner item_name = (Spinner) item.findViewById(R.id.ex_name_spinner);
+        else {
+            if(ind < newWorkout.getExCount()) {
+                ex = newWorkout.getWrkExList().get(ind);
+            }
+        }
+        // send ex as param
+        Intent intent = new Intent(getActivity(), com.android.prasnou.app.AddExActivity.class);
+        intent.putExtra(AddWorkoutActivity.WRK_EX_PARAM, ex);
+        startActivityForResult(intent, EX_EDIT_REQUEST_CODE);
+    }
 
-        startActivity(new Intent(getActivity(), com.android.prasnou.app.AddExActivity.class));
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == EX_EDIT_REQUEST_CODE
+                && resultCode == Activity.RESULT_OK){
+
+            NewWorkoutDataObject.Ex newEx = (NewWorkoutDataObject.Ex)data.getExtras().get(AddWorkoutActivity.WRK_EX_PARAM);
+            newWorkout.getWrkExList().set(newEx.getExInd(), newEx);
+        }
     }
 
     @Override
@@ -111,25 +139,25 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         String orderBy = null;
         Uri uri = null;
 
-
         switch (id) {
-            case (SP_WRK_TYPE_LOADER_ID): {
+            case (WRK_TYPE_LOADER_ID): {
                 select = WRK_TYPE_LIST_COLUMNS;
                 orderBy = WorkoutTypeEntry._ID + " ASC";
                 uri = WorkoutTypeEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
             }
         }
-
         return new CursorLoader(getActivity(), uri, select, null, null, orderBy);
     }
-
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data.moveToFirst()) {
             switch (loader.getId()){
-                case(SP_WRK_TYPE_LOADER_ID):
+                case(WRK_TYPE_LOADER_ID):
                     spWrkTypeAdapter.changeCursor(data);
+                    break;
+                case(WRK_INIT_LOADER_ID): // presnov finish
+                    newWorkout.setWrkTypeId(1); // folow up
                     break;
             }
 

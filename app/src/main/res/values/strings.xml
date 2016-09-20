@@ -6,7 +6,7 @@
     <string name="title_add_wrk_activity">New Workout</string>
     <string name="sp_type_label">Type</string>
     <string name="title_add_ex_activity">New Excercise</string>
-    <string name="chb_tmpl">Tmpl</string>
+    <string name="chb_tmpl">tpl</string>
     <string name="wrk_numb_prefix">#</string>
     <string name="app_label">Gym</string>
 

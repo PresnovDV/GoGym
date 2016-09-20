@@ -1,5 +1,6 @@
 package com.android.prasnou.app;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ public class NewWorkoutDataObject {
     public void setWrkNumb(int numb){
         wrkNumb = numb;
     }
+
     public int getWrkNumb(){
         return wrkNumb;
     }
@@ -31,6 +33,7 @@ public class NewWorkoutDataObject {
     public int getWrkTypeId() {
         return wrkTypeId;
     }
+
     public void setWrkTypeId(int wrkTypeId) {
         this.wrkTypeId = wrkTypeId;
     }
@@ -47,14 +50,26 @@ public class NewWorkoutDataObject {
         wrkExList.remove(ind);
     }
 
+    public int getExCount(){
+        return getWrkExList().size();
+    }
     //------------- Excercise ----------------------
-    class Ex{
+    class Ex implements Serializable{
         private int exNumb = -1;
+        private int exInd = 0;
         private List<Set> exSetList = new ArrayList<>();
 
         public Ex(int numb){
             super();
             exNumb = numb;
+        }
+
+        public int getExInd() {
+            return exInd;
+        }
+
+        public void setExInd(int ind) {
+            exInd = ind;
         }
 
         public int getExNumb() {

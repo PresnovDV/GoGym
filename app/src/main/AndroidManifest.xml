@@ -28,7 +28,6 @@
         <activity
             android:name="com.android.prasnou.app.AddWorkoutActivity"
             android:label="@string/title_add_wrk_activity"
-            android:theme="@style/GoGymTheme"
             android:parentActivityName=".MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -37,7 +36,6 @@
         <activity
             android:name="com.android.prasnou.app.AddExActivity"
             android:label="@string/title_add_ex_activity"
-            android:theme="@style/GoGymTheme"
             android:parentActivityName=".AddWorkoutActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

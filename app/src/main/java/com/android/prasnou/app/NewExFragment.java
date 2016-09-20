@@ -1,6 +1,8 @@
 package com.android.prasnou.app;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -12,75 +14,78 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.prasnou.app.data.DataContract;
-import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
+
+import java.util.Map;
 
 
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
 public class NewExFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
-    private final int SP_WRK_TYPE_LOADER_ID = 10;
-    private final int WRK_EX_LIST_LOADER_ID = 11;
-    SimpleCursorAdapter spWrkTypeAdapter = null;
-    SimpleCursorAdapter spWrkTemplAdapter = null;
+    private final int EX_TYPE_LOADER_ID = 11;
+    private SimpleCursorAdapter spExTypeAdapter = null;
+    private NewWorkoutDataObject.Ex mWrkEx = null;
 
-    //*************** Workout Type List Cols ***********************
-    private static final String[] WRK_TYPE_LIST_COLUMNS = {
-            WorkoutTypeEntry._ID,
-            WorkoutTypeEntry.COLUMN_NAME
+    //*************** Excercise Type List Cols ***********************
+    private static final String[] EX_TYPE_LIST_COLUMNS = {
+            DataContract.ExcerciseEntry._ID,
+            DataContract.ExcerciseEntry.COLUMN_NAME
     };
-    static final int COL_WRK_TYPE_ID = 0;
-    static final int COL_WRK_TYPE_NAME = 1;
+    static final int COL_EX_TYPE_ID = 0;
+    static final int COL_EX_TYPE_NAME = 1;
+    private Map<Integer, String> exTypes = null;
     //******************************************************
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent inputIntent = getActivity().getIntent();
+        mWrkEx = (NewWorkoutDataObject.Ex) inputIntent.getExtras().get(AddWorkoutActivity.WRK_EX_PARAM);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(SP_WRK_TYPE_LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final View rootView = inflater.inflate(R.layout.fr_new_wrk, container, false);
 
-        // Workout Type
-        Spinner spWrkType = (Spinner) rootView.findViewById(R.id.sp_wrk_type);
-        spWrkTypeAdapter=new SimpleCursorAdapter(getContext(),
-                android.R.layout.simple_spinner_item,
-                null,
-                new String[]{WorkoutTypeEntry.COLUMN_NAME},
-                new int[]{android.R.id.text1},
-                0);
-        spWrkTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spWrkType.setAdapter(spWrkTypeAdapter);
+        final View rootView = inflater.inflate(R.layout.fr_new_ex, container, false);
+        TextView textView = (TextView)rootView.findViewById(R.id.ex_textview);
 
+        textView.setText(String.valueOf(mWrkEx.getExNumb()));
 
-        TextView btnAddEx = (TextView) rootView.findViewById(R.id.btn_add_ex);
-        if (btnAddEx != null) {
-            btnAddEx.setOnClickListener( new View.OnClickListener() {
+        Button btnReturn = (Button) rootView.findViewById(R.id.btn_return);
+        if(btnReturn != null){
+            btnReturn.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View v) {
-                    LinearLayout exList = (LinearLayout) rootView.findViewById(R.id.ex_list);
-                    addEx(inflater, exList);
+                public void onClick(View view) {
+                    sendResult();
                 }
             });
         }
-
-        // footer
-
         return rootView;
     }
 
+    public void sendResult(){
+        Intent intent = new Intent();
+        intent.putExtra(AddWorkoutActivity.WRK_EX_PARAM, mWrkEx);
+        if (getActivity().getParent() == null) {
+            getActivity().setResult(Activity.RESULT_OK, intent);
+        } else {
+            getActivity().getParent().setResult(Activity.RESULT_OK, intent);
+        }
+        getActivity().finish();
+    }
+
+    // WTF?? presnov
     private void addEx(LayoutInflater inflater, LinearLayout exList) {
         View item = inflater.inflate(R.layout.ex_list_item_edit, exList, false);
         TextView item_numb = (TextView)item.findViewById(R.id.ex_numb_textview);
@@ -97,46 +102,32 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         String orderBy = null;
         Uri uri = null;
 
-
         switch (id) {
-            case (SP_WRK_TYPE_LOADER_ID): {
-                select = WRK_TYPE_LIST_COLUMNS;
-                orderBy = WorkoutTypeEntry._ID + " ASC";
-                uri = WorkoutTypeEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
-            }
-            case (WRK_EX_LIST_LOADER_ID): {
-
+            case (EX_TYPE_LOADER_ID): {
+                select = EX_TYPE_LIST_COLUMNS;
+                orderBy = DataContract.ExcerciseEntry.COLUMN_NAME + " ASC";
+                uri = DataContract.ExcerciseEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
             }
         }
-
         return new CursorLoader(getActivity(), uri, select, null, null, orderBy);
-    }
 
+    }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data.moveToFirst()) {
-            switch (loader.getId()){
-                case(SP_WRK_TYPE_LOADER_ID):
-                    spWrkTypeAdapter.changeCursor(data);
-                    //queryTemplates(data.getInt(NewWorkoutFragment.COL_WRK_TYPE_ID));
+            switch (loader.getId()) {
+                case (EX_TYPE_LOADER_ID):
+                    spExTypeAdapter.changeCursor(data);
                     break;
             }
         }
     }
 
+
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {}
+    public void onLoaderReset(Loader<Cursor> loader) {
 
-    public static class ViewHolder {
-        public final TextView numbView;
-        public final TextView nameView;
-
-        public ViewHolder(View view) {
-            numbView = (TextView) view.findViewById(R.id.ex_numb_textview);
-            nameView = (TextView) view.findViewById(R.id.ex_name_textview);
-        }
     }
-
 }
 
