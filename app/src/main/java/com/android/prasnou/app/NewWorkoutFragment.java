@@ -15,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -31,7 +30,6 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
 
     private static final int WRK_INIT_LOADER_ID = 0;
     private final int WRK_TYPE_LOADER_ID = 10;
-    private final int EX_TYPE_LOADER_ID = 11;
 
     private SimpleCursorAdapter spWrkTypeAdapter = null;
     private NewWorkoutDataObject newWorkout  = new NewWorkoutDataObject();
@@ -55,7 +53,6 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         getLoaderManager().initLoader(WRK_TYPE_LOADER_ID, null, this);
-        getLoaderManager().initLoader(EX_TYPE_LOADER_ID, null, this);
 
         super.onActivityCreated(savedInstanceState);
     }
@@ -75,7 +72,7 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         spWrkTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWrkType.setAdapter(spWrkTypeAdapter);
         /*
-        // change type
+        // change type  presnov
         spWrkType.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onClick(View view) {
@@ -95,7 +92,6 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             btnAddEx.setOnClickListener( new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    LinearLayout exList = (LinearLayout) rootView.findViewById(R.id.ex_list);
                     editEx(-1);
                 }
             });
@@ -104,12 +100,15 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         return rootView;
     }
 
+    /**
+     * creates new Ex and starts edit Ex activity
+     * @param ind
+     */
     private void editEx(int ind) {
         NewWorkoutDataObject.Ex ex = null;
         // get ex by ind (-1 - new)
         if(ind < 0){ // new - create empty ex
             ex = newWorkout.newEx();
-            ex.setExInd(newWorkout.getWrkExList().size());
         }
         else {
             if(ind < newWorkout.getExCount()) {
@@ -122,6 +121,7 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         startActivityForResult(intent, EX_EDIT_REQUEST_CODE);
     }
 
+    /** handles results of edit Ex activity */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -169,7 +169,7 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             do{
                 if(exId != data.getInt(ExcerciseListFragment.COL_EX_ID)){
                     exId = data.getInt(ExcerciseListFragment.COL_EX_ID);
-                    exItem = (LinearLayout)rootInflater.inflate(R.layout.ex_list_item,mListViewContainer,false);
+                    exItem = (LinearLayout)rootInflater.inflate(R.layout.wrk_ex_list_item,mListViewContainer,false);
                     vHolder = new ViewHolder(exItem);
 
                     // Ex #

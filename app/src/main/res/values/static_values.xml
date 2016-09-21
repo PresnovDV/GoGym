@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="weight_min">0</integer>
+    <integer name="weight_max">400</integer>
+    <integer name="weight_step">5</integer>
+    <integer name="reps_min">1</integer>
+    <integer name="reps_max">25</integer>
+    <integer name="reps_step">1</integer>
+
+</resources>

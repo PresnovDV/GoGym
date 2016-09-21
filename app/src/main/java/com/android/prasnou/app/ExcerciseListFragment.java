@@ -102,7 +102,7 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
             do{
                 if(exId != data.getInt(ExcerciseListFragment.COL_EX_ID)){
                     exId = data.getInt(ExcerciseListFragment.COL_EX_ID);
-                    exItem = (LinearLayout)rootInflater.inflate(R.layout.ex_list_item,mListViewContainer,false);
+                    exItem = (LinearLayout)rootInflater.inflate(R.layout.wrk_ex_list_item,mListViewContainer,false);
                     vHolder = new ViewHolder(exItem);
 
                     // Ex #

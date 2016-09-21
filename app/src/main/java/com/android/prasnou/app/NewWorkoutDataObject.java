@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/16/2016.
  */
-public class NewWorkoutDataObject {
+public class NewWorkoutDataObject implements Serializable{
     private int wrkNumb = -1;
     private int wrkTypeId = -1;
     private List<Ex> wrkExList = new ArrayList<>();
@@ -44,6 +44,8 @@ public class NewWorkoutDataObject {
     public Ex newEx() {
         Ex ex = new Ex(wrkExList.size());
         wrkExList.add(ex);
+        ex.setExInd(wrkExList.indexOf(ex));
+        ex.setExNumb(wrkExList.size());
         return ex;
     }
     public void removeEx(int ind){
@@ -86,6 +88,7 @@ public class NewWorkoutDataObject {
         public Set newSet(int setTypeId, int weight, int reps) {
             Set set = new Set(exSetList.size(), setTypeId, weight, reps);
             exSetList.add(set);
+            set.setInd(exSetList.indexOf(set));
             return set;
         }
 
@@ -96,6 +99,7 @@ public class NewWorkoutDataObject {
 
     //------------- Set ----------------------------
     class Set{
+        private int ind = 0;
         private int setNumb = -1;
         private int setTypeId = -1;
         private int setWeight = -1;
@@ -106,6 +110,14 @@ public class NewWorkoutDataObject {
             setTypeId = typeId;
             setWeight = weight;
             setReps = reps;
+        }
+
+        public int getInd() {
+            return ind;
+        }
+
+        public void setInd(int ind) {
+            this.ind = ind;
         }
 
         public int getSetNumb() {

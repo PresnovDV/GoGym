@@ -48,6 +48,8 @@ public class DataProvider extends ContentProvider {
     public static final int EX_LIST_SET = 23;
     // workout type ref
     public static final int WRK_TYPE_LIST = 30;
+    // excercise type ref
+    public static final int EX_TYPE_LIST = 40;
 
     //********************* Init content provider **************************************************
     @Override
@@ -71,7 +73,9 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#", EX_LIST_SET);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
 
+        // refs
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT_TYPE + "/" + DataContract.PATH_LIST, WRK_TYPE_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE + "/" + DataContract.PATH_LIST, EX_TYPE_LIST);
 
         return matcher;
     }
@@ -99,6 +103,9 @@ public class DataProvider extends ContentProvider {
             // workout type
             case WRK_TYPE_LIST:
                 return WorkoutTypeEntry.CONTENT_TYPE;
+            // ex type
+            case EX_TYPE_LIST:
+                return ExcerciseEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -210,7 +217,7 @@ public class DataProvider extends ContentProvider {
                         .append(WorkoutTypeEntry.TABLE_NAME).append(".").append(WorkoutTypeEntry._ID);
                 break;
             }
-            // excercise
+            // wrk - excercise
             case EX_LIST:{
                 ds.append(WorkoutExEntry.TABLE_NAME).append(" inner join ")
                         .append(ExcerciseEntry.TABLE_NAME).append(" on ")
@@ -233,6 +240,10 @@ public class DataProvider extends ContentProvider {
             // workout type
             case WRK_TYPE_LIST:
                 ds.append(WorkoutTypeEntry.TABLE_NAME);
+                break;
+            // excercise type
+            case EX_TYPE_LIST:
+                ds.append(ExcerciseEntry.TABLE_NAME);
                 break;
 
             default:

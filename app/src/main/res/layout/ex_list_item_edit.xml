@@ -19,6 +19,6 @@
         android:layout_height="match_parent"
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceMedium"
-        android:gravity="center_vertical"
+       android:gravity="center_vertical"
         />
 </LinearLayout>
