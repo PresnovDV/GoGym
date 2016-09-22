@@ -63,8 +63,35 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:background="@color/gray_med"
+            android:layout_below="@id/ex_numb_textview"
+            />
+        <!-- edit set block -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hrule">
+
+
+            <ImageButton
+                android:id="@+id/btn_add_set"
+                android:layout_margin="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:background="@drawable/ic_action_add_green"
+                />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/hruleBottom"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/gray_med"
             android:layout_alignParentBottom="true"
             />
+
     </RelativeLayout>
     <ScrollView
         android:id="@+id/set_list_wrapper"
@@ -82,54 +109,6 @@
         </LinearLayout>
     </ScrollView>
 
-
-    <LinearLayout
-        android:id="@+id/footer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/set_list_wrapper"
-        android:orientation="vertical">
-        <View
-            android:id="@+id/hruleF"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/gray_med"
-            android:layout_alignParentTop="true"
-            />
-        <ImageButton
-            android:id="@+id/btn_add_set"
-            android:layout_margin="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:background="@drawable/ic_action_add_green"
-            />
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true">
-
-        <NumberPicker
-            android:id="@+id/np_weight"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:layout_weight="1"
-            android:divider="#ee99ee"
-            />
-        <NumberPicker
-            android:id="@+id/np_reps"
-            android:layout_width="0dp"
-            android:layout_height="80dp"
-            android:layout_weight="1"
-            android:scrollIndicators="left"
-            />
-    </LinearLayout>
 
 
     <!--Button
