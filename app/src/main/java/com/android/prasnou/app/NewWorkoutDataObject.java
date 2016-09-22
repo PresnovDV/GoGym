@@ -85,8 +85,8 @@ public class NewWorkoutDataObject implements Serializable{
             return exSetList;
         }
 
-        public Set newSet(int setTypeId, int weight, int reps) {
-            Set set = new Set(exSetList.size(), setTypeId, weight, reps);
+        public Set newSet(int weight, int reps) {
+            Set set = new Set(exSetList.size()+1, weight, reps);
             exSetList.add(set);
             set.setInd(exSetList.indexOf(set));
             return set;
@@ -101,13 +101,11 @@ public class NewWorkoutDataObject implements Serializable{
     class Set{
         private int ind = 0;
         private int setNumb = -1;
-        private int setTypeId = -1;
         private int setWeight = -1;
         private int setReps = -1;
 
-        public Set(int numb, int typeId, int weight, int reps){
+        public Set(int numb, int weight, int reps){
             setNumb = numb;
-            setTypeId = typeId;
             setWeight = weight;
             setReps = reps;
         }
@@ -126,14 +124,6 @@ public class NewWorkoutDataObject implements Serializable{
 
         public void setSetNumb(int setNumb) {
             this.setNumb = setNumb;
-        }
-
-        public int getSetTypeId() {
-            return setTypeId;
-        }
-
-        public void setSetTypeId(int setTypeId) {
-            this.setTypeId = setTypeId;
         }
 
         public int getSetWeight() {

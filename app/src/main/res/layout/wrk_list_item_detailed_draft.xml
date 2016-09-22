@@ -71,21 +71,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!-- footer / note -->
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/wrk_note_textview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="bottom"
-            android:textAppearance="?android:textAppearanceSmall"
-            />
-    </RelativeLayout>
-
 </LinearLayout>
 
 

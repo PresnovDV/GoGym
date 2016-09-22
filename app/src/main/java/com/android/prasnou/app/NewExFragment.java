@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
 import android.widget.Spinner;
@@ -76,6 +77,9 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         spExTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spExType.setAdapter(spExTypeAdapter);
 
+        final LinearLayout setList = (LinearLayout) rootView.findViewById(R.id.set_list);
+        createSetList(inflater, setList);
+
         //------ Number pickers -------------
         // Weight
         Resources res = this.getResources();
@@ -119,9 +123,24 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
 
 
+        ImageButton btnAddSet = (ImageButton) rootView.findViewById(R.id.btn_add_set);
+        if(btnAddSet != null){
+            btnAddSet.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int weight = 0;
+                    int reps = 0;
+                    if(mWrkEx.getExSetList().size()>0) {
+                        NewWorkoutDataObject.Set latestSet = mWrkEx.getExSetList().get(mWrkEx.getExSetList().size() - 1);
+                        weight = latestSet.getSetWeight();
+                        reps = latestSet.getSetReps();
+                    }
 
-
-        //textView.setText(String.valueOf(mWrkEx.getExNumb()));
+                    View setItem = addSet(inflater, setList, mWrkEx.newSet(weight, reps));
+                    //setItem.setFocus presnov todo
+                }
+            });
+        }
 
         Button btnReturn = null; // (Button) rootView.findViewById(R.id.btn_return);
         if(btnReturn != null){
@@ -134,6 +153,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         }
         return rootView;
     }
+
 
     private String[] getDisplayValues(int minVal, int maxVal, int step) {
         int steps  = 1+(maxVal-minVal)/step;
@@ -156,14 +176,50 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         getActivity().finish();
     }
 
-    // WTF?? presnov
-    private void addEx(LayoutInflater inflater, LinearLayout exList) {
-        View item = inflater.inflate(R.layout.ex_list_item_edit, exList, false);
-        TextView item_numb = (TextView)item.findViewById(R.id.ex_numb_textview);
-        if(item_numb != null){
-            item_numb.setText(exList.getChildCount()+1);
+    private void createSetList(LayoutInflater inflater, LinearLayout setList) {
+        for(NewWorkoutDataObject.Set set : mWrkEx.getExSetList()){
+            addSet(inflater, setList, set);
         }
-        Spinner item_name = (Spinner) item.findViewById(R.id.ex_name_spinner);
+    }
+
+    /**
+     * Adds set item to view
+     * @param inflater
+     * @param setList a layout to add
+     * @param set a Set object
+     */
+    private View addSet(LayoutInflater inflater, LinearLayout setList, NewWorkoutDataObject.Set set) {
+        View setView = inflater.inflate(R.layout.ex_set_item, setList, false);
+
+        TextView set_numb = (TextView)setView.findViewById(R.id.set_numb_textview);
+        if(set_numb != null){
+            set_numb.setText(String.valueOf(set.getSetNumb()));
+        }
+
+        final TextView set_weight = (TextView)setView.findViewById(R.id.set_weight_textview);
+        if(set_weight != null){
+            set_weight.setText(String.valueOf(set.getSetWeight()));
+        }
+
+        final TextView set_reps = (TextView)setView.findViewById(R.id.set_reps_textview);
+        if(set_reps != null){
+            set_reps.setText(String.valueOf(set.getSetReps()));
+        }
+
+        setView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setEditMode(view);
+            }
+        });
+
+        setList.addView(setView);
+
+        return  setView;
+    }
+
+    private void setEditMode(View view) {
+        // todo set
     }
 
 

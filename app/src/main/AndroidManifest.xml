@@ -18,7 +18,6 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.android.prasnou.app.MainActivity"
-            android:label="@string/app_label"
             android:theme="@style/GoGymTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

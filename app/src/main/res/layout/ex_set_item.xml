@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    >
+    <TextView
+        android:id="@+id/set_numb_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="20dp"
+        android:paddingLeft="10dp"
+
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:id="@+id/set_weight_label"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingRight="20dp"
+        android:paddingLeft="10dp"
+
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/set_numb_textview"
+
+        android:text="weight:"
+        />
+
+    <TextView
+        android:id="@+id/set_weight_textview"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/set_weight_label"
+        />
+    <TextView
+        android:id="@+id/set_separator"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:text=" / "
+        android:layout_toRightOf="@id/set_weight_textview"
+        />
+    <TextView
+        android:id="@+id/set_reps_label"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:text="reps:"
+        android:layout_toRightOf="@id/set_separator"
+        />
+
+    <TextView
+        android:id="@+id/set_reps_textview"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:gravity="center_vertical"
+        android:layout_toRightOf="@id/set_reps_label"
+        />
+
+    <View
+        android:id="@+id/hrule"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@color/gray_med"
+        android:layout_alignParentBottom="true"
+        />
+</RelativeLayout>
