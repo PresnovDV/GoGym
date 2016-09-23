@@ -2,11 +2,25 @@ package com.android.prasnou.app;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.ToggleButton;
 
 /**
  * Created by Dzianis_Prasnou on 9/15/2016.
  */
 public class AddExActivity extends AppCompatActivity {
+
+    // radio group listener
+    static final RadioGroup.OnCheckedChangeListener ToggleListener = new RadioGroup.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(final RadioGroup radioGroup, final int i) {
+            for (int j = 0; j < radioGroup.getChildCount(); j++) {
+                final ToggleButton view = (ToggleButton) radioGroup.getChildAt(j);
+                view.setChecked(view.getId() == i);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +34,10 @@ public class AddExActivity extends AppCompatActivity {
     }
 
 
+    public void onClickSetType(View view) {
+        RadioGroup rg = (RadioGroup)view.getParent();
+        rg.check(view.getId());
+    }
 
     /* presnov
     @Override

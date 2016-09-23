@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.android.prasnou.app.NewExFragment"
-    >
+    tools:context="com.android.prasnou.app.NewExFragment">
 
     <RelativeLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true">
 
         <TextView
@@ -22,7 +21,9 @@
 
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text_dark"
+            android:textColor="@color/text_primary"
+            android:background="@drawable/rounded_label"
+
             android:gravity="center"
             android:text="#123"
             />
@@ -35,6 +36,7 @@
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/text_light"
+            android:background="@drawable/rounded_label"
 
             android:layout_toRightOf="@+id/ex_numb_textview"
             android:gravity="center"
@@ -47,13 +49,13 @@
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:paddingRight="10dp"
+
             android:fontFamily="sans-serif-condensed"
             android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text_dark"
+            android:textColor="@color/text_primary"
 
             android:layout_toRightOf="@+id/ex_type_label"
             android:gravity="center"
-
             />
 
         <View
@@ -69,17 +71,237 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/hrule">
+            android:layout_below="@id/hrule"
+            android:background="@color/wrk_item_pressed">
 
+            <!-- labels row -->
+            <TextView
+                android:id="@+id/header_set_numb_label"
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_label"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/text_light"
+                android:gravity="center"
+
+                android:text="#"
+                />
+
+            <TextView
+                android:id="@+id/header_set_weight_label"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_label"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="15dp"
+
+                android:layout_toRightOf="@id/header_set_numb_label"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/text_light"
+                android:gravity="center"
+
+                android:text="Weight"
+                />
+
+            <TextView
+                android:id="@+id/header_set_reps_label"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_label"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="45dp"
+
+                android:layout_toRightOf="@id/header_set_weight_label"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/text_light"
+                android:gravity="center"
+
+                android:text="Reps"
+                />
+
+            <!-- second row -->
+
+            <TextView
+                android:id="@+id/header_set_numb_edit"
+                android:layout_width="30dp"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_label"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_margin="5dp"
+                android:layout_below="@id/header_set_numb_label"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+
+                android:text="1"
+                />
+
+            <EditText
+                android:id="@+id/header_set_weight_edit"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_edit"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_below="@id/header_set_weight_label"
+                android:layout_toRightOf="@id/header_set_numb_edit"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+
+                android:text="250"
+                />
+
+            <TextView
+                android:id="@+id/header_set_unit_label"
+                android:layout_width="10dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+
+                android:layout_below="@id/header_set_weight_label"
+                android:layout_toRightOf="@id/header_set_weight_edit"
+
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/text_light"
+                android:gravity="bottom|left"
+
+                android:text="lb"
+                />
+
+            <TextView
+                android:id="@+id/header_set_divider_label"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+
+                android:layout_below="@id/header_set_weight_label"
+                android:layout_toRightOf="@id/header_set_unit_label"
+
+                android:fontFamily="sans-serif-light"
+                android:textSize="25sp"
+                android:textColor="@color/text_primary"
+                android:gravity="top|center_horizontal"
+
+                android:text="x"
+                />
+
+            <EditText
+                android:id="@+id/header_set_reps_edit"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:background="@drawable/rounded_edit"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+
+                android:layout_margin="5dp"
+
+                android:layout_below="@id/header_set_reps_label"
+                android:layout_toRightOf="@id/header_set_divider_label"
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceLarge"
+                android:textColor="@color/text_primary"
+                android:gravity="center"
+
+                android:text="8"
+                />
+
+            <TextView
+                android:id="@+id/header_set_runit_label"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="5dp"
+
+                android:layout_below="@id/header_set_reps_label"
+                android:layout_toRightOf="@id/header_set_reps_edit"
+
+
+                android:fontFamily="sans-serif-condensed"
+                android:textAppearance="?android:textAppearanceSmall"
+                android:textColor="@color/text_light"
+                android:gravity="bottom|left"
+
+                android:text="reps"
+                />
+
+            <!--RadioGroup
+                android:id="@+id/rg_setType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_alignParentBottom="true"
+                >
+                <ToggleButton
+                    android:id="@+id/tb_warmup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:textOff="warm up"
+                    android:textOn="warm up"
+                    android:onClick="onClickSetType"
+                    android:layout_marginLeft="40dp"
+                    android:layout_marginRight="40dp"
+                    />
+
+                <ToggleButton
+                    android:id="@+id/tb_heavy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:textOff="heavy"
+                    android:textOn="heavy"
+                    android:onClick="onClickSetType"
+                    android:layout_marginLeft="40dp"
+
+                    />
+            </RadioGroup-->
+
+
+            <!-- button -->
 
             <ImageButton
                 android:id="@+id/btn_add_set"
-                android:layout_margin="10dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
 
-                android:background="@drawable/ic_action_add_green"
+                android:layout_width="45dp"
+                android:layout_height="70dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+
+                android:src="@drawable/ic_submit"
+                android:background="@drawable/rounded_edit"
+
+                android:layout_alignParentRight="true"
                 />
+
+
         </RelativeLayout>
 
         <View
@@ -91,7 +313,6 @@
             android:background="@color/gray_med"
             android:layout_alignParentBottom="true"
             />
-
     </RelativeLayout>
     <ScrollView
         android:id="@+id/set_list_wrapper"
@@ -102,12 +323,10 @@
             android:id="@+id/set_list"
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            >
-
+            android:layout_height="wrap_content">
         </LinearLayout>
     </ScrollView>
+
 
 
 

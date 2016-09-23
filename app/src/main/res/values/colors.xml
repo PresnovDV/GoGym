@@ -12,6 +12,7 @@
     <color name="text_med">#4D3449</color>
     <color name="text_light">#A4889E</color>
     <color name="text_green">#3D5C18</color>
+    <color name="text_primary">#6B1169</color>
 
     <color name="gray_dark">#aaaaaa</color>
     <color name="gray_med">#cccccc</color>
@@ -31,5 +32,6 @@
     <color name="B5">#505D18</color>
 
     <color name="C1">#E6EDCC</color>
+
 
 </resources>

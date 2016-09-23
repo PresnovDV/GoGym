@@ -3,7 +3,6 @@ package com.android.prasnou.app;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -45,6 +43,8 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
     static final int COL_EX_TYPE_NAME = 1;
     private Map<Integer, String> exTypes = null;
     //******************************************************
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,45 +80,6 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         final LinearLayout setList = (LinearLayout) rootView.findViewById(R.id.set_list);
         createSetList(inflater, setList);
 
-        //------ Number pickers -------------
-        // Weight
-        Resources res = this.getResources();
-        NumberPicker npWeight = (NumberPicker) rootView.findViewById(R.id.np_weight);
-        npWeight.setWrapSelectorWheel(true);
-        String[] weightValues = getDisplayValues(res.getInteger(R.integer.weight_min),
-                res.getInteger(R.integer.weight_max), res.getInteger(R.integer.weight_step));
-        npWeight.setMinValue(0);
-        npWeight.setMaxValue(weightValues.length-1);
-        npWeight.setDisplayedValues(weightValues);
-        npWeight.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                String[] values = numberPicker.getDisplayedValues();
-                if(i1 < values.length ) {
-                    String newVal = values[i1];
-                    exNumb.setText(newVal);
-                }
-            }
-        });
-
-        // Reps
-        NumberPicker npReps = (NumberPicker) rootView.findViewById(R.id.np_reps);
-        String[] repsValues = getDisplayValues(res.getInteger(R.integer.reps_min),
-                res.getInteger(R.integer.reps_max), res.getInteger(R.integer.reps_step));
-        npReps.setMinValue(0);
-        npReps.setMaxValue(repsValues.length-1);
-        npReps.setDisplayedValues(repsValues);
-        npReps.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
-            @Override
-            public void onValueChange(NumberPicker numberPicker, int i, int i1) {
-                String[] values = numberPicker.getDisplayedValues();
-                if(i1 < values.length) {
-                    String newVal = values[i1];
-                    exNumb.setText(newVal);
-                }
-            }
-        });
-
         //-----------------------------------
 
 
@@ -136,11 +97,16 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
                         reps = latestSet.getSetReps();
                     }
 
-                    View setItem = addSet(inflater, setList, mWrkEx.newSet(weight, reps));
+                   // View setItem = addSet(inflater, setList, mWrkEx.newSet(weight, reps));
                     //setItem.setFocus presnov todo
                 }
             });
         }
+
+        // ----- ms toggle button ------------
+//        ((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
+
+        // -----------------------------------------
 
         Button btnReturn = null; // (Button) rootView.findViewById(R.id.btn_return);
         if(btnReturn != null){
