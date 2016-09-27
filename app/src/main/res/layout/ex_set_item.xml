@@ -33,7 +33,7 @@
 
     <TextView
         android:id="@+id/set_weight_textview"
-        android:layout_width="20dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceMedium"
@@ -64,7 +64,7 @@
 
     <TextView
         android:id="@+id/set_reps_textview"
-        android:layout_width="20dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceMedium"

@@ -10,7 +10,8 @@
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        >
 
         <TextView
             android:id="@+id/ex_numb_textview"
@@ -69,6 +70,7 @@
             />
         <!-- edit set block -->
         <RelativeLayout
+            android:id="@+id/set_edit_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/hrule"
@@ -171,7 +173,9 @@
                 android:textColor="@color/text_primary"
                 android:gravity="center"
 
-                android:text="250"
+                android:inputType="number"
+                android:selectAllOnFocus="true"
+
                 />
 
             <TextView
@@ -232,7 +236,7 @@
                 android:textColor="@color/text_primary"
                 android:gravity="center"
 
-                android:text="8"
+                android:inputType="number"
                 />
 
             <TextView
@@ -253,37 +257,6 @@
                 android:text="reps"
                 />
 
-            <!--RadioGroup
-                android:id="@+id/rg_setType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_alignParentBottom="true"
-                >
-                <ToggleButton
-                    android:id="@+id/tb_warmup"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:textOff="warm up"
-                    android:textOn="warm up"
-                    android:onClick="onClickSetType"
-                    android:layout_marginLeft="40dp"
-                    android:layout_marginRight="40dp"
-                    />
-
-                <ToggleButton
-                    android:id="@+id/tb_heavy"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:textOff="heavy"
-                    android:textOn="heavy"
-                    android:onClick="onClickSetType"
-                    android:layout_marginLeft="40dp"
-
-                    />
-            </RadioGroup-->
-
-
             <!-- button -->
 
             <ImageButton
@@ -296,10 +269,14 @@
                 android:layout_marginBottom="5dp"
 
                 android:src="@drawable/ic_submit"
-                android:background="@drawable/rounded_edit"
+                android:background="@drawable/rounded_button"
 
                 android:layout_alignParentRight="true"
-                />
+
+
+                >
+
+            </ImageButton>
 
 
         </RelativeLayout>
@@ -308,25 +285,23 @@
             android:id="@+id/hruleBottom"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:background="@color/gray_med"
-            android:layout_alignParentBottom="true"
+            android:background="@color/colorPrimary"
+            android:layout_below="@id/set_edit_layout"
             />
     </RelativeLayout>
-    <ScrollView
-        android:id="@+id/set_list_wrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/header">
-        <LinearLayout
-            android:id="@+id/set_list"
-            android:orientation="vertical"
+        <ScrollView
+            android:id="@+id/set_list_wrapper"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </LinearLayout>
-    </ScrollView>
-
+            android:layout_height="match_parent"
+            android:layout_below="@id/header"
+            >
+            <LinearLayout
+                android:id="@+id/set_list"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            </LinearLayout>
+        </ScrollView>
 
 
 

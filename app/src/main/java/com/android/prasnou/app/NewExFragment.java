@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
@@ -80,31 +81,51 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         final LinearLayout setList = (LinearLayout) rootView.findViewById(R.id.set_list);
         createSetList(inflater, setList);
 
-        //-----------------------------------
+        //----------- editors --------
 
+        final EditText edWeight = (EditText) rootView.findViewById(R.id.header_set_weight_edit);
+        /*edWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus) {
+                    edWeight.getText().clear();
+                }
+            }
+        });*/
 
-
+        final EditText edReps = (EditText) rootView.findViewById(R.id.header_set_reps_edit);
+        /*edReps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if(hasFocus){
+                    edReps.getText().clear();
+                }
+            }
+        });*/
+        //----------- Add Set button --------
         ImageButton btnAddSet = (ImageButton) rootView.findViewById(R.id.btn_add_set);
         if(btnAddSet != null){
             btnAddSet.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    int weight = 0;
-                    int reps = 0;
-                    if(mWrkEx.getExSetList().size()>0) {
-                        NewWorkoutDataObject.Set latestSet = mWrkEx.getExSetList().get(mWrkEx.getExSetList().size() - 1);
-                        weight = latestSet.getSetWeight();
-                        reps = latestSet.getSetReps();
-                    }
 
-                   // View setItem = addSet(inflater, setList, mWrkEx.newSet(weight, reps));
-                    //setItem.setFocus presnov todo
+                int weight = 0;
+                int reps = 0;
+                if(edWeight.getText().length()>0){
+                    weight = Integer.parseInt(edWeight.getText().toString());
+                }
+                if(edReps.getText().length()>0){
+                    reps = Integer.parseInt(edReps.getText().toString());
+                }
+
+                drawSet(inflater, setList, mWrkEx.newSet(-1, weight, reps));
+
                 }
             });
         }
 
         // ----- ms toggle button ------------
-//        ((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
+        //((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
 
         // -----------------------------------------
 
@@ -144,7 +165,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
     private void createSetList(LayoutInflater inflater, LinearLayout setList) {
         for(NewWorkoutDataObject.Set set : mWrkEx.getExSetList()){
-            addSet(inflater, setList, set);
+            drawSet(inflater, setList, set);
         }
     }
 
@@ -154,7 +175,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
      * @param setList a layout to add
      * @param set a Set object
      */
-    private View addSet(LayoutInflater inflater, LinearLayout setList, NewWorkoutDataObject.Set set) {
+    private View drawSet(LayoutInflater inflater, LinearLayout setList, NewWorkoutDataObject.Set set) {
         View setView = inflater.inflate(R.layout.ex_set_item, setList, false);
 
         TextView set_numb = (TextView)setView.findViewById(R.id.set_numb_textview);
@@ -175,17 +196,13 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         setView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setEditMode(view);
+                //setEditMode(view);
             }
         });
 
         setList.addView(setView);
 
         return  setView;
-    }
-
-    private void setEditMode(View view) {
-        // todo set
     }
 
 
