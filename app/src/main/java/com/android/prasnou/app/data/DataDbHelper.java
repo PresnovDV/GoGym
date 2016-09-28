@@ -21,7 +21,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 23;
+    private static final int DATABASE_VERSION = 24;
 
     public static final String DATABASE_NAME = "gogym.db";
 

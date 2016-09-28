@@ -17,7 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -65,12 +65,12 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
         final View rootView = inflater.inflate(R.layout.fr_new_ex, container, false);
 
-        final TextView exNumb = (TextView)rootView.findViewById(R.id.ex_numb_textview);
+        final TextView exNumb = (TextView)rootView.findViewById(R.id.ex_numb_textview); // presnov todo
 
-        // Ex Type spinner init
+        //---------- Ex Type spinner init
         Spinner spExType = (Spinner) rootView.findViewById(R.id.sp_ex_type);
         spExTypeAdapter=new SimpleCursorAdapter(getContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.sp_item,
                 null,
                 new String[]{ExcerciseEntry.COLUMN_NAME},
                 new int[]{android.R.id.text1},
@@ -78,30 +78,18 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         spExTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spExType.setAdapter(spExTypeAdapter);
 
-        final LinearLayout setList = (LinearLayout) rootView.findViewById(R.id.set_list);
-        createSetList(inflater, setList);
+        final ListView setList = (ListView) rootView.findViewById(R.id.set_list);
+
+        // ------ Set List init --------------
+        final SetAdapter setAdapter = new SetAdapter(getContext(),R.id.set_list, mWrkEx.getExSetList());
+        setList.setAdapter(setAdapter);
 
         //----------- editors --------
 
+        final TextView vSetNumb = (TextView) rootView.findViewById(R.id.header_set_numb_texview);
         final EditText edWeight = (EditText) rootView.findViewById(R.id.header_set_weight_edit);
-        /*edWeight.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus) {
-                    edWeight.getText().clear();
-                }
-            }
-        });*/
-
         final EditText edReps = (EditText) rootView.findViewById(R.id.header_set_reps_edit);
-        /*edReps.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if(hasFocus){
-                    edReps.getText().clear();
-                }
-            }
-        });*/
+
         //----------- Add Set button --------
         ImageButton btnAddSet = (ImageButton) rootView.findViewById(R.id.btn_add_set);
         if(btnAddSet != null){
@@ -117,9 +105,11 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
                 if(edReps.getText().length()>0){
                     reps = Integer.parseInt(edReps.getText().toString());
                 }
+                setAdapter.add(mWrkEx.newSet(-1, weight, reps));
+                setAdapter.notifyDataSetChanged();
 
-                drawSet(inflater, setList, mWrkEx.newSet(-1, weight, reps));
-
+                // update next set number
+                vSetNumb.setText(String.valueOf(mWrkEx.getExSetList().size()+1));
                 }
             });
         }
@@ -127,7 +117,9 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         // ----- ms toggle button ------------
         //((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
 
-        // -----------------------------------------
+
+
+        // ------------------------------------
 
         Button btnReturn = null; // (Button) rootView.findViewById(R.id.btn_return);
         if(btnReturn != null){
@@ -141,16 +133,6 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         return rootView;
     }
 
-
-    private String[] getDisplayValues(int minVal, int maxVal, int step) {
-        int steps  = 1+(maxVal-minVal)/step;
-        String[] res = new String[steps];
-        for(int i = 0; i<steps; i++){
-            res[i]=String.valueOf(minVal+i*step);
-        }
-        return res;
-    }
-
     /** send result back to new Workout fragment */
     public void sendResult(){
         Intent intent = new Intent();
@@ -162,49 +144,6 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         }
         getActivity().finish();
     }
-
-    private void createSetList(LayoutInflater inflater, LinearLayout setList) {
-        for(NewWorkoutDataObject.Set set : mWrkEx.getExSetList()){
-            drawSet(inflater, setList, set);
-        }
-    }
-
-    /**
-     * Adds set item to view
-     * @param inflater
-     * @param setList a layout to add
-     * @param set a Set object
-     */
-    private View drawSet(LayoutInflater inflater, LinearLayout setList, NewWorkoutDataObject.Set set) {
-        View setView = inflater.inflate(R.layout.ex_set_item, setList, false);
-
-        TextView set_numb = (TextView)setView.findViewById(R.id.set_numb_textview);
-        if(set_numb != null){
-            set_numb.setText(String.valueOf(set.getSetNumb()));
-        }
-
-        final TextView set_weight = (TextView)setView.findViewById(R.id.set_weight_textview);
-        if(set_weight != null){
-            set_weight.setText(String.valueOf(set.getSetWeight()));
-        }
-
-        final TextView set_reps = (TextView)setView.findViewById(R.id.set_reps_textview);
-        if(set_reps != null){
-            set_reps.setText(String.valueOf(set.getSetReps()));
-        }
-
-        setView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //setEditMode(view);
-            }
-        });
-
-        setList.addView(setView);
-
-        return  setView;
-    }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

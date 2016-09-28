@@ -16,7 +16,7 @@
         <TextView
             android:id="@+id/ex_numb_textview"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:paddingRight="20dp"
             android:paddingLeft="10dp"
 
@@ -26,12 +26,12 @@
             android:background="@drawable/rounded_label"
 
             android:gravity="center"
-            android:text="#123"
+            android:text="Ex #2"
             />
         <TextView
             android:id="@+id/ex_type_label"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
+            android:layout_height="40dp"
             android:paddingRight="0dp"
 
             android:fontFamily="sans-serif-condensed"
@@ -48,12 +48,8 @@
         <Spinner
             android:id="@+id/sp_ex_type"
             android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:paddingRight="10dp"
-
-            android:fontFamily="sans-serif-condensed"
-            android:textAppearance="?android:textAppearanceMedium"
-            android:textColor="@color/text_primary"
+            android:layout_height="40dp"
+            android:paddingLeft="10dp"
 
             android:layout_toRightOf="@+id/ex_type_label"
             android:gravity="center"
@@ -138,7 +134,7 @@
             <!-- second row -->
 
             <TextView
-                android:id="@+id/header_set_numb_edit"
+                android:id="@+id/header_set_numb_texview"
                 android:layout_width="30dp"
                 android:layout_height="40dp"
                 android:background="@drawable/rounded_label"
@@ -166,7 +162,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_below="@id/header_set_weight_label"
-                android:layout_toRightOf="@id/header_set_numb_edit"
+                android:layout_toRightOf="@id/header_set_numb_texview"
 
                 android:fontFamily="sans-serif-condensed"
                 android:textAppearance="?android:textAppearanceLarge"
@@ -237,6 +233,7 @@
                 android:gravity="center"
 
                 android:inputType="number"
+                android:selectAllOnFocus="true"
                 />
 
             <TextView
@@ -272,8 +269,6 @@
                 android:background="@drawable/rounded_button"
 
                 android:layout_alignParentRight="true"
-
-
                 >
 
             </ImageButton>
@@ -289,28 +284,36 @@
             android:layout_below="@id/set_edit_layout"
             />
     </RelativeLayout>
-        <ScrollView
-            android:id="@+id/set_list_wrapper"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@id/header"
-            >
-            <LinearLayout
-                android:id="@+id/set_list"
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </LinearLayout>
-        </ScrollView>
 
+    <ListView
+        android:id="@+id/set_list"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/header"
+        android:background="#f0f0f0"
+        >
+    </ListView>
 
-
-    <!--Button
+    <Button
         android:id="@+id/btn_return"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Return"
-        android:layout_alignParentBottom="true"/-->
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+
+        android:background="@drawable/rounded_button2"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+
+        android:gravity="center"
+
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:textColor="#fff"
+        android:text="Save"
+
+        />
 
 
 </RelativeLayout>

@@ -22,6 +22,7 @@ public class NewWorkoutDataObject implements Serializable{
         wrkTypeId = typeId;
     }
 
+
     public void setWrkNumb(int numb){
         wrkNumb = numb;
     }
@@ -87,8 +88,8 @@ public class NewWorkoutDataObject implements Serializable{
 
         public Set newSet(int setTypeId, int weight, int reps) {
             Set set = new Set(exSetList.size()+1, setTypeId, weight, reps);
-            exSetList.add(set);
-            set.setInd(exSetList.indexOf(set));
+            //exSetList.add(set);
+            //set.setInd(exSetList.indexOf(set));
             return set;
         }
 
