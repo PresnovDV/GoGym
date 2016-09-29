@@ -26,7 +26,6 @@
             android:background="@drawable/rounded_label"
 
             android:gravity="center"
-            android:text="Ex #2"
             />
         <TextView
             android:id="@+id/ex_type_label"
@@ -42,7 +41,7 @@
             android:layout_toRightOf="@+id/ex_numb_textview"
             android:gravity="center"
 
-            android:text="Ex name"
+            android:text="@string/new_ex_name_label"
             />
 
         <Spinner
@@ -88,7 +87,7 @@
                 android:textColor="@color/text_light"
                 android:gravity="center"
 
-                android:text="#"
+                android:text="@string/new_ex_set_numb_label"
                 />
 
             <TextView
@@ -108,7 +107,7 @@
                 android:textColor="@color/text_light"
                 android:gravity="center"
 
-                android:text="Weight"
+                android:text="@string/new_ex_set_weight_label"
                 />
 
             <TextView
@@ -128,7 +127,7 @@
                 android:textColor="@color/text_light"
                 android:gravity="center"
 
-                android:text="Reps"
+                android:text="@string/new_ex_set_reps_label"
                 />
 
             <!-- second row -->
@@ -147,8 +146,6 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 android:textColor="@color/text_primary"
                 android:gravity="center"
-
-                android:text="1"
                 />
 
             <EditText
@@ -190,7 +187,7 @@
                 android:textColor="@color/text_light"
                 android:gravity="bottom|left"
 
-                android:text="lb"
+                android:text="@string/new_ex_set_w_units_label"
                 />
 
             <TextView
@@ -211,7 +208,7 @@
                 android:textColor="@color/text_primary"
                 android:gravity="top|center_horizontal"
 
-                android:text="x"
+                android:text="@string/new_ex_set_sepr_label"
                 />
 
             <EditText
@@ -251,7 +248,7 @@
                 android:textColor="@color/text_light"
                 android:gravity="bottom|left"
 
-                android:text="reps"
+                android:text="@string/new_ex_set_r_units_label"
                 />
 
             <!-- button -->
@@ -311,7 +308,7 @@
         android:fontFamily="sans-serif-condensed"
         android:textAppearance="?android:textAppearanceLarge"
         android:textColor="#fff"
-        android:text="Save"
+        android:text="@string/new_ex_set_save_label"
 
         />
 

@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-public class WrkAdapter extends CursorAdapter {
+public class WrkListAdapter extends CursorAdapter {
 
-    public WrkAdapter(Context context, Cursor c, int flags) {
+    public WrkListAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
 
@@ -22,9 +22,9 @@ public class WrkAdapter extends CursorAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        int currWrkId = ((Cursor)getItem(position)).getInt(WorkoutListFragment.COL_WRK_ID);
+        int currWrkId = ((Cursor)getItem(position)).getInt(WrkListFragment.COL_WRK_ID);
         int selectedWrkId = ((MainActivity)mContext).getSelectedWrkId();
-        boolean isDone = ((Cursor)getItem(position)).getLong(WorkoutListFragment.COL_WRK_DATE)>0;
+        boolean isDone = ((Cursor)getItem(position)).getLong(WrkListFragment.COL_WRK_DATE)>0;
 
         if(selectedWrkId == currWrkId){
             return (isDone) ? VIEW_TYPE_DETAILED_DONE : VIEW_TYPE_DETAILED_DRAFT;
@@ -81,35 +81,35 @@ public class WrkAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        view.setTag(R.id.fr_wrk_list,cursor.getInt(WorkoutListFragment.COL_WRK_ID));
+        view.setTag(R.id.fr_wrk_list,cursor.getInt(WrkListFragment.COL_WRK_ID));
 
         // Wrk #
-        String numb = cursor.getString(WorkoutListFragment.COL_WRK_NUMBER);
+        String numb = cursor.getString(WrkListFragment.COL_WRK_NUMBER);
         if(viewHolder.numbView != null) {
             viewHolder.numbView.setText(numb);
         }
 
         // Wrk Type
-        String wrkType = cursor.getString(WorkoutListFragment.COL_WRK_TYPE);
+        String wrkType = cursor.getString(WrkListFragment.COL_WRK_TYPE);
         if(viewHolder.typeView != null) {
             viewHolder.typeView.setText(wrkType);
         }
 
         // Wrk Date
-        Long wrkDate = Long.valueOf(cursor.getString(WorkoutListFragment.COL_WRK_DATE));
+        Long wrkDate = Long.valueOf(cursor.getString(WrkListFragment.COL_WRK_DATE));
         if(viewHolder.dateView != null) {
             viewHolder.dateView.setText(Utils.formatDate(wrkDate));
         }
 
         // Wrk Result
-        long wrkDuration = Long.valueOf(cursor.getString(WorkoutListFragment.COL_WRK_DURATION));
+        long wrkDuration = Long.valueOf(cursor.getString(WrkListFragment.COL_WRK_DURATION));
         if(viewHolder.resultView != null) {
             String wrkResult = Utils.wrkResult(wrkDuration,0);
             viewHolder.resultView.setText(wrkResult);
         }
 
         // Wrk Notes
-        String wrkNotes = cursor.getString(WorkoutListFragment.COL_WRK_NOTES);
+        String wrkNotes = cursor.getString(WrkListFragment.COL_WRK_NOTES);
         if(viewHolder.noteView != null) {
             viewHolder.noteView.setText(wrkNotes);
         }

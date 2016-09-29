@@ -7,21 +7,20 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/16/2016.
  */
-public class NewWorkoutDataObject implements Serializable{
+public class NewWrkDataObject implements Serializable{
     private int wrkNumb = -1;
     private int wrkTypeId = -1;
     private List<Ex> wrkExList = new ArrayList<>();
 
-    public NewWorkoutDataObject(){
+    public NewWrkDataObject(){
         super();
     }
 
-    public NewWorkoutDataObject(int numb, int typeId){
+    public NewWrkDataObject(int numb, int typeId){
         super();
         wrkNumb = numb;
         wrkTypeId = typeId;
     }
-
 
     public void setWrkNumb(int numb){
         wrkNumb = numb;
@@ -43,10 +42,7 @@ public class NewWorkoutDataObject implements Serializable{
         return wrkExList;
     }
     public Ex newEx() {
-        Ex ex = new Ex(wrkExList.size());
-        wrkExList.add(ex);
-        ex.setExInd(wrkExList.indexOf(ex));
-        ex.setExNumb(wrkExList.size());
+        Ex ex = new Ex(wrkExList.size()+1);
         return ex;
     }
     public void removeEx(int ind){
@@ -59,8 +55,12 @@ public class NewWorkoutDataObject implements Serializable{
     //------------- Excercise ----------------------
     class Ex implements Serializable{
         private int exNumb = -1;
-        private int exInd = 0;
+        private int exInd = -1;
+        private int exTypeId = -1;
+        private String exName = "";
+
         private List<Set> exSetList = new ArrayList<>();
+
 
         public Ex(int numb){
             super();
@@ -82,33 +82,45 @@ public class NewWorkoutDataObject implements Serializable{
             this.exNumb = exNumb;
         }
 
+        public int getExTypeId() {
+            return exTypeId;
+        }
+        public void setExTypeId(int typeId) {
+            exTypeId = typeId;
+        }
+
+        public String getExName() {
+            return exName;
+        }
+        public void setExName(String name) {
+            exName = name;
+        }
+
         public List<Set> getExSetList() {
             return exSetList;
         }
 
-        public Set newSet(int setTypeId, int weight, int reps) {
-            Set set = new Set(exSetList.size()+1, setTypeId, weight, reps);
-            //exSetList.add(set);
-            //set.setInd(exSetList.indexOf(set));
+        public Set newSet(int weight, int reps) {
+            Set set = new Set(exSetList.size()+1, weight, reps);
             return set;
         }
 
         public void removeSet(int ind){
             exSetList.remove(ind);
         }
+
+
     }
 
     //------------- Set ----------------------------
-    class Set{
+    class Set implements Serializable{
         private int ind = 0;
         private int setNumb = -1;
-        private int setTypeId = -1;
         private int setWeight = -1;
         private int setReps = -1;
 
-        public Set(int numb, int typeId, int weight, int reps){
+        public Set(int numb, int weight, int reps){
             setNumb = numb;
-            setTypeId = typeId;
             setWeight = weight;
             setReps = reps;
         }
@@ -127,14 +139,6 @@ public class NewWorkoutDataObject implements Serializable{
 
         public void setSetNumb(int setNumb) {
             this.setNumb = setNumb;
-        }
-
-        public int getSetTypeId() {
-            return setTypeId;
-        }
-
-        public void setSetTypeId(int setTypeId) {
-            this.setTypeId = setTypeId;
         }
 
         public int getSetWeight() {

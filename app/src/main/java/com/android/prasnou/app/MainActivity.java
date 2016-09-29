@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends AppCompatActivity implements WorkoutListFragment.Callback{
+public class MainActivity extends AppCompatActivity implements WrkListFragment.Callback{
     private static final String SELECTED_WRK_KEY = "selected_wrk";
     private int mSelectedWrkId = -1;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements WorkoutListFragme
         int id = item.getItemId();
 
         if (id == R.id.action_add_wrk) {
-            startActivity(new Intent(this, com.android.prasnou.app.AddWorkoutActivity.class));
+            startActivity(new Intent(this, AddWrkActivity.class));
             return true;
         }
 

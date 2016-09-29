@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.android.prasnou.app.NewWorkoutFragment">
+    tools:context=".NewWrkFragment">
 
     <RelativeLayout
         android:id="@+id/header"
@@ -80,15 +80,15 @@
             />
     </RelativeLayout>
 
-
-    <LinearLayout
+    <ListView
         android:id="@+id/ex_list"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header"
+        android:background="#f0f0f0"
         >
-    </LinearLayout>
+    </ListView>
 
     <ImageButton
         android:id="@+id/btn_add_ex"

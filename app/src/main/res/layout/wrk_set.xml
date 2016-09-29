@@ -13,7 +13,6 @@
 
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal|center_vertical"
-
         />
     <View
         android:id="@+id/hrule"

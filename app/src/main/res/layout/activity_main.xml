@@ -2,9 +2,9 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/fr_wrk_list"
-    android:name="com.android.prasnou.app.WorkoutListFragment"
+    android:name="com.android.prasnou.app.WrkListFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.android.prasnou.app.WorkoutListFragment"
+    tools:context=".WrkListFragment"
     tools:layout="@android:layout/list_content"
 />

@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,15 +26,16 @@ import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
-public class NewWorkoutFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     public static final int EX_EDIT_REQUEST_CODE = 0;
 
     private static final int WRK_INIT_LOADER_ID = 0;
     private final int WRK_TYPE_LOADER_ID = 10;
 
     private SimpleCursorAdapter spWrkTypeAdapter = null;
-    private NewWorkoutDataObject newWorkout  = new NewWorkoutDataObject();
+    private NewWrkDataObject mNewWrk = new NewWrkDataObject();
     private View rootView = null;
+    private NewWrkAdapter newWrkAdapter;
 
     //*************** Workout Type List Cols ***********************
     private static final String[] WRK_TYPE_LIST_COLUMNS = {
@@ -76,14 +78,14 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         spWrkType.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onClick(View view) {
-                newWorkout.setWrkTypeId(2);
+                newWrk.setWrkTypeId(2);
             }
         });
 */
-        // init workout object
-        if(newWorkout.getWrkNumb()>0){
+        // init workout object presnov todo
+        if(mNewWrk.getWrkNumb()>0){
             TextView wrkNumb = (TextView) rootView.findViewById(R.id.wrk_numb_textview);
-            wrkNumb.setText(R.string.wrk_numb_prefix + newWorkout.getWrkNumb());
+            wrkNumb.setText(R.string.wrk_numb_prefix + mNewWrk.getWrkNumb());
         }
 
         // add ex button
@@ -97,6 +99,13 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
             });
         }
 
+        // ------ Ex List init --------------
+        final ListView exList = (ListView) rootView.findViewById(R.id.ex_list);
+
+        newWrkAdapter = new NewWrkAdapter(getContext(),R.id.ex_list, mNewWrk.getWrkExList());
+        exList.setAdapter(newWrkAdapter);
+        //------------------------------------
+
         return rootView;
     }
 
@@ -105,19 +114,19 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
      * @param ind
      */
     private void editEx(int ind) {
-        NewWorkoutDataObject.Ex ex = null;
+        NewWrkDataObject.Ex ex = null;
         // get ex by ind (-1 - new)
         if(ind < 0){ // new - create empty ex
-            ex = newWorkout.newEx();
+            ex = mNewWrk.newEx();
         }
         else {
-            if(ind < newWorkout.getExCount()) {
-                ex = newWorkout.getWrkExList().get(ind);
+            if(ind < mNewWrk.getExCount()) {
+                ex = mNewWrk.getWrkExList().get(ind);
             }
         }
         // send ex as param
-        Intent intent = new Intent(getActivity(), com.android.prasnou.app.AddExActivity.class);
-        intent.putExtra(AddWorkoutActivity.WRK_EX_PARAM, ex);
+        Intent intent = new Intent(getActivity(), AddExActivity.class);
+        intent.putExtra(AddWrkActivity.WRK_EX_PARAM, ex);
         startActivityForResult(intent, EX_EDIT_REQUEST_CODE);
     }
 
@@ -128,11 +137,19 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
         if(requestCode == EX_EDIT_REQUEST_CODE
                 && resultCode == Activity.RESULT_OK){
 
-            NewWorkoutDataObject.Ex newEx = (NewWorkoutDataObject.Ex)data.getExtras().get(AddWorkoutActivity.WRK_EX_PARAM);
-            newWorkout.getWrkExList().set(newEx.getExInd(), newEx);
+            NewWrkDataObject.Ex newEx = (NewWrkDataObject.Ex)data.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
+            int ind = newEx.getExInd();
+            if(ind > -1 && ind < mNewWrk.getExCount()) {
+                mNewWrk.getWrkExList().set(newEx.getExInd(), newEx);
+            }
+            else{
+                newWrkAdapter.add(newEx);
+            }
+            newWrkAdapter.notifyDataSetChanged();
         }
     }
 
+    // ---------------- Loaders -------------------------------
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] select = {};
@@ -156,68 +173,16 @@ public class NewWorkoutFragment extends Fragment implements LoaderManager.Loader
                 case(WRK_TYPE_LOADER_ID):
                     spWrkTypeAdapter.changeCursor(data);
                     break;
-                case(WRK_INIT_LOADER_ID): // presnov finish
-                    newWorkout.setWrkTypeId(1); // folow up
+                case(WRK_INIT_LOADER_ID): // presnov finish todo
+                    mNewWrk.setWrkTypeId(1); // follow up
                     break;
             }
-
-/*
-            int exId = -1;
-            LinearLayout exItem = null;
-            ViewHolder vHolder = null;
-
-            do{
-                if(exId != data.getInt(ExcerciseListFragment.COL_EX_ID)){
-                    exId = data.getInt(ExcerciseListFragment.COL_EX_ID);
-                    exItem = (LinearLayout)rootInflater.inflate(R.layout.wrk_ex_list_item,mListViewContainer,false);
-                    vHolder = new ViewHolder(exItem);
-
-                    // Ex #
-                    String numb = data.getString(ExcerciseListFragment.COL_EX_NUMB);
-                    if(vHolder.numbView != null) {
-                        vHolder.numbView.setText(numb);
-                    }
-
-                    // Ex Name
-                    String exName = data.getString(ExcerciseListFragment.COL_EX_NAME);
-                    if(vHolder.nameView != null) {
-                        vHolder.nameView.setText(exName);
-                    }
-                    mListViewContainer.addView(exItem);
-                }
-
-                // add set
-
-                //exItem.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
-                if(data.getInt(ExcerciseListFragment.COL_SET_ID)>0) {
-                    WrkSet set = new WrkSet(getContext());
-
-                    set.setWeight(data.getInt(ExcerciseListFragment.COL_SET_WEIGHT));
-                    set.setReps(data.getInt(ExcerciseListFragment.COL_SET_REPS));
-                    StringBuilder setTag = new StringBuilder(data.getString(ExcerciseListFragment.COL_EX_NUMB)).append(":")
-                            .append(data.getString(ExcerciseListFragment.COL_SET_NUMB));
-                    set.setTag(setTag.toString());
-                    set.setType(data.getInt(ExcerciseListFragment.COL_SET_TYPE));
-
-                    exItem.addView(set);
-                }
-            }while (data.moveToNext());
-*/
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {}
 
-//    public static class ViewHolder {
-//        public final TextView numbView;
-//        public final TextView nameView;
-//
-//        public ViewHolder(View view) {
-//            numbView = (TextView) view.findViewById(R.id.ex_numb_textview);
-//            nameView = (TextView) view.findViewById(R.id.ex_name_textview);
-//        }
-//    }
 
 }
 

@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.android.prasnou.app.AddWorkoutActivity"
+            android:name=".AddWrkActivity"
             android:label="@string/title_add_wrk_activity"
             android:parentActivityName=".MainActivity" >
             <meta-data
@@ -35,10 +35,10 @@
         <activity
             android:name="com.android.prasnou.app.AddExActivity"
             android:label="@string/title_add_ex_activity"
-            android:parentActivityName=".AddWorkoutActivity" >
+            android:parentActivityName=".AddWrkActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.android.prasnou.app.AddWorkoutActivity" />
+                android:value=".AddWrkActivity" />
         </activity>
 
         <provider

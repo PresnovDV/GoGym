@@ -33,7 +33,7 @@ import java.util.Map;
 public class NewExFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private final int EX_TYPE_LOADER_ID = 0;
     private SimpleCursorAdapter spExTypeAdapter = null;
-    private NewWorkoutDataObject.Ex mWrkEx = null;
+    private NewWrkDataObject.Ex mWrkEx = null;
 
     //*************** Excercise Type List Cols ***********************
     private static final String[] EX_TYPE_LIST_COLUMNS = {
@@ -51,7 +51,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent inputIntent = getActivity().getIntent();
-        mWrkEx = (NewWorkoutDataObject.Ex) inputIntent.getExtras().get(AddWorkoutActivity.WRK_EX_PARAM);
+        mWrkEx = (NewWrkDataObject.Ex) inputIntent.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
     }
 
     @Override
@@ -65,9 +65,10 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
         final View rootView = inflater.inflate(R.layout.fr_new_ex, container, false);
 
-        final TextView exNumb = (TextView)rootView.findViewById(R.id.ex_numb_textview); // presnov todo
+        final TextView exNumb = (TextView)rootView.findViewById(R.id.ex_numb_textview);
+        exNumb.setText(getContext().getResources().getString(R.string.new_ex_numb_prefix) + mWrkEx.getExNumb());
 
-        //---------- Ex Type spinner init
+        //---------- Ex Type spinner init                                               // presnov save selected value to ex object todo
         Spinner spExType = (Spinner) rootView.findViewById(R.id.sp_ex_type);
         spExTypeAdapter=new SimpleCursorAdapter(getContext(),
                 R.layout.sp_item,
@@ -78,15 +79,20 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         spExTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spExType.setAdapter(spExTypeAdapter);
 
-        final ListView setList = (ListView) rootView.findViewById(R.id.set_list);
+        mWrkEx.setExTypeId(1);// presnov save selected value to ex object todo
+        mWrkEx.setExName("BENCH");
 
         // ------ Set List init --------------
-        final SetAdapter setAdapter = new SetAdapter(getContext(),R.id.set_list, mWrkEx.getExSetList());
-        setList.setAdapter(setAdapter);
+        final ListView setList = (ListView) rootView.findViewById(R.id.set_list);
+
+        final NewExAdapter newExAdapter = new NewExAdapter(getContext(),R.id.set_list, mWrkEx.getExSetList());
+        setList.setAdapter(newExAdapter);
 
         //----------- editors --------
-
+        // next set number
         final TextView vSetNumb = (TextView) rootView.findViewById(R.id.header_set_numb_texview);
+        vSetNumb.setText(String.valueOf(1));
+
         final EditText edWeight = (EditText) rootView.findViewById(R.id.header_set_weight_edit);
         final EditText edReps = (EditText) rootView.findViewById(R.id.header_set_reps_edit);
 
@@ -105,8 +111,8 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
                 if(edReps.getText().length()>0){
                     reps = Integer.parseInt(edReps.getText().toString());
                 }
-                setAdapter.add(mWrkEx.newSet(-1, weight, reps));
-                setAdapter.notifyDataSetChanged();
+                newExAdapter.add(mWrkEx.newSet(weight, reps));
+                newExAdapter.notifyDataSetChanged();
 
                 // update next set number
                 vSetNumb.setText(String.valueOf(mWrkEx.getExSetList().size()+1));
@@ -116,12 +122,9 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
         // ----- ms toggle button ------------
         //((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
-
-
-
         // ------------------------------------
 
-        Button btnReturn = null; // (Button) rootView.findViewById(R.id.btn_return);
+        Button btnReturn = (Button) rootView.findViewById(R.id.btn_return);
         if(btnReturn != null){
             btnReturn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -136,7 +139,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
     /** send result back to new Workout fragment */
     public void sendResult(){
         Intent intent = new Intent();
-        intent.putExtra(AddWorkoutActivity.WRK_EX_PARAM, mWrkEx);
+        intent.putExtra(AddWrkActivity.WRK_EX_PARAM, mWrkEx);
         if (getActivity().getParent() == null) {
             getActivity().setResult(Activity.RESULT_OK, intent);
         } else {
@@ -145,6 +148,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         getActivity().finish();
     }
 
+    // ---------- Loaders ------------------------------------
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] select = {};

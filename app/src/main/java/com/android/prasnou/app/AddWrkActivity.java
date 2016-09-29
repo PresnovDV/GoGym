@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 /**
  * Created by Dzianis_Prasnou on 9/15/2016.
  */
-public class AddWorkoutActivity extends AppCompatActivity {
+public class AddWrkActivity extends AppCompatActivity {
     public static final String WRK_EX_PARAM = "ex";
 
     @Override

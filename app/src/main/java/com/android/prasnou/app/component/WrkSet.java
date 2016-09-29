@@ -46,7 +46,8 @@ public class WrkSet extends RelativeLayout{
 
     private void init(Context context) {
         rootView = inflate(context, R.layout.wrk_set, this);
-        rootView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        final LayoutParams lParams = (RelativeLayout.LayoutParams) new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        setLayoutParams(lParams);
 
         weightTextView = (TextView) rootView.findViewById(R.id.weightTextView);
         repsTextView = (TextView) rootView.findViewById(R.id.repsTextView);
@@ -83,6 +84,18 @@ public class WrkSet extends RelativeLayout{
         requestLayout();
     }
 
+    public int getType(){
+        return mType;
+    }
+
+    public int getSelected() {
+        return mSelected;
+    }
+
+    public void setSelected(int isSelected) {
+        mSelected = isSelected;
+    }
+
     private int resolveLayout(){
         int layout = 0;
 
@@ -104,8 +117,6 @@ public class WrkSet extends RelativeLayout{
         return layout;
     }
 
-    public int getType(){
-        return mType;
-    }
+
 
 }

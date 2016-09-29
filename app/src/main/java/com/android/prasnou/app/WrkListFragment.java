@@ -22,11 +22,11 @@ import com.android.prasnou.app.data.DataContract;
 /**
  * Created by Dzianis_Prasnou on 9/1/2016.
  */
-public class WorkoutListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class WrkListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private final int WORKOUT_LIST_LOADER_ID = 0;
     private static final String SELECTED_KEY = "selected_position";
     private int mPosition = ListView.INVALID_POSITION;
-    private WrkAdapter mWorkoutAdapter;
+    private WrkListAdapter mWorkoutAdapter;
     private ListView mListView;
 
     /** callback to pass selected workout id to other activities/fragments*/
@@ -68,7 +68,7 @@ public class WorkoutListFragment extends Fragment implements LoaderManager.Loade
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mWorkoutAdapter = new WrkAdapter(getActivity(), null, 0);
+        mWorkoutAdapter = new WrkListAdapter(getActivity(), null, 0);
 
         View rootView = inflater.inflate(R.layout.fr_wrk_list, container, false);
         mListView = (ListView) rootView.findViewById(R.id.wrk_listview);

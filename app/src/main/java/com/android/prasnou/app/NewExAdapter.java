@@ -13,9 +13,9 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/27/2016.
  */
-public class SetAdapter extends ArrayAdapter<NewWorkoutDataObject.Set> {
-    List<NewWorkoutDataObject.Set> setList;
-    public SetAdapter(Context context, int resource, List<NewWorkoutDataObject.Set> objects) {
+public class NewExAdapter extends ArrayAdapter<NewWrkDataObject.Set> {
+    List<NewWrkDataObject.Set> setList;
+    public NewExAdapter(Context context, int resource, List<NewWrkDataObject.Set> objects) {
         super(context, resource, objects);
         setList = objects;
     }
@@ -24,14 +24,14 @@ public class SetAdapter extends ArrayAdapter<NewWorkoutDataObject.Set> {
 
     private void recalcIndexes(){
         for(int i = 0; i<setList.size(); i++){
-            NewWorkoutDataObject.Set set = setList.get(i);
+            NewWrkDataObject.Set set = setList.get(i);
             set.setInd(i);
             set.setSetNumb(i+1);
         }
     }
 
     @Override
-    public void add(NewWorkoutDataObject.Set object) {
+    public void add(NewWrkDataObject.Set object) {
         super.add(object);
         recalcIndexes();
     }
@@ -40,10 +40,10 @@ public class SetAdapter extends ArrayAdapter<NewWorkoutDataObject.Set> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View setView = null;
 
-        final NewWorkoutDataObject.Set set = getItem(position);
+        final NewWrkDataObject.Set set = getItem(position);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
-        setView = inflater.inflate(R.layout.ex_set_item, parent, false);
+        setView = inflater.inflate(R.layout.new_ex_set_item, parent, false);
 
         TextView set_numb = (TextView)setView.findViewById(R.id.set_numb_textview);
         if(set_numb != null){
@@ -60,7 +60,7 @@ public class SetAdapter extends ArrayAdapter<NewWorkoutDataObject.Set> {
             set_reps.setText(String.valueOf(set.getSetReps()));
         }
 
-        final SetAdapter setAdapter = this;
+        final NewExAdapter newExAdapter = this;
         setView.setOnTouchListener(new View.OnTouchListener() {
             float dX, rawX;
             @Override
@@ -87,7 +87,7 @@ public class SetAdapter extends ArrayAdapter<NewWorkoutDataObject.Set> {
                             view.animate().x(0).setDuration(50).start();
                         }
                         else{
-                            setAdapter.remove(set);
+                            newExAdapter.remove(set);
                             recalcIndexes();
                         }
                         break;
