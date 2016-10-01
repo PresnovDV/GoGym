@@ -14,17 +14,20 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.prasnou.app.data.DataContract;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
 
 import java.util.Map;
+
 
 
 /**
@@ -33,7 +36,8 @@ import java.util.Map;
 public class NewExFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
     private final int EX_TYPE_LOADER_ID = 0;
     private SimpleCursorAdapter spExTypeAdapter = null;
-    private NewWrkDataObject.Ex mWrkEx = null;
+    private WrkDataObject.Ex mWrkEx = null;
+    private Spinner spExType = null;
 
     //*************** Excercise Type List Cols ***********************
     private static final String[] EX_TYPE_LIST_COLUMNS = {
@@ -45,18 +49,15 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
     private Map<Integer, String> exTypes = null;
     //******************************************************
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent inputIntent = getActivity().getIntent();
-        mWrkEx = (NewWrkDataObject.Ex) inputIntent.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
+        mWrkEx = (WrkDataObject.Ex) inputIntent.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(EX_TYPE_LOADER_ID, null, this);
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -66,10 +67,12 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         final View rootView = inflater.inflate(R.layout.fr_new_ex, container, false);
 
         final TextView exNumb = (TextView)rootView.findViewById(R.id.ex_numb_textview);
-        exNumb.setText(getContext().getResources().getString(R.string.new_ex_numb_prefix) + mWrkEx.getExNumb());
+        exNumb.setText(getContext().getResources().getString(R.string.new_ex_numb_prefix, mWrkEx.getExNumb()));
 
-        //---------- Ex Type spinner init                                               // presnov save selected value to ex object todo
-        Spinner spExType = (Spinner) rootView.findViewById(R.id.sp_ex_type);
+        //---------- Ex Type spinner init -----------------------
+        spExType = (Spinner) rootView.findViewById(R.id.sp_ex_type);
+        // start loader
+        getLoaderManager().initLoader(EX_TYPE_LOADER_ID, null, this);
         spExTypeAdapter=new SimpleCursorAdapter(getContext(),
                 R.layout.sp_item,
                 null,
@@ -78,9 +81,22 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
                 0);
         spExTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spExType.setAdapter(spExTypeAdapter);
+        spExType.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(
+                            AdapterView<?> parent, View view, int position, long id) {
+                        CharSequence exTypeText = ((TextView)view).getText();
+                        CharSequence  msg = "Ex Type: " + ((TextView)view).getText();
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                        mWrkEx.setExTypeId(Integer.parseInt(Long.toString(id)));
+                        mWrkEx.setExName((String)exTypeText);
+                    }
 
-        mWrkEx.setExTypeId(1);// presnov save selected value to ex object todo
-        mWrkEx.setExName("BENCH");
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        Toast.makeText(getActivity(), "Select excercise type", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
         // ------ Set List init --------------
         final ListView setList = (ListView) rootView.findViewById(R.id.set_list);
@@ -120,11 +136,8 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
             });
         }
 
-        // ----- ms toggle button ------------
-        //((RadioGroup) rootView.findViewById(R.id.rg_setType)).setOnCheckedChangeListener(AddExActivity.ToggleListener);
-        // ------------------------------------
-
-        Button btnReturn = (Button) rootView.findViewById(R.id.btn_return);
+        // --------------- Save Button --------------------
+        Button btnReturn = (Button) rootView.findViewById(R.id.btn_save_ex);
         if(btnReturn != null){
             btnReturn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -172,6 +185,10 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
             switch (loader.getId()) {
                 case (EX_TYPE_LOADER_ID):
                     spExTypeAdapter.changeCursor(data);
+                    int exPos = Utils.getAdapterItemPositionById(spExTypeAdapter, mWrkEx.getExTypeId());
+                    if(exPos != -1){
+                        spExType.setSelection(exPos,true);
+                    }
                     break;
             }
         }

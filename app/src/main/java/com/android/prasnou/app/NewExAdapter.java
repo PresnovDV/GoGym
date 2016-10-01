@@ -13,9 +13,9 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/27/2016.
  */
-public class NewExAdapter extends ArrayAdapter<NewWrkDataObject.Set> {
-    List<NewWrkDataObject.Set> setList;
-    public NewExAdapter(Context context, int resource, List<NewWrkDataObject.Set> objects) {
+public class NewExAdapter extends ArrayAdapter<WrkDataObject.Set> {
+    List<WrkDataObject.Set> setList;
+    public NewExAdapter(Context context, int resource, List<WrkDataObject.Set> objects) {
         super(context, resource, objects);
         setList = objects;
     }
@@ -24,14 +24,14 @@ public class NewExAdapter extends ArrayAdapter<NewWrkDataObject.Set> {
 
     private void recalcIndexes(){
         for(int i = 0; i<setList.size(); i++){
-            NewWrkDataObject.Set set = setList.get(i);
+            WrkDataObject.Set set = setList.get(i);
             set.setInd(i);
             set.setSetNumb(i+1);
         }
     }
 
     @Override
-    public void add(NewWrkDataObject.Set object) {
+    public void add(WrkDataObject.Set object) {
         super.add(object);
         recalcIndexes();
     }
@@ -40,7 +40,7 @@ public class NewExAdapter extends ArrayAdapter<NewWrkDataObject.Set> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View setView = null;
 
-        final NewWrkDataObject.Set set = getItem(position);
+        final WrkDataObject.Set set = getItem(position);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         setView = inflater.inflate(R.layout.new_ex_set_item, parent, false);

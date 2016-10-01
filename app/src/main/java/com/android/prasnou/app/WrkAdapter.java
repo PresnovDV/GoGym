@@ -16,10 +16,10 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/27/2016.
  */
-public class NewWrkAdapter extends ArrayAdapter<NewWrkDataObject.Ex> {
-    List<NewWrkDataObject.Ex> exList;
+public class WrkAdapter extends ArrayAdapter<WrkDataObject.Ex> {
+    List<WrkDataObject.Ex> exList;
 
-    public NewWrkAdapter(Context context, int resource, List<NewWrkDataObject.Ex> objects) {
+    public WrkAdapter(Context context, int resource, List<WrkDataObject.Ex> objects) {
         super(context, resource, objects);
         exList = objects;
     }
@@ -27,14 +27,14 @@ public class NewWrkAdapter extends ArrayAdapter<NewWrkDataObject.Ex> {
 
     private void recalcIndexes() {
         for (int i = 0; i < exList.size(); i++) {
-            NewWrkDataObject.Ex ex = exList.get(i);
+            WrkDataObject.Ex ex = exList.get(i);
             ex.setExInd(i);
             ex.setExNumb(i + 1);
         }
     }
 
     @Override
-    public void add(NewWrkDataObject.Ex object) {
+    public void add(WrkDataObject.Ex object) {
         super.add(object);
         recalcIndexes();
     }
@@ -43,7 +43,7 @@ public class NewWrkAdapter extends ArrayAdapter<NewWrkDataObject.Ex> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LinearLayout exView = null;
 
-        final NewWrkDataObject.Ex ex = getItem(position);
+        final WrkDataObject.Ex ex = getItem(position);
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // ---------- add ex Item -----------
@@ -64,7 +64,7 @@ public class NewWrkAdapter extends ArrayAdapter<NewWrkDataObject.Ex> {
 
         // ----------- add sets -----------
 
-        for(NewWrkDataObject.Set set : ex.getExSetList()){
+        for(WrkDataObject.Set set : ex.getExSetList()){
             WrkSet setItem = new WrkSet(getContext());
             setItem.setType(1);
             setItem.setWeight(set.getSetWeight());
@@ -77,7 +77,7 @@ public class NewWrkAdapter extends ArrayAdapter<NewWrkDataObject.Ex> {
 
         //------------------ Swipe to remove ----------------------
 
-        final NewWrkAdapter newExAdapter = this;
+        final WrkAdapter newExAdapter = this;
         exView.setOnTouchListener(new View.OnTouchListener() {
             float dX, rawX;
 

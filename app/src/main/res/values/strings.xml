@@ -7,9 +7,8 @@
     <string name="sp_type_label">Type</string>
     <string name="title_add_ex_activity">New Excercise</string>
     <string name="chb_tmpl">tpl</string>
-    <string name="wrk_numb_prefix">#</string>
     <string name="app_label">Gym</string>
-    <string name="new_ex_numb_prefix">Ex #</string>
+    <string name="new_ex_numb_prefix">Ex #%1$d</string>
     <string name="new_ex_name_label">Ex name</string>
     <string name="new_ex_set_numb_label">#</string>
     <string name="new_ex_set_weight_label">Weight</string>
@@ -18,5 +17,7 @@
     <string name="new_ex_set_sepr_label">x</string>
     <string name="new_ex_set_r_units_label">reps</string>
     <string name="new_ex_set_save_label">Save</string>
+
+    <string name="new_wrk_numb_prefix">Wrk #%1$d</string>
 
 </resources>

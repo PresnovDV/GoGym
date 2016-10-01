@@ -7,16 +7,16 @@ import java.util.List;
 /**
  * Created by Dzianis_Prasnou on 9/16/2016.
  */
-public class NewWrkDataObject implements Serializable{
+public class WrkDataObject implements Serializable{
     private int wrkNumb = -1;
     private int wrkTypeId = -1;
     private List<Ex> wrkExList = new ArrayList<>();
 
-    public NewWrkDataObject(){
+    public WrkDataObject(){
         super();
     }
 
-    public NewWrkDataObject(int numb, int typeId){
+    public WrkDataObject(int numb, int typeId){
         super();
         wrkNumb = numb;
         wrkTypeId = typeId;

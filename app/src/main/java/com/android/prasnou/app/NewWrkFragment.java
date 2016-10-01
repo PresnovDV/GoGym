@@ -14,13 +14,17 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.prasnou.app.data.DataContract;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
+import com.android.prasnou.app.data.WrkDAO;
 
 
 /**
@@ -33,9 +37,10 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
     private final int WRK_TYPE_LOADER_ID = 10;
 
     private SimpleCursorAdapter spWrkTypeAdapter = null;
-    private NewWrkDataObject mNewWrk = new NewWrkDataObject();
+    private WrkDataObject mWrk = new WrkDataObject();
     private View rootView = null;
-    private NewWrkAdapter newWrkAdapter;
+    private WrkAdapter wrkAdapter;
+    Spinner spWrkType = null;
 
     //*************** Workout Type List Cols ***********************
     private static final String[] WRK_TYPE_LIST_COLUMNS = {
@@ -54,8 +59,6 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
-        getLoaderManager().initLoader(WRK_TYPE_LOADER_ID, null, this);
-
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -63,32 +66,42 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fr_new_wrk, container, false);
 
-        // Workout Type spinner init
-        Spinner spWrkType = (Spinner) rootView.findViewById(R.id.sp_wrk_type);
+        //---------- Workout Type spinner init -----------------------
+        spWrkType = (Spinner) rootView.findViewById(R.id.sp_wrk_type);
+        // start loader
+        getLoaderManager().initLoader(WRK_TYPE_LOADER_ID, null, this);
         spWrkTypeAdapter=new SimpleCursorAdapter(getContext(),
-                android.R.layout.simple_spinner_item,
+                R.layout.sp_item,
                 null,
                 new String[]{WorkoutTypeEntry.COLUMN_NAME},
                 new int[]{android.R.id.text1},
                 0);
         spWrkTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spWrkType.setAdapter(spWrkTypeAdapter);
-        /*
-        // change type  presnov
-        spWrkType.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            @Override
-            public void onClick(View view) {
-                newWrk.setWrkTypeId(2);
-            }
-        });
-*/
+        spWrkType.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(
+                            AdapterView<?> parent, View view, int position, long id) {
+                        CharSequence exTypeText = ((TextView)view).getText();
+                        CharSequence  msg = "Wrk Type: " + ((TextView)view).getText();
+                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                        mWrk.setWrkTypeId(Integer.parseInt(Long.toString(id)));
+                    }
+
+                    public void onNothingSelected(AdapterView<?> parent) {
+                        Toast.makeText(getActivity(), "Select workout type", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
         // init workout object presnov todo
-        if(mNewWrk.getWrkNumb()>0){
-            TextView wrkNumb = (TextView) rootView.findViewById(R.id.wrk_numb_textview);
-            wrkNumb.setText(R.string.wrk_numb_prefix + mNewWrk.getWrkNumb());
+
+        if(mWrk.getWrkNumb()>0){
+            final TextView wrkNumb = (TextView)rootView.findViewById(R.id.wrk_numb_textview);
+            wrkNumb.setText(getContext().getResources().getString(R.string.new_wrk_numb_prefix, 123));
         }
 
-        // add ex button
+        // -------  add ex button -----------
         ImageButton btnAddEx = (ImageButton) rootView.findViewById(R.id.btn_add_ex);
         if (btnAddEx != null) {
             btnAddEx.setOnClickListener( new View.OnClickListener() {
@@ -102,10 +115,20 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
         // ------ Ex List init --------------
         final ListView exList = (ListView) rootView.findViewById(R.id.ex_list);
 
-        newWrkAdapter = new NewWrkAdapter(getContext(),R.id.ex_list, mNewWrk.getWrkExList());
-        exList.setAdapter(newWrkAdapter);
+        wrkAdapter = new WrkAdapter(getContext(),R.id.ex_list, mWrk.getWrkExList());
+        exList.setAdapter(wrkAdapter);
         //------------------------------------
 
+        // --------------- Save Button --------------------
+        Button btnReturn = (Button) rootView.findViewById(R.id.btn_save_wrk);
+        if(btnReturn != null){
+            btnReturn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    saveWrk();
+                }
+            });
+        }
         return rootView;
     }
 
@@ -114,14 +137,14 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
      * @param ind
      */
     private void editEx(int ind) {
-        NewWrkDataObject.Ex ex = null;
+        WrkDataObject.Ex ex = null;
         // get ex by ind (-1 - new)
         if(ind < 0){ // new - create empty ex
-            ex = mNewWrk.newEx();
+            ex = mWrk.newEx();
         }
         else {
-            if(ind < mNewWrk.getExCount()) {
-                ex = mNewWrk.getWrkExList().get(ind);
+            if(ind < mWrk.getExCount()) {
+                ex = mWrk.getWrkExList().get(ind);
             }
         }
         // send ex as param
@@ -137,17 +160,23 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
         if(requestCode == EX_EDIT_REQUEST_CODE
                 && resultCode == Activity.RESULT_OK){
 
-            NewWrkDataObject.Ex newEx = (NewWrkDataObject.Ex)data.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
+            WrkDataObject.Ex newEx = (WrkDataObject.Ex)data.getExtras().get(AddWrkActivity.WRK_EX_PARAM);
             int ind = newEx.getExInd();
-            if(ind > -1 && ind < mNewWrk.getExCount()) {
-                mNewWrk.getWrkExList().set(newEx.getExInd(), newEx);
+            if(ind > -1 && ind < mWrk.getExCount()) {
+                mWrk.getWrkExList().set(newEx.getExInd(), newEx);
             }
             else{
-                newWrkAdapter.add(newEx);
+                wrkAdapter.add(newEx);
             }
-            newWrkAdapter.notifyDataSetChanged();
+            wrkAdapter.notifyDataSetChanged();
         }
     }
+
+    // ---------------- Save WrkObject to DB ------------------
+    private void saveWrk() {
+        WrkDAO.addWrk(mWrk);
+    }
+
 
     // ---------------- Loaders -------------------------------
     @Override
@@ -174,7 +203,7 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
                     spWrkTypeAdapter.changeCursor(data);
                     break;
                 case(WRK_INIT_LOADER_ID): // presnov finish todo
-                    mNewWrk.setWrkTypeId(1); // follow up
+                    mWrk.setWrkTypeId(1); // follow up
                     break;
             }
         }

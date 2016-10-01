@@ -1,5 +1,7 @@
 package com.android.prasnou.app;
 
+import android.widget.Adapter;
+
 import java.util.Date;
 
 /**
@@ -21,5 +23,17 @@ public class Utils {
 
     public static String wrkResult(long durInMillis, long totalWeight){
         return "Time: 1h:20m  Weight: 2300lb"; // todo
+    }
+
+    /* find item position by id */
+    public static int getAdapterItemPositionById(Adapter adapter, long id){
+
+        for (int i = 0; i < adapter.getCount(); i++) {
+            if (id == adapter.getItemId(i)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 }
