@@ -41,7 +41,7 @@ public class DataProvider extends ContentProvider {
     public static final int WORKOUT = 10;
     public static final int WORKOUT_LIST = 11;
     public static final int WORKOUT_LIST_ID = 12;
-
+    public static final int WORKOUT_MAX_NUMB = 13;
     // excercise list
     public static final int EX = 20;
     public static final int EX_LIST = 21;
@@ -68,6 +68,7 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT, WORKOUT);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST, WORKOUT_LIST);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST + "/#", WORKOUT_LIST_ID);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_MAX, WORKOUT_MAX_NUMB);
 
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE, EX);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
