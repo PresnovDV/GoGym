@@ -16,6 +16,7 @@ public class DataContract {
     public static final String PATH_WRK_EX = "wrk_ex";
     public static final String PATH_WRK_EX_SET = "wrk_ex_set";
     public static final String PATH_LIST = "list";
+    public static final String PATH_MAX = "max";
 
     public static final String PATH_WORKOUT_TYPE = "workout_type";
     public static final String PATH_EXCERCISE = "excercise";

@@ -53,7 +53,7 @@ public class WrkDataObject implements Serializable{
         return getWrkExList().size();
     }
     //------------- Excercise ----------------------
-    class Ex implements Serializable{
+    public class Ex implements Serializable{
         private int exNumb = -1;
         private int exInd = -1;
         private int exTypeId = -1;
@@ -113,7 +113,7 @@ public class WrkDataObject implements Serializable{
     }
 
     //------------- Set ----------------------------
-    class Set implements Serializable{
+    public class Set implements Serializable{
         private int ind = 0;
         private int setNumb = -1;
         private int setWeight = -1;
