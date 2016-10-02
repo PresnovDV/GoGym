@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.android.prasnou.app.data.DataContract;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
-import com.android.prasnou.app.data.WrkDAO;
+import com.android.prasnou.app.data.DataProvider;
 
 
 /**
@@ -98,7 +98,7 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
 
         if(mWrk.getWrkNumb()>0){
             final TextView wrkNumb = (TextView)rootView.findViewById(R.id.wrk_numb_textview);
-            wrkNumb.setText(getContext().getResources().getString(R.string.new_wrk_numb_prefix, 123));
+            wrkNumb.setText(getContext().getResources().getString(R.string.new_wrk_numb_prefix, mWrk.getWrkNumb()));
         }
 
         // -------  add ex button -----------
@@ -174,7 +174,9 @@ public class NewWrkFragment extends Fragment implements LoaderManager.LoaderCall
 
     // ---------------- Save WrkObject to DB ------------------
     private void saveWrk() {
-        WrkDAO.addWrk(mWrk);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(DataProvider.WORKOUT_OBJ, mWrk);
+        getContext().getContentResolver().call(DataContract.WorkoutEntry.CONTENT_URI,DataProvider.ADD_WORKOUT_MTHD,null,bundle);
     }
 
 

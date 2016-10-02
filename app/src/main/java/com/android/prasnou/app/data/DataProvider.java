@@ -21,7 +21,10 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 
+import com.android.prasnou.app.WrkDataObject;
 import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
@@ -29,6 +32,10 @@ import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutTypeEntry;
 
 public class DataProvider extends ContentProvider {
+    // static constants
+    public static final String WORKOUT_OBJ = "WRK_D_OBJ";
+    // custom methods
+    public static final String ADD_WORKOUT_MTHD = "addWrk";
     // db helper
     private DataDbHelper mOpenHelper;
 
@@ -46,11 +53,16 @@ public class DataProvider extends ContentProvider {
     public static final int EX = 20;
     public static final int EX_LIST = 21;
     public static final int EX_LIST_ID = 22;
-    public static final int EX_LIST_SET = 23;
+
+    // set
+    public static final int EX_SET = 30;
+    public static final int EX_SET_LIST = 31;
+    public static final int EX_SET_LIST_ID = 32;
     // workout type ref
-    public static final int WRK_TYPE_LIST = 30;
+    public static final int WRK_TYPE_LIST = 40;
     // excercise type ref
-    public static final int EX_TYPE_LIST = 40;
+    public static final int EX_TYPE_LIST = 41;
+
 
     //********************* Init content provider **************************************************
     @Override
@@ -70,10 +82,13 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_LIST + "/#", WORKOUT_LIST_ID);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT + "/" + DataContract.PATH_MAX, WORKOUT_MAX_NUMB);
 
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EXCERCISE, EX);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX , EX);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST + "/#", EX_LIST);
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#", EX_LIST_SET);
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_LIST_ID);
+
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET , EX_SET);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#", EX_SET_LIST);
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST + "/#/#", EX_SET_LIST_ID);
 
         // refs
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WORKOUT_TYPE + "/" + DataContract.PATH_LIST, WRK_TYPE_LIST);
@@ -95,13 +110,21 @@ public class DataProvider extends ContentProvider {
                 return WorkoutEntry.CONTENT_TYPE;
             case WORKOUT_LIST_ID:
                 return WorkoutEntry.CONTENT_ITEM_TYPE;
+            case WORKOUT_MAX_NUMB:
+                return WorkoutEntry.CONTENT_ITEM_TYPE;
+
             // excercise
             case EX:
             case EX_LIST:
-            case EX_LIST_SET:
-                return ExcerciseEntry.CONTENT_TYPE;
+                return WorkoutExEntry.CONTENT_TYPE;
             case EX_LIST_ID:
-                return ExcerciseEntry.CONTENT_ITEM_TYPE;
+                return WorkoutExEntry.CONTENT_ITEM_TYPE;
+            // set
+            case EX_SET:
+            case EX_SET_LIST:
+                return WorkoutExSetEntry.CONTENT_TYPE;
+            case EX_SET_LIST_ID:
+                return WorkoutExSetEntry.CONTENT_ITEM_TYPE;
             // workout type
             case WRK_TYPE_LIST:
                 return WorkoutTypeEntry.CONTENT_TYPE;
@@ -171,34 +194,79 @@ public class DataProvider extends ContentProvider {
         return updatedRows;
     }
 
-/* ?? override for insert sets
     @Override
-    public int bulkInsert(Uri uri, ContentValues[] values) {
+    public Bundle call(String method, String arg, Bundle extras) {
+        if(method.equals(ADD_WORKOUT_MTHD)) {
+            WrkDataObject wrkDataObject = (WrkDataObject) extras.get(WORKOUT_OBJ);
+            addWrk(wrkDataObject);
+        }
+        return null;
+    }
+
+    // --------------- Custom opertations ---------------------------------------
+    private boolean addWrk(WrkDataObject wrkDObj){
+        boolean result = true;
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-        final int match = sUriMatcher.match(uri);
-        switch (match) {
-            case WEATHER:
-                db.beginTransaction();
-                int returnCount = 0;
-                try {
-                    for (ContentValues value : values) {
-                        normalizeDate(value);
-                        long _id = db.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, value);
-                        if (_id != -1) {
-                            returnCount++;
+
+        //--- query the max wrk numb
+        Uri maxNumbUri = WorkoutEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_MAX).build();
+        String maxNumbProj = "max("+WorkoutEntry.COLUMN_NUMBER+") as number";
+        Cursor cursor = db.query(createDataSource(maxNumbUri), new String[]{maxNumbProj},null,null,null,null,null);
+        if(!cursor.moveToFirst()){
+            return false;
+        }
+        else {
+            wrkDObj.setWrkNumb(cursor.getInt(0)+1);
+        }
+        Log.d(ADD_WORKOUT_MTHD, "new wrk #"+wrkDObj.getWrkNumb());
+        //---- save new wrk
+        db.beginTransaction();
+
+        try {
+            // insert to wrk
+            ContentValues wrkValues = new ContentValues();
+            wrkValues.put(WorkoutEntry.COLUMN_DATE, 0);
+            wrkValues.put(WorkoutEntry.COLUMN_NUMBER, wrkDObj.getWrkNumb());
+            wrkValues.put(WorkoutEntry.COLUMN_WRK_TYPE_ID, wrkDObj.getWrkTypeId());
+            wrkValues.put(WorkoutEntry.COLUMN_DURATION, 0);
+
+            //normalizeDate(wrkValues);
+            long wrkId = db.insert(createDataSource(WorkoutEntry.CONTENT_URI), null, wrkValues);
+            Log.i(ADD_WORKOUT_MTHD,"Wrk saved id="+wrkId);
+
+            // insert to wrk_ex
+            if(wrkId > 0) {
+                for (WrkDataObject.Ex ex : wrkDObj.getWrkExList()) {
+                    ContentValues wrkExValues = new ContentValues();
+                    wrkExValues.put(WorkoutExEntry.COLUMN_WRK_ID, wrkId);
+                    wrkExValues.put(WorkoutExEntry.COLUMN_EX_ID, ex.getExInd());
+                    wrkExValues.put(WorkoutExEntry.COLUMN_EX_NUMB, ex.getExNumb());
+
+                    long wrkExId = db.insert(createDataSource(WorkoutExEntry.CONTENT_URI), null, wrkExValues);
+                    Log.i(ADD_WORKOUT_MTHD,"Ex saved id="+wrkExId);
+
+                    // insert to wrk_ex_set
+                    if(wrkExId > 0) {
+                        for (WrkDataObject.Set set : ex.getExSetList()) {
+                            ContentValues wrkExSetValues = new ContentValues();
+                            wrkExSetValues.put(WorkoutExSetEntry.COLUMN_WRK_EX_ID, wrkExId);
+                            wrkExSetValues.put(WorkoutExSetEntry.COLUMN_SET_NUMB, set.getSetNumb());
+                            wrkExSetValues.put(WorkoutExSetEntry.COLUMN_SET_WEIGHT, set.getSetWeight());
+                            wrkExSetValues.put(WorkoutExSetEntry.COLUMN_SET_REPS, set.getSetReps());
+
+                            long _id = db.insert(createDataSource(WorkoutExSetEntry.CONTENT_URI), null, wrkExSetValues);
+                            Log.i(ADD_WORKOUT_MTHD,"Set saved id = "+ _id);
                         }
                     }
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
                 }
-                getContext().getContentResolver().notifyChange(uri, null);
-                return returnCount;
-            default:
-                return super.bulkInsert(uri, values);
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
         }
+
+        return result;
     }
-  */
 
     /**********************************************************************************************/
     /****************************  Data Sources  **************************************************/
@@ -210,6 +278,7 @@ public class DataProvider extends ContentProvider {
         switch (sUriMatcher.match(uri)){
             // workout
             case WORKOUT:
+            case WORKOUT_MAX_NUMB:
                 ds.append(WorkoutEntry.TABLE_NAME);
                 break;
             case WORKOUT_LIST:{
