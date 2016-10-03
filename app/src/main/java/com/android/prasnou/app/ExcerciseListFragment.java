@@ -37,7 +37,6 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
             ExTypeEntry.TABLE_NAME + "." + ExTypeEntry.COLUMN_NAME,
             WorkoutExSetEntry.TABLE_NAME + "." + WorkoutExSetEntry._ID,
             WorkoutExSetEntry.COLUMN_SET_NUMB,
-            WorkoutExSetEntry.COLUMN_SET_TYPE_ID,
             WorkoutExSetEntry.COLUMN_SET_WEIGHT,
             WorkoutExSetEntry.COLUMN_SET_REPS
     };
@@ -50,9 +49,8 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
     static final int COL_EX_NAME = 4;
     static final int COL_SET_ID = 5;
     static final int COL_SET_NUMB = 6;
-    static final int COL_SET_TYPE = 7;
-    static final int COL_SET_WEIGHT = 8;
-    static final int COL_SET_REPS = 9;
+    static final int COL_SET_WEIGHT = 7;
+    static final int COL_SET_REPS = 8;
 
     //******************************************************
 
@@ -132,7 +130,7 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
                     StringBuilder setTag = new StringBuilder(data.getString(ExcerciseListFragment.COL_EX_NUMB)).append(":")
                             .append(data.getString(ExcerciseListFragment.COL_SET_NUMB));
                     set.setTag(setTag.toString());
-                    set.setType(data.getInt(ExcerciseListFragment.COL_SET_TYPE));
+                    set.setType(1); // presnov todo always warm up
 
                     exItem.addView(set);
                 }

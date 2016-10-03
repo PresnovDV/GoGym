@@ -98,7 +98,7 @@ public class DataProvider extends ContentProvider {
         matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_EX_TYPE + "/" + DataContract.PATH_LIST, EX_TYPE_LIST);
 
         // complex
-        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST +
+        matcher.addURI(DataContract.CONTENT_AUTHORITY, DataContract.PATH_WRK_EX + "/" + DataContract.PATH_LIST + "/" +
                                                        DataContract.PATH_WRK_EX_SET + "/" + DataContract.PATH_LIST +"/#", EX_LIST_SET_LIST);    // 1# - wrkId
 
         return matcher;
@@ -248,7 +248,7 @@ public class DataProvider extends ContentProvider {
                 for (WrkDataObject.Ex ex : wrkDObj.getWrkExList()) {
                     ContentValues wrkExValues = new ContentValues();
                     wrkExValues.put(WorkoutExEntry.COLUMN_WRK_ID, wrkId);
-                    wrkExValues.put(WorkoutExEntry.COLUMN_EX_ID, ex.getExInd());
+                    wrkExValues.put(WorkoutExEntry.COLUMN_EX_ID, ex.getExTypeId());
                     wrkExValues.put(WorkoutExEntry.COLUMN_EX_NUMB, ex.getExNumb());
 
                     long wrkExId = db.insert(createDataSource(WorkoutExEntry.CONTENT_URI), null, wrkExValues);
@@ -270,7 +270,11 @@ public class DataProvider extends ContentProvider {
                 }
             }
             db.setTransactionSuccessful();
-        } finally {
+        } catch (Exception e){
+            Log.e(this.getClass().getName(), e.getMessage());
+            db.endTransaction();
+        }
+        finally {
             db.endTransaction();
         }
 
@@ -298,6 +302,9 @@ public class DataProvider extends ContentProvider {
                 break;
             }
             // wrk - excercise
+            case EX:
+                ds.append(WorkoutExEntry.TABLE_NAME);
+                break;
             case EX_LIST:{
                 ds.append(WorkoutExEntry.TABLE_NAME).append(" inner join ")
                         .append(ExTypeEntry.TABLE_NAME).append(" on ")
@@ -305,6 +312,9 @@ public class DataProvider extends ContentProvider {
                         .append(ExTypeEntry.TABLE_NAME).append(".").append(ExTypeEntry._ID);
                 break;
             }
+            case EX_SET:
+                ds.append(WorkoutExSetEntry.TABLE_NAME);
+                break;
             // complex
             case EX_LIST_SET_LIST:{
                 ds.append(WorkoutExEntry.TABLE_NAME)
@@ -370,7 +380,7 @@ public class DataProvider extends ContentProvider {
                     break;
                 }
                 case EX_LIST_SET_LIST:{
-                    whereClauseArgs = new String[]{ WorkoutExEntry.getWrkIdFromUri(uri) };
+                    whereClauseArgs = new String[]{ WorkoutExEntry.getWrkIdFromExSetListUri(uri) };
                     break;
                 }
             }

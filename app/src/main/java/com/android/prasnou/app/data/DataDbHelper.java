@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.prasnou.app.R;
 import com.android.prasnou.app.data.DataContract.ExTypeEntry;
-import com.android.prasnou.app.data.DataContract.SetTypeEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
@@ -21,7 +20,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 26;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -34,7 +33,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(WorkoutTypeEntry.SQL_CREATE_WORKOUT_TYPE_TABLE);
         sqLiteDatabase.execSQL(ExTypeEntry.SQL_CREATE_EXCERCISE_TABLE);
-        sqLiteDatabase.execSQL(SetTypeEntry.SQL_CREATE_SET_TYPE_TABLE);
 
         // test data presnov
         sqLiteDatabase.execSQL(WorkoutEntry.SQL_CREATE_WORKOUT_TABLE);
@@ -52,7 +50,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutTypeEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ExTypeEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SetTypeEntry.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
     }
@@ -75,13 +72,6 @@ public class DataDbHelper extends SQLiteOpenHelper {
         for (String item : exData){
             values.put(ExTypeEntry.COLUMN_NAME, item);
             db.insert(ExTypeEntry.TABLE_NAME, null, values);
-        }
-
-        // excercise reference
-        String[] setTypeData = res.getStringArray(R.array.set_type_data);
-        for (String item : setTypeData){
-            values.put(DataContract.SetTypeEntry.COLUMN_NAME, item);
-            db.insert(DataContract.SetTypeEntry.TABLE_NAME, null, values);
         }
 
         // Test !! Workout presnov
@@ -115,9 +105,8 @@ public class DataDbHelper extends SQLiteOpenHelper {
             values.clear();
             values.put(WorkoutExSetEntry.COLUMN_WRK_EX_ID, vals[0]);
             values.put(WorkoutExSetEntry.COLUMN_SET_NUMB, vals[1]);
-            values.put(WorkoutExSetEntry.COLUMN_SET_TYPE_ID, vals[2]);
-            values.put(WorkoutExSetEntry.COLUMN_SET_WEIGHT, vals[3]);
-            values.put(WorkoutExSetEntry.COLUMN_SET_REPS, vals[4]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_WEIGHT, vals[2]);
+            values.put(WorkoutExSetEntry.COLUMN_SET_REPS, vals[3]);
             db.insert(WorkoutExSetEntry.TABLE_NAME, null, values);
         }
 

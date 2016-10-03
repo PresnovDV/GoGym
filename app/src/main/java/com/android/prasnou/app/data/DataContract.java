@@ -20,7 +20,6 @@ public class DataContract {
 
     public static final String PATH_WORKOUT_TYPE = "workout_type";
     public static final String PATH_EX_TYPE = "ex_type";
-    public static final String PATH_SET_TYPE = "set_type";
 
 
     // all dates normalize to the Julian day at UTC.
@@ -107,8 +106,8 @@ public class DataContract {
         public static String getWrkIdFromUri(Uri uri) {
             return uri.getPathSegments().get(2);
         }
-        public static String getExIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(3);
+        public static String getWrkIdFromExSetListUri(Uri uri) {
+            return uri.getPathSegments().get(4);
         }
 
     }
@@ -124,7 +123,6 @@ public class DataContract {
         public static final String TABLE_NAME = "wrk_ex_set";
         public static final String COLUMN_WRK_EX_ID = "wrk_ex_id";
         public static final String COLUMN_SET_NUMB = "set_numb";
-        public static final String COLUMN_SET_TYPE_ID = "set_type_id";
         public static final String COLUMN_SET_WEIGHT = "set_weight";
         public static final String COLUMN_SET_REPS = "set_reps";
 
@@ -133,12 +131,11 @@ public class DataContract {
                 WorkoutExSetEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 WorkoutExSetEntry.COLUMN_WRK_EX_ID + " INTEGER NOT NULL, " +
                 WorkoutExSetEntry.COLUMN_SET_NUMB + " INTEGER NOT NULL, " +
-                WorkoutExSetEntry.COLUMN_SET_TYPE_ID + " INTEGER NOT NULL," +
                 WorkoutExSetEntry.COLUMN_SET_WEIGHT + " INTEGER NOT NULL, " +
                 WorkoutExSetEntry.COLUMN_SET_REPS + " INTEGER NOT NULL, " +
                 // foreign keys
                 " FOREIGN KEY (" + WorkoutExSetEntry.COLUMN_WRK_EX_ID + ") REFERENCES " +
-                WorkoutEntry.TABLE_NAME + " (" + WorkoutEntry._ID + "));";
+                WorkoutExEntry.TABLE_NAME + " (" + WorkoutExEntry._ID + "));";
 
         /** returns workoutSet/id uri */
         public static Uri buildWrkExSetIdUri(long id) {
@@ -211,33 +208,5 @@ public class DataContract {
             return uri.getPathSegments().get(1);
         }
     }
-
-    /* set type table */
-    public static final class SetTypeEntry implements BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_SET_TYPE).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SET_TYPE;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_SET_TYPE;
-
-        // table
-        public static final String TABLE_NAME = "set_type";
-        public static final String COLUMN_NAME = "name";
-
-        // create sql
-        public static final String SQL_CREATE_SET_TYPE_TABLE = "CREATE TABLE " + SetTypeEntry.TABLE_NAME + " (" +
-                SetTypeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                SetTypeEntry.COLUMN_NAME + " TEXT NOT NULL);";
-
-        /** returns setType/id uri */
-        public static Uri buildSetTypeUri(long id) {
-            return ContentUris.withAppendedId(CONTENT_URI, id);
-        }
-
-        // returns id from SetType/id uri
-        public static String getSetTypeIdFromUri(Uri uri) {
-            return uri.getPathSegments().get(1);
-        }
-    }
-
-
 
 }
