@@ -19,7 +19,7 @@ public class DataContract {
     public static final String PATH_MAX = "max";
 
     public static final String PATH_WORKOUT_TYPE = "workout_type";
-    public static final String PATH_EXCERCISE = "excercise";
+    public static final String PATH_EX_TYPE = "ex_type";
     public static final String PATH_SET_TYPE = "set_type";
 
 
@@ -79,7 +79,7 @@ public class DataContract {
         // table
         public static final String TABLE_NAME = "wrk_ex";
         public static final String COLUMN_WRK_ID = "wrk_id";
-        public static final String COLUMN_EX_ID = "ex_id";
+        public static final String COLUMN_EX_ID = "ex_type_id";
         public static final String COLUMN_EX_NUMB = "ex_numb";
 
         // create sql
@@ -92,7 +92,7 @@ public class DataContract {
                 " FOREIGN KEY (" + WorkoutExEntry.COLUMN_WRK_ID + ") REFERENCES " +
                 WorkoutEntry.TABLE_NAME + " (" + WorkoutEntry._ID + "), " +
                 " FOREIGN KEY (" + WorkoutExEntry.COLUMN_EX_ID + ") REFERENCES " +
-                ExcerciseEntry.TABLE_NAME + " (" + ExcerciseEntry._ID + "), " +
+                ExTypeEntry.TABLE_NAME + " (" + ExTypeEntry._ID + "), " +
                 // constraint
                 " UNIQUE (" + WorkoutExEntry.COLUMN_WRK_ID + "," + WorkoutExEntry.COLUMN_EX_ID + ") ON CONFLICT REPLACE);";
         /** returns workoutEx/id uri */
@@ -187,19 +187,19 @@ public class DataContract {
 
 
     /* excercise table */
-    public static final class ExcerciseEntry implements BaseColumns {
-        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_EXCERCISE).build();
-        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EXCERCISE;
-        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EXCERCISE;
+    public static final class ExTypeEntry implements BaseColumns {
+        public static final Uri CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH_EX_TYPE).build();
+        public static final String CONTENT_TYPE = ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EX_TYPE;
+        public static final String CONTENT_ITEM_TYPE = ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_EX_TYPE;
 
         // table
-        public static final String TABLE_NAME = "excercise";
+        public static final String TABLE_NAME = "ex_type";
         public static final String COLUMN_NAME = "name";
 
         // create sql
-        public static final String SQL_CREATE_EXCERCISE_TABLE = "CREATE TABLE " + ExcerciseEntry.TABLE_NAME + " (" +
-                ExcerciseEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
-                ExcerciseEntry.COLUMN_NAME + " TEXT NOT NULL);";
+        public static final String SQL_CREATE_EXCERCISE_TABLE = "CREATE TABLE " + ExTypeEntry.TABLE_NAME + " (" +
+                ExTypeEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                ExTypeEntry.COLUMN_NAME + " TEXT NOT NULL);";
 
         /** returns excercise/id uri */
         public static Uri buildExUri(long id) {

@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.prasnou.app.data.DataContract;
-import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
+import com.android.prasnou.app.data.DataContract.ExTypeEntry;
 
 import java.util.Map;
 
@@ -41,8 +41,8 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
 
     //*************** Excercise Type List Cols ***********************
     private static final String[] EX_TYPE_LIST_COLUMNS = {
-            DataContract.ExcerciseEntry._ID,
-            DataContract.ExcerciseEntry.COLUMN_NAME
+            ExTypeEntry._ID,
+            ExTypeEntry.COLUMN_NAME
     };
     static final int COL_EX_TYPE_ID = 0;
     static final int COL_EX_TYPE_NAME = 1;
@@ -76,7 +76,7 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         spExTypeAdapter=new SimpleCursorAdapter(getContext(),
                 R.layout.sp_item,
                 null,
-                new String[]{ExcerciseEntry.COLUMN_NAME},
+                new String[]{ExTypeEntry.COLUMN_NAME},
                 new int[]{android.R.id.text1},
                 0);
         spExTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -171,8 +171,8 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         switch (id) {
             case (EX_TYPE_LOADER_ID): {
                 select = EX_TYPE_LIST_COLUMNS;
-                orderBy = ExcerciseEntry.COLUMN_NAME + " ASC";
-                uri = ExcerciseEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
+                orderBy = ExTypeEntry.COLUMN_NAME + " ASC";
+                uri = ExTypeEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).build();
             }
         }
         return new CursorLoader(getActivity(), uri, select, null, null, orderBy);

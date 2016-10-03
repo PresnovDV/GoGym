@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.android.prasnou.app.component.WrkSet;
 import com.android.prasnou.app.data.DataContract;
-import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
+import com.android.prasnou.app.data.DataContract.ExTypeEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExSetEntry;
 
@@ -34,7 +34,7 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
             WorkoutExEntry.COLUMN_WRK_ID,
             WorkoutExEntry.TABLE_NAME + "." + WorkoutExEntry.COLUMN_EX_ID,
             WorkoutExEntry.COLUMN_EX_NUMB,
-            ExcerciseEntry.TABLE_NAME + "." + ExcerciseEntry.COLUMN_NAME,
+            ExTypeEntry.TABLE_NAME + "." + ExTypeEntry.COLUMN_NAME,
             WorkoutExSetEntry.TABLE_NAME + "." + WorkoutExSetEntry._ID,
             WorkoutExSetEntry.COLUMN_SET_NUMB,
             WorkoutExSetEntry.COLUMN_SET_TYPE_ID,
@@ -82,7 +82,9 @@ public class ExcerciseListFragment extends Fragment implements LoaderManager.Loa
         if(mWrkID > 0) {
             String[] select = WRK_EX_LIST_COLUMNS;
             String orderBy = WorkoutExEntry.COLUMN_EX_NUMB + " ASC";
-            Uri uri = DataContract.WorkoutExSetEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST).appendPath(String.valueOf(mWrkID)).build();
+            Uri uri = DataContract.WorkoutExEntry.CONTENT_URI.buildUpon().appendPath(DataContract.PATH_LIST)
+                    .appendPath(DataContract.PATH_WRK_EX_SET).appendPath(DataContract.PATH_LIST)
+                    .appendPath(String.valueOf(mWrkID)).build();
 
             return new CursorLoader(getActivity(), uri, select, null, null, orderBy);
         }

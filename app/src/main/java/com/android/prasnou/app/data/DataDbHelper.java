@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.android.prasnou.app.R;
-import com.android.prasnou.app.data.DataContract.ExcerciseEntry;
+import com.android.prasnou.app.data.DataContract.ExTypeEntry;
 import com.android.prasnou.app.data.DataContract.SetTypeEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutEntry;
 import com.android.prasnou.app.data.DataContract.WorkoutExEntry;
@@ -21,7 +21,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     private Context mContext;
 
     // If you change the database schema, you must increment the database version.
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
 
     public static final String DATABASE_NAME = "gogym.db";
 
@@ -33,7 +33,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL(WorkoutTypeEntry.SQL_CREATE_WORKOUT_TYPE_TABLE);
-        sqLiteDatabase.execSQL(ExcerciseEntry.SQL_CREATE_EXCERCISE_TABLE);
+        sqLiteDatabase.execSQL(ExTypeEntry.SQL_CREATE_EXCERCISE_TABLE);
         sqLiteDatabase.execSQL(SetTypeEntry.SQL_CREATE_SET_TYPE_TABLE);
 
         // test data presnov
@@ -51,7 +51,7 @@ public class DataDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutEntry.TABLE_NAME);
 
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + WorkoutTypeEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ExcerciseEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ExTypeEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + SetTypeEntry.TABLE_NAME);
 
         onCreate(sqLiteDatabase);
@@ -73,8 +73,8 @@ public class DataDbHelper extends SQLiteOpenHelper {
         // excercise reference
         String[] exData = res.getStringArray(R.array.ex_data);
         for (String item : exData){
-            values.put(DataContract.ExcerciseEntry.COLUMN_NAME, item);
-            db.insert(DataContract.ExcerciseEntry.TABLE_NAME, null, values);
+            values.put(ExTypeEntry.COLUMN_NAME, item);
+            db.insert(ExTypeEntry.TABLE_NAME, null, values);
         }
 
         // excercise reference
