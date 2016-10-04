@@ -161,6 +161,16 @@ public class NewExFragment extends Fragment implements LoaderManager.LoaderCallb
         getActivity().finish();
     }
 
+    /* presnov todo handle back button
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            // your code
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+*/
     // ---------- Loaders ------------------------------------
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
